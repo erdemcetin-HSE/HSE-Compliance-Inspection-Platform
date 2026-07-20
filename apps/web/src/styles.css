@@ -298,7 +298,7 @@ body {
 
 .enterprise-filter-toolbar {
   display: grid;
-  grid-template-columns: repeat(6, minmax(140px, 1fr));
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
   gap: 10px;
   align-items: end;
   margin-bottom: 14px;
@@ -306,6 +306,11 @@ body {
   border: 1px solid #d9e3ef;
   border-radius: 14px;
   background: linear-gradient(180deg, #f8fbff 0%, #f1f6fc 100%);
+}
+
+.enterprise-filter-toolbar label {
+  display: grid;
+  align-content: start;
 }
 
 .enterprise-filter-toolbar label {

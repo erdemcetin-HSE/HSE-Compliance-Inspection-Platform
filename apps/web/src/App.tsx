@@ -9325,6 +9325,30 @@ export function App() {
     const pageTwoSections = sectionRows.slice(5, 10);
     const kpiRows = dashboardData.summaryKpis;
 
+    const renderMiniBars = (values: number[]) => {
+      const max = Math.max(...values, 1);
+      return `
+        <div class="mini-bars">
+          ${values
+            .map((value) => `<span class="mini-bar" style="height:${Math.max(10, (value / max) * 56)}px"></span>`)
+            .join('')}
+        </div>
+      `;
+    };
+
+    const renderSectionChartCards = (rows: typeof dashboardData.sections) =>
+      rows
+        .map(
+          (section) => `
+            <article class="chart-mini-card">
+              <strong>${escapeHtml(localizeText(section.title, language))}</strong>
+              <div class="chart-mini-label">${escapeHtml(localizeText(section.chartA.label, language))}</div>
+              ${renderMiniBars(section.chartA.values)}
+            </article>
+          `
+        )
+        .join('');
+
     const renderSectionTableRows = (rows: typeof sectionRows) =>
       rows
         .map(
@@ -9356,6 +9380,12 @@ export function App() {
           .meta div { border: 1px solid #d9e2ee; border-radius: 6px; padding: 5px 6px; }
           .block { border: 1px solid #d4dde9; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
           .block-title { background: #f3f7fc; border-bottom: 1px solid #d4dde9; padding: 6px 8px; font-size: 11px; font-weight: 700; }
+          .chart-mini-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 8px; }
+          .chart-mini-card { border: 1px solid #dbe3ee; border-radius: 8px; padding: 8px; }
+          .chart-mini-card strong { display: block; font-size: 10px; margin-bottom: 4px; }
+          .chart-mini-label { font-size: 9px; color: #475569; margin-bottom: 6px; }
+          .mini-bars { height: 60px; display: flex; align-items: end; gap: 4px; }
+          .mini-bar { flex: 1; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, #38bdf8 0%, #0b2740 100%); min-height: 10px; }
           .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; }
           .kpi-item { border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; padding: 6px; min-height: 56px; }
           .kpi-item:nth-child(5n) { border-right: 0; }
@@ -9393,6 +9423,13 @@ export function App() {
                   `
                 )
                 .join('')}
+            </div>
+          </section>
+
+          <section class="block">
+            <div class="block-title">Grafik Özeti</div>
+            <div class="chart-mini-grid">
+              ${renderSectionChartCards(dashboardData.sections.slice(0, 6))}
             </div>
           </section>
 
@@ -9586,6 +9623,12 @@ export function App() {
     };
   }, [language, selectedProject?.name, selectedProject?.city, selectedProject?.address, selectedProject?.country, weatherCity]);
   const footerYear = new Date().getFullYear();
+  const localizedFooterText =
+    language === 'ru'
+      ? `Дизайн и разработка: Erdem Cetin © ${footerYear} Все права защищены.`
+      : language === 'en'
+        ? `Design and Development: Erdem Cetin © ${footerYear} All Rights Reserved.`
+        : `Tasarım ve Geliştirme: Erdem Cetin © ${footerYear} Tüm Hakları Saklıdır.`;
 
   if (accessLevel === 'locked') {
     const title =
@@ -15059,7 +15102,7 @@ export function App() {
 
         <footer className="global-footer" role="contentinfo">
           <p>
-            Tasarım ve Geliştirme: Erdem Cetin © {footerYear} Tüm Hakları Saklıdır.
+            {localizedFooterText}
           </p>
         </footer>
       </main>
