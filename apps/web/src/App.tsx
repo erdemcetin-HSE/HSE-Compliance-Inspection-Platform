@@ -9154,7 +9154,7 @@ export function App() {
   }, [language, selectedProject?.name, selectedProject?.city, selectedProject?.address, selectedProject?.country, weatherCity]);
   const footerYear = new Date().getFullYear();
 
-  if (accessLevel !== 'authorized') {
+  if (accessLevel === 'locked') {
     const title =
       language === 'en'
         ? 'HSE Compliance Platform'
