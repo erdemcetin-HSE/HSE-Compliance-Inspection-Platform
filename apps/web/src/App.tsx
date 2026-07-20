@@ -9790,51 +9790,80 @@ export function App() {
           <section className="panel">
             <h2>{t.executiveKpi}</h2>
             <div className="dashboard-toolbar enterprise-filter-toolbar" role="toolbar" aria-label="kpi filters">
-              <label>
-                {language === 'en' ? 'Period' : 'Periyot'}
-                <select
-                  value={dashboardFilterDraft.period}
-                  onChange={(event) =>
-                    setDashboardFilterDraft((prev) => ({ ...prev, period: event.target.value as DashboardPeriod }))
-                  }
-                >
-                  <option value="daily">{language === 'en' ? 'Daily' : 'Günlük'}</option>
-                  <option value="weekly">{language === 'en' ? 'Weekly' : 'Haftalık'}</option>
-                  <option value="monthly">{language === 'en' ? 'Monthly' : 'Aylık'}</option>
-                  <option value="yearly">{language === 'en' ? 'Yearly' : 'Yıllık'}</option>
-                  <option value="custom">{language === 'en' ? 'Custom Date Range' : 'Özel Tarih Aralığı'}</option>
-                </select>
-              </label>
+              <div className="enterprise-filter-primary-row">
+                <label>
+                  {language === 'en' ? 'Period' : 'Periyot'}
+                  <select
+                    value={dashboardFilterDraft.period}
+                    onChange={(event) =>
+                      setDashboardFilterDraft((prev) => ({ ...prev, period: event.target.value as DashboardPeriod }))
+                    }
+                  >
+                    <option value="daily">{language === 'en' ? 'Daily' : 'Günlük'}</option>
+                    <option value="weekly">{language === 'en' ? 'Weekly' : 'Haftalık'}</option>
+                    <option value="monthly">{language === 'en' ? 'Monthly' : 'Aylık'}</option>
+                    <option value="yearly">{language === 'en' ? 'Yearly' : 'Yıllık'}</option>
+                    <option value="custom">{language === 'en' ? 'Custom Date Range' : 'Özel Tarih Aralığı'}</option>
+                  </select>
+                </label>
 
-              <label>
-                {language === 'en' ? 'Project' : 'Proje'}
-                <select
-                  value={dashboardFilterDraft.projectId}
-                  onChange={(event) =>
-                    setDashboardFilterDraft((prev) => ({ ...prev, projectId: event.target.value }))
-                  }
-                >
-                  {projectFilterOptions.map((project) => (
-                    <option key={project.id} value={project.id}>
-                      {project.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <label>
+                  {language === 'en' ? 'Project' : 'Proje'}
+                  <select
+                    value={dashboardFilterDraft.projectId}
+                    onChange={(event) =>
+                      setDashboardFilterDraft((prev) => ({ ...prev, projectId: event.target.value }))
+                    }
+                  >
+                    {projectFilterOptions.map((project) => (
+                      <option key={project.id} value={project.id}>
+                        {project.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-              <label>
-                {language === 'en' ? 'Comparison' : 'Karşılaştırma'}
-                <select
-                  value={dashboardFilterDraft.comparisonType}
-                  onChange={(event) =>
-                    setDashboardFilterDraft((prev) => ({ ...prev, comparisonType: event.target.value as ComparisonMode }))
-                  }
-                >
-                  <option value="none">{language === 'en' ? 'None' : 'Yok'}</option>
-                  <option value="project">{language === 'en' ? 'Project Comparison' : 'Proje Karşılaştırma'}</option>
-                  <option value="department">{language === 'en' ? 'Department Comparison' : 'Departman Karşılaştırma'}</option>
-                </select>
-              </label>
+                <label>
+                  {language === 'en' ? 'Comparison' : 'Karşılaştırma'}
+                  <select
+                    value={dashboardFilterDraft.comparisonType}
+                    onChange={(event) =>
+                      setDashboardFilterDraft((prev) => ({ ...prev, comparisonType: event.target.value as ComparisonMode }))
+                    }
+                  >
+                    <option value="none">{language === 'en' ? 'None' : 'Yok'}</option>
+                    <option value="project">{language === 'en' ? 'Project Comparison' : 'Proje Karşılaştırma'}</option>
+                    <option value="department">{language === 'en' ? 'Department Comparison' : 'Departman Karşılaştırma'}</option>
+                  </select>
+                </label>
+
+                <div className="filter-actions">
+                  <button type="button" onClick={() => setDashboardFilters(dashboardFilterDraft)}>
+                    {language === 'en' ? 'Apply Filters' : 'Filtreleri Uygula'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const resetState = {
+                        period: 'monthly' as DashboardPeriod,
+                        customStart: '',
+                        customEnd: '',
+                        projectId: 'all',
+                        comparisonType: 'none' as ComparisonMode,
+                        selectedProjects: [],
+                        selectedDepartments: []
+                      };
+                      setDashboardFilterDraft(resetState);
+                      setDashboardFilters(resetState);
+                    }}
+                  >
+                    {language === 'en' ? 'Reset Filters' : 'Filtreleri Sıfırla'}
+                  </button>
+                  <button type="button" onClick={openDashboardExecutivePdf}>
+                    {language === 'en' ? 'Executive PDF Output' : 'Yönetici PDF Çıktısı'}
+                  </button>
+                </div>
+              </div>
 
               {dashboardFilterDraft.period === 'custom' ? (
                 <>
@@ -9905,32 +9934,6 @@ export function App() {
                 </label>
               ) : null}
 
-              <div className="filter-actions">
-                <button type="button" onClick={() => setDashboardFilters(dashboardFilterDraft)}>
-                  {language === 'en' ? 'Apply Filters' : 'Filtreleri Uygula'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const resetState = {
-                      period: 'monthly' as DashboardPeriod,
-                      customStart: '',
-                      customEnd: '',
-                      projectId: 'all',
-                      comparisonType: 'none' as ComparisonMode,
-                      selectedProjects: [],
-                      selectedDepartments: []
-                    };
-                    setDashboardFilterDraft(resetState);
-                    setDashboardFilters(resetState);
-                  }}
-                >
-                  {language === 'en' ? 'Reset Filters' : 'Filtreleri Sıfırla'}
-                </button>
-                <button type="button" onClick={openDashboardExecutivePdf}>
-                  {language === 'en' ? 'Executive PDF Output' : 'Yönetici PDF Çıktısı'}
-                </button>
-              </div>
             </div>
 
             {(() => {

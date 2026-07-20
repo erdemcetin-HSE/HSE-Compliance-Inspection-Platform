@@ -297,8 +297,7 @@ body {
 }
 
 .enterprise-filter-toolbar {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
   gap: 10px;
   align-items: end;
   margin-bottom: 14px;
@@ -311,15 +310,22 @@ body {
 .enterprise-filter-toolbar label {
   display: grid;
   align-content: start;
-  flex: 1 1 0;
+  min-width: 0;
+}
+
+.enterprise-filter-primary-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) auto;
+  gap: 10px;
+  align-items: end;
 }
 
 .enterprise-filter-toolbar .filter-actions {
-  flex: 0 0 auto;
   justify-content: flex-end;
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
+  align-items: end;
 }
 
 .enterprise-filter-toolbar .filter-actions button {
@@ -328,7 +334,6 @@ body {
 }
 
 .enterprise-filter-toolbar label {
-  min-width: 0;
   font-size: 0.82rem;
   color: #1e293b;
 }
