@@ -9302,10 +9302,240 @@ export function App() {
       custom: 'Özel Tarih Aralığı'
     };
 
+    const pdfCopy = {
+      title:
+        language === 'ru'
+          ? 'Отчет руководства по показателям HSE'
+          : language === 'en'
+            ? 'Executive HSE Performance Summary'
+            : 'Yönetici HSE Performans Özeti',
+      comparisonTitle:
+        language === 'ru'
+          ? 'Сравнение'
+          : language === 'en'
+            ? 'Comparison'
+            : 'Karşılaştırma',
+      strategicKpiSummary:
+        language === 'ru'
+          ? 'Сводка стратегических KPI'
+          : language === 'en'
+            ? 'Strategic KPI Summary'
+            : 'Stratejik KPI Özeti',
+      fullPanelChartSummary:
+        language === 'ru'
+          ? 'Графический обзор всей панели'
+          : language === 'en'
+            ? 'Full Panel Chart Summary'
+            : 'Tüm Panel Grafik Özeti',
+      pageLabel: language === 'ru' ? 'Страница' : language === 'en' ? 'Page' : 'Sayfa',
+      footerLabel:
+        language === 'ru'
+          ? 'Сводка руководства CEO'
+          : language === 'en'
+            ? 'CEO Executive Summary'
+            : 'CEO Yönetici Özeti',
+      projectComparison:
+        language === 'ru'
+          ? 'Сравнение проектов'
+          : language === 'en'
+            ? 'Project Comparison'
+            : 'Proje Karşılaştırma',
+      departmentComparison:
+        language === 'ru'
+          ? 'Сравнение отделов'
+          : language === 'en'
+            ? 'Department Comparison'
+            : 'Departman Karşılaştırma',
+      projectActivity:
+        language === 'ru'
+          ? 'HSE-активность по проектам'
+          : language === 'en'
+            ? 'HSE Activity by Project'
+            : 'Projelere Göre HSE Aktivitesi',
+      departmentActivity:
+        language === 'ru'
+          ? 'HSE-активность по отделам'
+          : language === 'en'
+            ? 'HSE Activity by Department'
+            : 'Departmanlara Göre HSE Aktivitesi',
+      projectDistribution:
+        language === 'ru'
+          ? 'Распределение проектов'
+          : language === 'en'
+            ? 'Project Distribution'
+            : 'Proje Dağılımı',
+      departmentDistribution:
+        language === 'ru'
+          ? 'Распределение отделов'
+          : language === 'en'
+            ? 'Department Distribution'
+            : 'Departman Dağılımı',
+      allProjects: localizeText('All Projects', language),
+      period:
+        language === 'ru'
+          ? {
+              daily: 'Ежедневно',
+              weekly: 'Еженедельно',
+              monthly: 'Ежемесячно',
+              yearly: 'Ежегодно',
+              custom: 'Произвольный период'
+            }
+          : language === 'en'
+            ? {
+                daily: 'Daily',
+                weekly: 'Weekly',
+                monthly: 'Monthly',
+                yearly: 'Yearly',
+                custom: 'Custom Date Range'
+              }
+            : {
+                daily: 'Günlük',
+                weekly: 'Haftalık',
+                monthly: 'Aylık',
+                yearly: 'Yıllık',
+                custom: 'Özel Tarih Aralığı'
+              }
+    };
+
+    const pdfRuCopy: Record<string, string> = {
+      'Güvenlik Performansı': 'Показатели безопасности',
+      'Güvenlik Skoru Trendi': 'Тренд показателя безопасности',
+      'Genel Güvenlik Endeksi': 'Общий индекс безопасности',
+      'Çalışma İzni': 'Разрешение на работы',
+      'Çalışma İzni Hacim Trendi': 'Тренд объема разрешений на работы',
+      'Çalışma İzni Durum Dağılımı': 'Распределение статусов разрешений на работы',
+      'Denetimler': 'Инспекции',
+      'Denetim Sayısı Trendi': 'Тренд количества инспекций',
+      'Bulgu Durumu': 'Статус замечаний',
+      'Olaylar': 'Инциденты',
+      'Olay Trendi (Son 7 Dönem)': 'Тренд инцидентов (последние 7 периодов)',
+      'Olay Kategori Dağılımı': 'Распределение категорий инцидентов',
+      'Eğitim': 'Обучение',
+      'Eğitime Katılım Trendi': 'Тренд участия в обучении',
+      'Eğitim Tamamlama Oranı': 'Уровень завершения обучения',
+      'KKD Yönetimi': 'Управление СИЗ',
+      'KKD Teslim Alım Trendi': 'Тренд поступления СИЗ',
+      'KKD Stok Dağılımı': 'Распределение запасов СИЗ',
+      'Ekipman': 'Оборудование',
+      'Ekipman Envanteri': 'Инвентаризация оборудования',
+      'Sertifikasyon Uyum Oranı': 'Уровень соответствия сертификации',
+      'İş Sağlığı': 'Охрана труда',
+      'İşe Uygunluk Trendi': 'Тренд годности к работе',
+      'Sağlık Durum Dağılımı': 'Распределение статусов здоровья',
+      'Risk Yönetimi': 'Управление рисками',
+      'Açık Risk Trendi': 'Тренд открытых рисков',
+      'Risk Seviyesi Dağılımı': 'Распределение уровней риска',
+      'Çevre': 'Экология',
+      'Atık Üretimi Trendi': 'Тренд образования отходов',
+      'Geri Dönüşüm Trendi': 'Тренд переработки',
+      'Mevzuata Uyum': 'Соответствие законодательству',
+      'Uyum Skoru': 'Оценка соответствия',
+      'Tetkik ve Uygunsuzluk Görünümü': 'Аудиты и несоответствия',
+      'Aktif Çalışma İzni': 'Активные разрешения на работы',
+      'Kapatılan Çalışma İzni': 'Закрытые разрешения на работы',
+      'Uygunluk': 'Соответствие',
+      'Sıcak Çalışma': 'Горячие работы',
+      'Kapalı Alan': 'Замкнутое пространство',
+      'Yüksekte Çalışma': 'Работа на высоте',
+      'Çalışma İzni İhlali': 'Нарушение разрешения на работы',
+      'Toplam Denetim': 'Всего инспекций',
+      'Açık Bulgu': 'Открытые замечания',
+      'Haftalık Performans': 'Недельная эффективность',
+      'Kapalı Bulgu': 'Закрытые замечания',
+      'Geciken Aksiyonlar': 'Просроченные действия',
+      'Pozitif Gözlem': 'Позитивные наблюдения',
+      'Toplam Olay': 'Всего инцидентов',
+      'Ramak Kala Olay': 'Почти произошедший инцидент',
+      'Haftalık Oryantasyon': 'Еженедельный вводный инструктаж',
+      'Toolbox Konuşmaları': 'Инструктажи Toolbox',
+      'Süresi Dolan Sertifikalar': 'Просроченные сертификаты',
+      'Aylık Oryantasyon': 'Ежемесячный вводный инструктаж',
+      'Toplam Oryantasyon': 'Всего вводных инструктажей',
+      'Yaklaşan Eğitimler': 'Предстоящие обучения',
+      'Stokta': 'На складе',
+      'Dağıtılan': 'Выдано',
+      'Düşük Stok Kalemleri': 'Позиции с низким запасом',
+      'Teslim Alınan': 'Получено',
+      'Tüketim Trendi': 'Тренд потребления',
+      'Dağılım': 'Распределение',
+      'Toplam Ekipman': 'Всего оборудования',
+      'Denetimi Gecikmiş': 'Просроченная проверка',
+      'Servis Dışı': 'Вне эксплуатации',
+      'Mobil': 'Мобильное',
+      'Ağır': 'Тяжелое',
+      'Kaldırma': 'Подъемное',
+      'İşe Uygun': 'Годен к работе',
+      'Muayene Zamanı Gelen': 'Требуется осмотр',
+      'Aşılama': 'Вакцинация',
+      'Toplam Çalışan': 'Всего сотрудников',
+      'Kronik Hastalık': 'Хроническое заболевание',
+      'Bulaşıcı Hastalık': 'Инфекционное заболевание',
+      'Açık Riskler': 'Открытые риски',
+      'Yüksek Riskler': 'Высокие риски',
+      'Kapanan Riskler': 'Закрытые риски',
+      'Orta Riskler': 'Средние риски',
+      'Düşük Riskler': 'Низкие риски',
+      'Kritik Risk Adedi': 'Количество критических рисков',
+      'Oluşan Atık': 'Образовано отходов',
+      'Geri Dönüştürülen Atık': 'Переработано отходов',
+      'Çevresel Olaylar': 'Экологические инциденты',
+      'Su Tüketimi': 'Потребление воды',
+      'Elektrik Tüketimi': 'Потребление электроэнергии',
+      'Yakıt Tüketimi': 'Потребление топлива',
+      'Yasal Uyum': 'Юридическое соответствие',
+      'Açık Uygunsuzluk': 'Открытые несоответствия',
+      'Açık DÖF': 'Открытые CAPA',
+      'İç Tetkikler': 'Внутренние аудиты',
+      'Dış Tetkikler': 'Внешние аудиты',
+      'Kapanan DÖF': 'Закрытые CAPA',
+      'First Aid Cases': 'Случаи первой помощи',
+      'Near Miss': 'Почти произошедший инцидент',
+      'Total Incidents': 'Всего инцидентов',
+      'Unsafe Acts': 'Небезопасные действия',
+      'Unsafe Conditions': 'Небезопасные условия',
+      'Risk Score': 'Риск-скор',
+      'Compliance': 'Соответствие',
+      'Safety Performance': 'Показатели безопасности',
+      'Permit to Work': 'Разрешение на работы',
+      'Inspections': 'Инспекции',
+      'Incidents': 'Инциденты',
+      'Training': 'Обучение',
+      'PPE Management': 'Управление СИЗ',
+      'Occupational Health': 'Охрана труда',
+      'Risk Management': 'Управление рисками',
+      'Environmental': 'Экология',
+      'Compliance Score': 'Оценка соответствия',
+      'Training Completion': 'Завершение обучения',
+      'PPE Stock Health': 'Состояние запасов СИЗ',
+      'Environmental Incidents': 'Экологические инциденты',
+      'Project Comparison': 'Сравнение проектов',
+      'Department Comparison': 'Сравнение отделов',
+      'HSE Activity by Project': 'HSE-активность по проектам',
+      'HSE Activity by Department': 'HSE-активность по отделам',
+      'Project Distribution': 'Распределение проектов',
+      'Department Distribution': 'Распределение отделов',
+      'Project': 'Проект',
+      'Period': 'Период',
+      'Date': 'Дата',
+      'Page': 'Страница',
+      'CEO Executive Summary': 'Сводка руководства CEO'
+    };
+    const pdfText = (value: string) => (language === 'ru' ? pdfRuCopy[value] ?? localizeText(value, language) : localizeText(value, language));
+
     const selectedProjectLabel =
       projectFilterOptions.find((project) => project.id === dashboardFilters.projectId)?.name ??
-      (language === 'en' ? 'All Projects' : 'Tüm Projeler');
-    const periodLabel = periodLabelMap[dashboardFilters.period] ?? 'Aylık';
+      pdfCopy.allProjects;
+    const periodLabel = pdfCopy.period[dashboardFilters.period] ?? pdfCopy.period.monthly;
+
+    const comparisonRows =
+      dashboardFilters.comparisonType === 'project'
+        ? dashboardData.projectComparison
+        : dashboardFilters.comparisonType === 'department'
+          ? dashboardData.departmentComparison
+          : [];
+
+    const totalPages = 1 + (dashboardFilters.comparisonType === 'none' ? 0 : 1) + dashboardData.sections.length;
+    const pageNumberText = (pageNumber: number) => `${pdfCopy.pageLabel} ${pageNumber} / ${totalPages}`;
 
     const sectionRows = dashboardData.sections.map((section) => {
       const metricSet = section.incidentExecutiveKpis
@@ -9321,8 +9551,6 @@ export function App() {
       };
     });
 
-    const pageOneSections = sectionRows.slice(0, 5);
-    const pageTwoSections = sectionRows.slice(5, 10);
     const kpiRows = dashboardData.summaryKpis;
 
     const renderMiniBars = (values: number[]) => {
@@ -9341,13 +9569,177 @@ export function App() {
         .map(
           (section) => `
             <article class="chart-mini-card">
-              <strong>${escapeHtml(localizeText(section.title, language))}</strong>
-              <div class="chart-mini-label">${escapeHtml(localizeText(section.chartA.label, language))}</div>
+              <strong>${escapeHtml(pdfText(section.title))}</strong>
+              <div class="chart-mini-label">${escapeHtml(pdfText(section.chartA.label))}</div>
               ${renderMiniBars(section.chartA.values)}
             </article>
           `
         )
         .join('');
+
+    const renderExecutiveSection = (section: (typeof dashboardData.sections)[number]) => `
+      <section class="block">
+        <div class="block-title">${escapeHtml(pdfText(section.title))}</div>
+        <div class="chart-mini-grid chart-mini-grid-full">
+          <article class="chart-mini-card chart-mini-card-large">
+            <strong>${escapeHtml(pdfText(section.chartA.label))}</strong>
+            ${renderMiniBars(section.chartA.values)}
+          </article>
+          ${section.chartB ? `
+            <article class="chart-mini-card chart-mini-card-large">
+              <strong>${escapeHtml(pdfText(section.chartB.label))}</strong>
+              ${renderMiniBars(section.chartB.values)}
+            </article>
+          ` : ''}
+        </div>
+        ${section.incidentExecutiveKpis ? `
+          <div class="pdf-kpi-bar">
+            ${section.incidentExecutiveKpis
+              .map(
+                (kpi) => `
+                  <article class="pdf-kpi-card pdf-kpi-card-compact">
+                    <div class="kpi-name">${escapeHtml(pdfText(kpi.label))}</div>
+                    <strong class="kpi-val">${escapeHtml(kpi.value)}</strong>
+                    ${kpi.note ? `<div class="kpi-trend">${escapeHtml(pdfText(kpi.note))}</div>` : ''}
+                  </article>
+                `
+              )
+              .join('')}
+          </div>
+        ` : `
+          <div class="pdf-highlight-grid">
+            ${section.highlights
+              .map(
+                (highlight) => `
+                  <article class="pdf-highlight-item">
+                    <span>${escapeHtml(pdfText(highlight.label))}</span>
+                    <strong>${escapeHtml(highlight.value)}</strong>
+                  </article>
+                `
+              )
+              .join('')}
+          </div>
+        `}
+        ${section.details.length > 0 ? `
+          <div class="pdf-detail-grid">
+            ${section.details
+              .map(
+                (detail) => `
+                  <article class="pdf-detail-item">
+                    <span>${escapeHtml(pdfText(detail.label))}</span>
+                    <strong>${escapeHtml(detail.value)}</strong>
+                    ${detail.note ? `<small>${escapeHtml(pdfText(detail.note))}</small>` : ''}
+                  </article>
+                `
+              )
+              .join('')}
+          </div>
+        ` : ''}
+      </section>
+    `;
+
+    const renderComparisonPage = () => {
+      if (dashboardFilters.comparisonType === 'none' || comparisonRows.length === 0) {
+        return '';
+      }
+
+      const comparisonTitle =
+        dashboardFilters.comparisonType === 'project'
+          ? pdfCopy.projectComparison
+          : pdfCopy.departmentComparison;
+
+      const comparisonChartTitle =
+        dashboardFilters.comparisonType === 'project'
+          ? pdfCopy.projectActivity
+          : pdfCopy.departmentActivity;
+
+      const distributionTitle =
+        dashboardFilters.comparisonType === 'project'
+          ? pdfCopy.projectDistribution
+          : pdfCopy.departmentDistribution;
+
+      return `
+        <section class="page pdf-page">
+          <section class="block">
+            <div class="block-title">${escapeHtml(comparisonTitle)}</div>
+            <div class="executive-charts-grid pdf-comparison-grid">
+              <article class="chart-mini-card chart-mini-card-large">
+                <strong>${escapeHtml(comparisonChartTitle)}</strong>
+                ${renderMiniBars(comparisonRows.map((row) => row.value))}
+              </article>
+              <article class="chart-mini-card chart-mini-card-large">
+                <strong>${escapeHtml(distributionTitle)}</strong>
+                ${renderMiniBars(comparisonRows.map((row) => row.value))}
+              </article>
+            </div>
+            <div class="pdf-highlight-grid pdf-highlight-grid-inline">
+              ${comparisonRows
+                .map(
+                  (entry) => `
+                    <article class="pdf-highlight-item">
+                      <span>${escapeHtml(pdfText(entry.label))}</span>
+                      <strong>${escapeHtml(String(entry.value))}</strong>
+                    </article>
+                  `
+                )
+                .join('')}
+            </div>
+          </section>
+          <footer class="footer"><span>${escapeHtml(pdfCopy.footerLabel)}</span><span>${escapeHtml(pageNumberText(2))}</span></footer>
+        </section>
+      `;
+    };
+
+    const pdfPages = [
+      `
+        <section class="page pdf-page">
+          <header class="header">
+            <h1 class="title">${escapeHtml(pdfCopy.title)}</h1>
+            <div class="meta">
+              <div><strong>${escapeHtml(language === 'ru' ? 'Период' : language === 'en' ? 'Period' : 'Periyot')}:</strong> ${escapeHtml(periodLabel)}</div>
+              <div><strong>${escapeHtml(language === 'ru' ? 'Проект' : language === 'en' ? 'Project' : 'Proje')}:</strong> ${escapeHtml(selectedProjectLabel)}</div>
+              <div><strong>${escapeHtml(language === 'ru' ? 'Дата' : language === 'en' ? 'Date' : 'Tarih')}:</strong> ${escapeHtml(new Date().toLocaleDateString(language === 'ru' ? 'ru-RU' : language === 'en' ? 'en-US' : 'tr-TR'))}</div>
+            </div>
+          </header>
+
+          <section class="block">
+            <div class="block-title">${escapeHtml(pdfCopy.strategicKpiSummary)}</div>
+            <div class="kpi-grid">
+              ${kpiRows
+                .map(
+                  (kpi) => `
+                    <article class="kpi-item">
+                      <div class="kpi-name">${escapeHtml(localizeText(kpi.label, language))}</div>
+                      <strong class="kpi-val">${escapeHtml(kpi.value)}</strong>
+                      <div class="kpi-trend">${escapeHtml(kpi.trend ?? '-')}</div>
+                    </article>
+                  `
+                )
+                .join('')}
+            </div>
+          </section>
+
+          <section class="block">
+            <div class="block-title">${escapeHtml(pdfCopy.fullPanelChartSummary)}</div>
+            <div class="chart-mini-grid chart-mini-grid-full">
+              ${renderSectionChartCards(dashboardData.sections)}
+            </div>
+          </section>
+
+          <footer class="footer"><span>${escapeHtml(pdfCopy.footerLabel)}</span><span>${escapeHtml(pageNumberText(1))}</span></footer>
+        </section>
+      `,
+      renderComparisonPage(),
+      ...dashboardData.sections.map((section, index) => {
+        const pageNumber = index + 3;
+        return `
+          <section class="page pdf-page">
+            ${renderExecutiveSection(section)}
+            <footer class="footer"><span>${escapeHtml(pdfCopy.footerLabel)}</span><span>${escapeHtml(pageNumberText(pageNumber))}</span></footer>
+          </section>
+        `;
+      })
+    ].filter((page) => page.trim().length > 0);
 
     const renderSectionTableRows = (rows: typeof sectionRows) =>
       rows
@@ -9368,12 +9760,12 @@ export function App() {
       <html lang="tr">
       <head>
         <meta charset="utf-8" />
-        <title>Yönetici Gösterge Paneli PDF</title>
+        <title>${escapeHtml(pdfCopy.title)}</title>
         <style>
           @page { size: A4 portrait; margin: 8mm 9mm; }
           body { margin: 0; font-family: Arial, sans-serif; color: #0f172a; }
-          .page { height: 277mm; page-break-after: always; display: flex; flex-direction: column; }
-          .page:last-child { page-break-after: auto; }
+          .pdf-page { break-after: page; page-break-after: always; break-inside: avoid; page-break-inside: avoid; }
+          .pdf-page:last-child { break-after: auto; page-break-after: auto; }
           .header { border: 1px solid #cfd9e6; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
           .title { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
           .meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; font-size: 10px; color: #334155; }
@@ -9381,7 +9773,9 @@ export function App() {
           .block { border: 1px solid #d4dde9; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
           .block-title { background: #f3f7fc; border-bottom: 1px solid #d4dde9; padding: 6px 8px; font-size: 11px; font-weight: 700; }
           .chart-mini-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 8px; }
+          .chart-mini-grid-full { grid-template-columns: repeat(2, minmax(0, 1fr)); }
           .chart-mini-card { border: 1px solid #dbe3ee; border-radius: 8px; padding: 8px; }
+          .chart-mini-card-large { min-height: 96px; }
           .chart-mini-card strong { display: block; font-size: 10px; margin-bottom: 4px; }
           .chart-mini-label { font-size: 9px; color: #475569; margin-bottom: 6px; }
           .mini-bars { height: 60px; display: flex; align-items: end; gap: 4px; }
@@ -9392,98 +9786,24 @@ export function App() {
           .kpi-name { font-size: 9px; color: #475569; line-height: 1.2; }
           .kpi-val { display: block; margin-top: 3px; font-size: 13px; font-weight: 700; }
           .kpi-trend { font-size: 9px; color: #0f766e; }
+          .pdf-kpi-bar, .pdf-highlight-grid, .pdf-detail-grid { display: grid; gap: 6px; padding: 8px; }
+          .pdf-kpi-bar { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+          .pdf-highlight-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          .pdf-highlight-grid-inline { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+          .pdf-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .pdf-kpi-card, .pdf-highlight-item, .pdf-detail-item { border: 1px solid #dbe3ee; border-radius: 8px; padding: 6px 7px; }
+          .pdf-kpi-card-compact .kpi-name, .pdf-highlight-item span, .pdf-detail-item span { font-size: 9px; color: #475569; display: block; }
+          .pdf-kpi-card-compact .kpi-val { font-size: 12px; }
+          .pdf-highlight-item strong, .pdf-detail-item strong { display: block; margin-top: 2px; font-size: 11px; }
+          .pdf-detail-item small { display: block; margin-top: 2px; color: #64748b; font-size: 8px; }
           table { width: 100%; border-collapse: collapse; table-layout: fixed; }
           th, td { border: 1px solid #dbe3ee; padding: 5px 6px; font-size: 9px; vertical-align: top; }
           th { background: #f8fbff; text-align: left; font-weight: 700; }
-          .footer { margin-top: auto; border-top: 1px solid #d4dde9; padding-top: 5px; font-size: 9px; color: #475569; display: flex; justify-content: space-between; }
+          .footer { margin-top: 10px; border-top: 1px solid #d4dde9; padding-top: 5px; font-size: 9px; color: #475569; display: flex; justify-content: space-between; }
         </style>
       </head>
       <body>
-        <section class="page">
-          <header class="header">
-            <h1 class="title">Yönetici HSE Performans Özeti</h1>
-            <div class="meta">
-              <div><strong>Periyot:</strong> ${escapeHtml(periodLabel)}</div>
-              <div><strong>Proje:</strong> ${escapeHtml(selectedProjectLabel)}</div>
-              <div><strong>Tarih:</strong> ${escapeHtml(new Date().toLocaleDateString('tr-TR'))}</div>
-            </div>
-          </header>
-
-          <section class="block">
-            <div class="block-title">Stratejik KPI Özeti</div>
-            <div class="kpi-grid">
-              ${kpiRows
-                .map(
-                  (kpi) => `
-                    <article class="kpi-item">
-                      <div class="kpi-name">${escapeHtml(localizeText(kpi.label, language))}</div>
-                      <strong class="kpi-val">${escapeHtml(kpi.value)}</strong>
-                      <div class="kpi-trend">${escapeHtml(kpi.trend ?? '-')}</div>
-                    </article>
-                  `
-                )
-                .join('')}
-            </div>
-          </section>
-
-          <section class="block">
-            <div class="block-title">Grafik Özeti</div>
-            <div class="chart-mini-grid">
-              ${renderSectionChartCards(dashboardData.sections.slice(0, 6))}
-            </div>
-          </section>
-
-          <section class="block">
-            <div class="block-title">Öncelikli Alanlar (Sayfa 1)</div>
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 16%;">Bölüm</th>
-                  <th style="width: 40%;">Ana Göstergeler</th>
-                  <th style="width: 34%;">Detaylar</th>
-                  <th style="width: 10%;">Trend</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${renderSectionTableRows(pageOneSections)}
-              </tbody>
-            </table>
-          </section>
-
-          <footer class="footer"><span>CEO Yönetici Özeti</span><span>Sayfa 1 / 2</span></footer>
-        </section>
-
-        <section class="page">
-          <section class="block">
-            <div class="block-title">Operasyonel Alanlar (Sayfa 2)</div>
-            <table>
-              <thead>
-                <tr>
-                  <th style="width: 16%;">Bölüm</th>
-                  <th style="width: 40%;">Ana Göstergeler</th>
-                  <th style="width: 34%;">Detaylar</th>
-                  <th style="width: 10%;">Trend</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${renderSectionTableRows(pageTwoSections)}
-              </tbody>
-            </table>
-          </section>
-
-          <section class="block">
-            <div class="block-title">Yönetim Değerlendirmesi</div>
-            <table>
-              <tbody>
-                <tr><th style="width: 28%;">Genel Durum</th><td>HSE performansı kontrol altında, kritik aksiyonlar takip edilmelidir.</td></tr>
-                <tr><th>Önerilen Aksiyon</th><td>Yüksek riskli bulgular için haftalık yönetim gözden geçirme uygulanmalıdır.</td></tr>
-                <tr><th>Yönetim Notu</th><td>Bu rapor üst yönetim karar toplantıları için iki sayfalık özet formatında hazırlanmıştır.</td></tr>
-              </tbody>
-            </table>
-          </section>
-
-          <footer class="footer"><span>CEO Yönetici Özeti</span><span>Sayfa 2 / 2</span></footer>
-        </section>
+        ${pdfPages.join('')}
       </body>
       </html>
     `;
