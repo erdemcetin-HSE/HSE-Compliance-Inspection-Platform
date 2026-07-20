@@ -1724,6 +1724,118 @@ const buildTurkishReplacementMap = (language: Exclude<Language, 'tr'>): Map<stri
     }
   });
 
+  const extraReplacements: Record<Exclude<Language, 'tr'>, Array<[string, string]>> = {
+    en: [
+      ['Haz', 'Jun'],
+      ['Tem', 'Jul'],
+      ['Agu', 'Aug'],
+      ['Eyl', 'Sep'],
+      ['Eki', 'Oct'],
+      ['Kas', 'Nov'],
+      ['Ara', 'Dec'],
+      ['Artış', 'Increase'],
+      ['Azalış', 'Decrease'],
+      ['Toplam', 'Total'],
+      ['Ortalama', 'Average'],
+      ['Son', 'Last'],
+      ['Güçlü', 'Strong'],
+      ['Kritik', 'Critical'],
+      ['Sabit', 'Stable'],
+      ['Servis Dışı', 'Out of Service'],
+      ['Açık Bulgu', 'Open Finding'],
+      ['Kapalı Bulgu', 'Closed Finding'],
+      ['Pozitif Gözlem', 'Positive Observation'],
+      ['Dağılım', 'Distribution']
+    ],
+    ru: [
+      ['Haz', 'Июн'],
+      ['Tem', 'Июл'],
+      ['Agu', 'Авг'],
+      ['Eyl', 'Сен'],
+      ['Eki', 'Окт'],
+      ['Kas', 'Ноя'],
+      ['Ara', 'Дек'],
+      ['Artış', 'Рост'],
+      ['Azalış', 'Снижение'],
+      ['Toplam', 'Всего'],
+      ['Ortalama', 'Среднее'],
+      ['Son', 'Последнее'],
+      ['Güçlü', 'Сильный'],
+      ['Kritik', 'Критично'],
+      ['Sabit', 'Стабильно'],
+      ['Periyot', 'Период'],
+      ['Günlük', 'Ежедневно'],
+      ['Haftalık', 'Еженедельно'],
+      ['Aylık', 'Ежемесячно'],
+      ['Yıllık', 'Ежегодно'],
+      ['Özel Tarih Aralığı', 'Произвольный период'],
+      ['Karşılaştırma', 'Сравнение'],
+      ['Yok', 'Нет'],
+      ['Projeleri Seç', 'Выберите проекты'],
+      ['Departmanları Seç', 'Выберите отделы'],
+      ['Filtreleri Uygula', 'Применить фильтры'],
+      ['Filtreleri Sıfırla', 'Сбросить фильтры'],
+      ['Yönetici PDF Çıktısı', 'PDF-отчет для руководства'],
+      ['Güvenlik Performansı', 'Показатели безопасности'],
+      ['Güvenlik Skoru Trendi', 'Тренд показателя безопасности'],
+      ['Genel Güvenlik Endeksi', 'Общий индекс безопасности'],
+      ['Kontrol Et', 'Проверить'],
+      ['Güvenli Adam-Saat - Günlük', 'Безопасные человеко-часы - день'],
+      ['Güvenli Adam-Saat - Haftalık', 'Безопасные человеко-часы - неделя'],
+      ['Güvenli Adam-Saat - Aylık', 'Безопасные человеко-часы - месяц'],
+      ['Güvenli Adam-Saat - Toplam', 'Безопасные человеко-часы - всего'],
+      ['Günlük, haftalık ve aylık güvenli kapasitenin yıllık toplamı', 'Годовой итог безопасной мощности на основе дневных, недельных и месячных значений'],
+      ['Sıcak Çalışma', 'Огневые работы'],
+      ['Kapalı Alan', 'Замкнутое пространство'],
+      ['Yüksekte Çalışma', 'Работы на высоте'],
+      ['Denetim Sayısı Trendi', 'Тренд количества инспекций'],
+      ['Bulgu Durumu', 'Статус замечаний'],
+      ['Toplam Olay', 'Всего инцидентов'],
+      ['Hedef <= 10', 'Цель <= 10'],
+      ['Sıfır yaralanma hedefi', 'Цель: ноль травм'],
+      ['Vardiya bazlı izle', 'Отслеживать по сменам'],
+      ['Davranış aksiyonları', 'Поведенческие действия'],
+      ['Mühendislik kontrolü', 'Инженерные меры контроля'],
+      ['Bildirim ivmesi', 'Динамика уведомлений'],
+      ['Anında eskalasyon', 'Немедленная эскалация'],
+      ['Toolbox Konuşmaları', 'Тулбокс-брифинги'],
+      ['Süresi Dolan Sertifikalar', 'Сертификаты с истекшим сроком'],
+      ['Dağılım', 'Распределение'],
+      ['Mekanik', 'Механика'],
+      ['İnşaat', 'Строительство'],
+      ['Elektrik', 'Электрика'],
+      ['İdari', 'Административный'],
+      ['Servis Dışı', 'Вне эксплуатации'],
+      ['Mobil', 'Мобильное'],
+      ['Ağır', 'Тяжелое'],
+      ['Kaldırma', 'Подъемное'],
+      ['Kronik Hastalık', 'Хронические заболевания'],
+      ['Bulaşıcı Hastalık', 'Инфекционные заболевания'],
+      ['Aşılama', 'Вакцинация'],
+      ['Kritik Risk Adedi', 'Количество критических рисков'],
+      ['Atık Üretimi Trendi', 'Тренд образования отходов'],
+      ['Geri Dönüşüm Trendi', 'Тренд переработки'],
+      ['Mevzuata Uyum', 'Соответствие законодательству'],
+      ['Uyum Skoru', 'Оценка соответствия'],
+      ['Tetkik ve Uygunsuzluk Görünümü', 'Обзор аудитов и несоответствий'],
+      ['Yasal Uygunluk', 'Юридическое соответствие'],
+      ['Açık Uygunsuzluk', 'Открытое несоответствие'],
+      ['Açık Bulgu', 'Открытое замечание'],
+      ['Kapalı Bulgu', 'Закрытое замечание'],
+      ['Pozitif Gözlem', 'Позитивное наблюдение'],
+      ['Uygunluk', 'Соответствие'],
+      ['Rüzgar Yönü', 'Направление ветра'],
+      ['Açık', 'Ясно'],
+      ['performansı ve yönetici özeti.', 'производительность и сводка для руководства.'],
+      ['Erdem Cetin tarafından tasarlandı ve geliştirildi', 'Разработано и спроектировано Erdem Cetin'],
+      ['Tasarım ve Geliştirme: Erdem Cetin © 2026 Tüm Hakları Saklıdır.', 'Дизайн и разработка: Erdem Cetin © 2026 Все права защищены.']
+    ]
+  };
+
+  extraReplacements[language].forEach(([from, to]) => {
+    replacements.set(from, to);
+  });
+
   return replacements;
 };
 
@@ -1736,6 +1848,23 @@ const replaceByDictionary = (input: string, replacements: Array<[string, string]
     output = output.split(from).join(to);
   });
   return output;
+};
+
+const applyTextReplacementsToNode = (root: Node, replacementEntries: Array<[string, string]>) => {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+
+  while (node) {
+    const textNode = node as Text;
+    const current = textNode.nodeValue ?? '';
+    if (current.trim()) {
+      const replaced = replaceByDictionary(current, replacementEntries);
+      if (replaced !== current) {
+        textNode.nodeValue = replaced;
+      }
+    }
+    node = walker.nextNode();
+  }
 };
 
 function kpiTermHint(label: string, language: Language): string {
@@ -3493,20 +3622,31 @@ export function App() {
     const replacementMap = buildTurkishReplacementMap(language);
     const replacementEntries = Array.from(replacementMap.entries()).sort((a, b) => b[0].length - a[0].length);
     const root = document.querySelector('.page') ?? document.body;
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    let node = walker.nextNode();
 
-    while (node) {
-      const textNode = node as Text;
-      const current = textNode.nodeValue ?? '';
-      if (current.trim()) {
-        const replaced = replaceByDictionary(current, replacementEntries);
-        if (replaced !== current) {
-          textNode.nodeValue = replaced;
+    applyTextReplacementsToNode(root, replacementEntries);
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((addedNode) => {
+          applyTextReplacementsToNode(addedNode, replacementEntries);
+        });
+
+        if (mutation.type === 'characterData' && mutation.target.nodeType === Node.TEXT_NODE) {
+          const textNode = mutation.target as Text;
+          const current = textNode.nodeValue ?? '';
+          const replaced = replaceByDictionary(current, replacementEntries);
+          if (replaced !== current) {
+            textNode.nodeValue = replaced;
+          }
         }
-      }
-      node = walker.nextNode();
-    }
+      });
+    });
+
+    observer.observe(root, { childList: true, subtree: true, characterData: true });
+
+    return () => {
+      observer.disconnect();
+    };
   }, [language, activeModule, projectFilter, accessLevel]);
 
   useEffect(() => {
