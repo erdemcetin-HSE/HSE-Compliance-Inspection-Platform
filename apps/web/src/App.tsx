@@ -1567,21 +1567,44 @@ const buildTurkishReplacementMap = (language: Exclude<Language, 'tr'>): Map<stri
 
     const russian = textByLanguage.ru?.[english];
     replacements.set(turkish, russian ?? english);
+
+    if (russian) {
+      replacements.set(english, russian);
+    }
   });
 
   Object.entries(moduleLabelsByLanguage.tr).forEach(([key, turkishLabel]) => {
     const englishLabel = moduleLabelsByLanguage.en[key as ModuleKey];
     const russianLabel = moduleLabelsByLanguage.ru[key as ModuleKey];
     replacements.set(turkishLabel, language === 'en' ? englishLabel : russianLabel ?? englishLabel);
+
+    if (language === 'ru') {
+      replacements.set(englishLabel, russianLabel ?? englishLabel);
+    }
   });
 
   Object.entries(uiText.tr).forEach(([key, turkishLabel]) => {
     const englishLabel = uiText.en[key] ?? turkishLabel;
     const russianLabel = uiText.ru[key] ?? englishLabel;
     replacements.set(turkishLabel, language === 'en' ? englishLabel : russianLabel);
+
+    if (language === 'ru') {
+      replacements.set(englishLabel, russianLabel);
+    }
   });
 
   return replacements;
+};
+
+const replaceByDictionary = (input: string, replacements: Array<[string, string]>): string => {
+  let output = input;
+  replacements.forEach(([from, to]) => {
+    if (!from || from === to || !output.includes(from)) {
+      return;
+    }
+    output = output.split(from).join(to);
+  });
+  return output;
 };
 
 function kpiTermHint(label: string, language: Language): string {
@@ -3337,6 +3360,7 @@ export function App() {
     }
 
     const replacementMap = buildTurkishReplacementMap(language);
+    const replacementEntries = Array.from(replacementMap.entries()).sort((a, b) => b[0].length - a[0].length);
     const root = document.querySelector('.page') ?? document.body;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let node = walker.nextNode();
@@ -3344,11 +3368,10 @@ export function App() {
     while (node) {
       const textNode = node as Text;
       const current = textNode.nodeValue ?? '';
-      const trimmed = current.trim();
-      if (trimmed && replacementMap.has(trimmed)) {
-        const replacement = replacementMap.get(trimmed);
-        if (replacement) {
-          textNode.nodeValue = current.replace(trimmed, replacement);
+      if (current.trim()) {
+        const replaced = replaceByDictionary(current, replacementEntries);
+        if (replaced !== current) {
+          textNode.nodeValue = replaced;
         }
       }
       node = walker.nextNode();
