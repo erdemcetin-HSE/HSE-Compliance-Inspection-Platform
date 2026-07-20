@@ -3235,6 +3235,13 @@ label {
 
   .sidebar {
     position: static;
+    min-height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .content {
+    min-height: auto;
   }
 
   .executive-header-grid {
