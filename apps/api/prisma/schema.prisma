@@ -1,0 +1,385 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OpenClosedStatus {
+  OPEN
+  CLOSED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum PtwStatus {
+  DRAFT
+  PENDING_APPROVAL
+  ACTIVE
+  SUSPENDED
+  COMPLETED
+  CANCELLED
+}
+
+enum PtwControlStatus {
+  COMPLIANT
+  NON_COMPLIANT
+  NA
+}
+
+enum PtwActionStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum PtwAttachmentType {
+  PHOTO
+  PDF
+  RISK_ASSESSMENT
+  METHOD_STATEMENT
+  TOOLBOX_TALK
+  CERTIFICATE
+  OTHER
+}
+
+model Company {
+  id             String             @id @default(cuid())
+  name           String
+  legalName      String?
+  taxNumber      String?
+  country        String?
+  city           String?
+  address        String?
+  currency       String             @default("RUB")
+  projects       ProjectMaster[]
+  departments    DepartmentMaster[]
+  contractors    ContractorMaster[]
+  auditLogs      AuditLog[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model ProjectMaster {
+  id             String             @id @default(cuid())
+  companyId      String?
+  company        Company?           @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  name           String
+  country        String
+  city           String
+  address        String
+  contractScope  String
+  isActive       Boolean            @default(true)
+  contractors    ContractorMaster[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model DepartmentMaster {
+  id             String             @id @default(cuid())
+  companyId      String?
+  company        Company?           @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  name           String
+  code           String
+  description    String?
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+}
+
+model ContractorMaster {
+  id                       String          @id @default(cuid())
+  companyId                String?
+  company                  Company?        @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  projectId                String?
+  project                  ProjectMaster?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  companyName              String
+  country                  String
+  city                     String
+  projectLocation          String
+  contractScope            String
+  hseWarningCount          Int             @default(0)
+  hseWarningDate           DateTime?
+  fireWarningCount         Int             @default(0)
+  fireWarningDate          DateTime?
+  environmentWarningCount  Int             @default(0)
+  environmentWarningDate   DateTime?
+  penaltyCount             Int             @default(0)
+  penaltyLegalClause       String?
+  totalPenaltyAmount       Int             @default(0)
+  isActive                 Boolean         @default(true)
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+}
+
+model AuditLog {
+  id             String     @id @default(cuid())
+  companyId      String?
+  company        Company?   @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  entityType     String
+  entityId       String?
+  action         String
+  actor          String     @default("system")
+  beforeJson     Json?
+  afterJson      Json?
+  createdAt      DateTime   @default(now())
+}
+
+model Employee {
+  id            String        @id @default(cuid())
+  firstName     String
+  lastName      String
+  contractor    String?
+  region        String?
+  roleTitle     String?
+  trainings     Training[]
+  inspections   Inspection[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Inspection {
+  id               String                 @id @default(cuid())
+  employeeId       String
+  employee         Employee               @relation(fields: [employeeId], references: [id])
+  contractor       String
+  region           String
+  workNature       String
+  findings         String?
+  riskLevel        RiskLevel
+  correctiveAction String?
+  dueDate          DateTime?
+  status           OpenClosedStatus       @default(OPEN)
+  attachments      InspectionAttachment[]
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+}
+
+model InspectionAttachment {
+  id            String      @id @default(cuid())
+  inspectionId  String
+  inspection    Inspection  @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+  fileName      String
+  fileType      String
+  fileUrl       String
+  createdAt     DateTime    @default(now())
+}
+
+model PpeItem {
+  id             String            @id @default(cuid())
+  name           String
+  region         String?
+  transactions   PpeTransaction[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model PpeTransaction {
+  id             String      @id @default(cuid())
+  itemId         String
+  item           PpeItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  quantityIn     Int         @default(0)
+  quantityUsed   Int         @default(0)
+  quantityLeft   Int
+  note           String?
+  createdAt      DateTime    @default(now())
+}
+
+model PtwRecord {
+  id                   String               @id @default(cuid())
+  permitNo             String               @unique
+  organization         String
+  department           String
+  project              String
+  location             String
+  permitType           String
+  issueDate            DateTime
+  validityStart        DateTime
+  validityEnd          DateTime
+  status               PtwStatus            @default(DRAFT)
+
+  requesterName        String
+  issuerName           String
+  jobResponsibleName   String
+  siteResponsibleName  String
+  hseResponsibleName   String
+  authorizedApprover   String
+
+  jobTitle             String
+  jobDescription       String
+  workArea             String
+  plannedWork          String
+  workingConditions    String
+  workStartDate        DateTime
+  workStartTime        String
+  workEndDate          DateTime
+  workEndTime          String
+
+  specialConditions    String?
+
+  preparedBy           String?
+  hseApprovalBy        String?
+  projectManagerBy     String?
+  employerRepBy        String?
+  digitalSignature     String?
+  approvalDate         DateTime?
+
+  workCompleted        Boolean              @default(false)
+  areaSafe             Boolean              @default(false)
+  materialsCollected   Boolean              @default(false)
+  ptwClosed            Boolean              @default(false)
+  closedBy             String?
+  closedAt             DateTime?
+  closureRemarks       String?
+
+  hazards              PtwHazard[]
+  safetySystems        PtwSafetySystem[]
+  equipmentUsed        PtwEquipment[]
+  teamMembers          PtwTeamMember[]
+  preWorkChecks        PtwPreWorkCheck[]
+  precautions          PtwPrecaution[]
+  dailyLogs            PtwDailyLog[]
+  teamChanges          PtwTeamChange[]
+  attachments          PtwAttachment[]
+
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+}
+
+model PtwHazard {
+  id           String     @id @default(cuid())
+  ptwId        String
+  ptw          PtwRecord  @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  name         String
+  createdAt    DateTime   @default(now())
+}
+
+model PtwSafetySystem {
+  id           String     @id @default(cuid())
+  ptwId        String
+  ptw          PtwRecord  @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  name         String
+  createdAt    DateTime   @default(now())
+}
+
+model PtwEquipment {
+  id           String     @id @default(cuid())
+  ptwId        String
+  ptw          PtwRecord  @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  name         String
+  createdAt    DateTime   @default(now())
+}
+
+model PtwTeamMember {
+  id                 String     @id @default(cuid())
+  ptwId              String
+  ptw                PtwRecord  @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  fullName           String
+  duty               String
+  company            String
+  trainingStatus     String
+  signature          String
+  createdAt          DateTime   @default(now())
+}
+
+model PtwPreWorkCheck {
+  id                 String           @id @default(cuid())
+  ptwId              String
+  ptw                PtwRecord        @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  checkItem          String
+  status             PtwControlStatus @default(COMPLIANT)
+  note               String?
+  createdAt          DateTime         @default(now())
+}
+
+model PtwPrecaution {
+  id                 String          @id @default(cuid())
+  ptwId              String
+  ptw                PtwRecord       @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  measure            String
+  responsible        String
+  dueDate            DateTime?
+  status             PtwActionStatus @default(OPEN)
+  createdAt          DateTime        @default(now())
+}
+
+model PtwDailyLog {
+  id                 String     @id @default(cuid())
+  ptwId              String
+  ptw                PtwRecord  @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  logDate            DateTime
+  logTime            String
+  workStarted        String?
+  workEnded          String?
+  note               String?
+  responsible        String
+  createdAt          DateTime   @default(now())
+}
+
+model PtwTeamChange {
+  id                 String     @id @default(cuid())
+  ptwId              String
+  ptw                PtwRecord  @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  addedPersonnel     String?
+  removedPersonnel   String?
+  changeDate         DateTime
+  approvedBy         String
+  createdAt          DateTime   @default(now())
+}
+
+model PtwAttachment {
+  id                 String            @id @default(cuid())
+  ptwId              String
+  ptw                PtwRecord         @relation(fields: [ptwId], references: [id], onDelete: Cascade)
+  type               PtwAttachmentType @default(OTHER)
+  fileName           String
+  fileType           String
+  fileUrl            String
+  createdAt          DateTime          @default(now())
+}
+
+model Observation {
+  id             String            @id @default(cuid())
+  observationType String
+  location       String
+  details        String
+  ownerName      String
+  status         OpenClosedStatus  @default(OPEN)
+  closedAt       DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model RiskRecord {
+  id             String       @id @default(cuid())
+  title          String
+  probability    Int
+  impact         Int
+  score          Int
+  riskLevel      RiskLevel
+  status         OpenClosedStatus @default(OPEN)
+  actionOwner    String?
+  dueDate        DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Training {
+  id                String      @id @default(cuid())
+  employeeId        String
+  employee          Employee    @relation(fields: [employeeId], references: [id])
+  trainingName      String
+  trainingDate      DateTime
+  validUntil        DateTime
+  certificateNo     String?
+  certificateUrl    String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
