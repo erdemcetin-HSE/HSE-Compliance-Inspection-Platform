@@ -1536,12 +1536,53 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
 };
 
 function localizeText(label: string, language: Language): string {
+  const trToEnMap = Object.fromEntries(Object.entries(textByLanguage.tr ?? {}).map(([english, translated]) => [translated, english]));
+
   if (language === 'en') {
-    const trToEnMap = Object.fromEntries(Object.entries(textByLanguage.tr ?? {}).map(([english, translated]) => [translated, english]));
     return (trToEnMap[label] as string | undefined) ?? label;
   }
+
+  if (language === 'ru') {
+    const ruDirect = textByLanguage.ru?.[label];
+    if (ruDirect) {
+      return ruDirect;
+    }
+
+    const englishLabel = (trToEnMap[label] as string | undefined) ?? label;
+    return textByLanguage.ru?.[englishLabel] ?? englishLabel;
+  }
+
   return textByLanguage[language]?.[label] ?? label;
 }
+
+const buildTurkishReplacementMap = (language: Exclude<Language, 'tr'>): Map<string, string> => {
+  const replacements = new Map<string, string>();
+  const trEntries = Object.entries(textByLanguage.tr ?? {});
+
+  trEntries.forEach(([english, turkish]) => {
+    if (language === 'en') {
+      replacements.set(turkish, english);
+      return;
+    }
+
+    const russian = textByLanguage.ru?.[english];
+    replacements.set(turkish, russian ?? english);
+  });
+
+  Object.entries(moduleLabelsByLanguage.tr).forEach(([key, turkishLabel]) => {
+    const englishLabel = moduleLabelsByLanguage.en[key as ModuleKey];
+    const russianLabel = moduleLabelsByLanguage.ru[key as ModuleKey];
+    replacements.set(turkishLabel, language === 'en' ? englishLabel : russianLabel ?? englishLabel);
+  });
+
+  Object.entries(uiText.tr).forEach(([key, turkishLabel]) => {
+    const englishLabel = uiText.en[key] ?? turkishLabel;
+    const russianLabel = uiText.ru[key] ?? englishLabel;
+    replacements.set(turkishLabel, language === 'en' ? englishLabel : russianLabel);
+  });
+
+  return replacements;
+};
 
 function kpiTermHint(label: string, language: Language): string {
   if (language !== 'tr') {
@@ -3289,6 +3330,30 @@ export function App() {
 
     window.__HSE_GUEST_MODE__ = accessLevel === 'guest';
   }, [accessLevel]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || language === 'tr') {
+      return;
+    }
+
+    const replacementMap = buildTurkishReplacementMap(language);
+    const root = document.querySelector('.page') ?? document.body;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode();
+
+    while (node) {
+      const textNode = node as Text;
+      const current = textNode.nodeValue ?? '';
+      const trimmed = current.trim();
+      if (trimmed && replacementMap.has(trimmed)) {
+        const replacement = replacementMap.get(trimmed);
+        if (replacement) {
+          textNode.nodeValue = current.replace(trimmed, replacement);
+        }
+      }
+      node = walker.nextNode();
+    }
+  }, [language, activeModule, projectFilter, accessLevel]);
 
   useEffect(() => {
     if (!isAuthorizedViewer) {
