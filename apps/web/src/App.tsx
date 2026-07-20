@@ -3147,19 +3147,50 @@ export function App() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
-  const allowedEmails = useMemo(() => {
-    const raw = import.meta.env.VITE_ALLOWED_EMAILS ?? '';
-    const parsed = raw
+  const allowedCredentials = useMemo(() => {
+    const credentials: Record<string, string> = {};
+
+    const pairRaw = (import.meta.env.VITE_AUTH_CREDENTIALS ?? '').trim();
+    if (pairRaw.length > 0) {
+      pairRaw
+        .split(';')
+        .map((entry: string) => entry.trim())
+        .filter((entry: string) => entry.length > 0)
+        .forEach((entry: string) => {
+          const dividerIndex = entry.indexOf(':');
+          if (dividerIndex <= 0) {
+            return;
+          }
+          const email = entry.slice(0, dividerIndex).trim().toLowerCase();
+          const password = entry.slice(dividerIndex + 1).trim();
+          if (email && password) {
+            credentials[email] = password;
+          }
+        });
+    }
+
+    if (Object.keys(credentials).length > 0) {
+      return credentials;
+    }
+
+    const fallbackEmails = (import.meta.env.VITE_ALLOWED_EMAILS ?? '')
       .split(',')
       .map((item: string) => item.trim().toLowerCase())
       .filter((item: string) => item.length > 0);
-    return parsed.length > 0 ? parsed : ['admin@gohse.blog'];
+    const fallbackPassword = (import.meta.env.VITE_ACCESS_PASSWORD ?? 'ChangeMe123!').trim();
+
+    if (fallbackEmails.length > 0) {
+      fallbackEmails.forEach((email: string) => {
+        credentials[email] = fallbackPassword;
+      });
+      return credentials;
+    }
+
+    credentials['admin@gohse.blog'] = fallbackPassword;
+    return credentials;
   }, []);
 
-  const accessPassword = useMemo(
-    () => (import.meta.env.VITE_ACCESS_PASSWORD ?? 'ChangeMe123!').trim(),
-    []
-  );
+  const allowedEmails = useMemo(() => Object.keys(allowedCredentials), [allowedCredentials]);
 
   const isAuthorizedViewer = accessLevel === 'authorized';
   const t = uiText[language];
@@ -3764,7 +3795,8 @@ export function App() {
       return;
     }
 
-    if (loginPassword !== accessPassword) {
+    const expectedPassword = allowedCredentials[normalizedEmail] ?? '';
+    if (loginPassword !== expectedPassword) {
       setLoginError(language === 'en' ? 'Incorrect password.' : language === 'ru' ? 'Неверный пароль.' : 'Parola hatalı.');
       return;
     }
