@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { countryList, getCitiesForCountry } from './data/locations';
 
+declare global {
+  interface Window {
+    __HSE_GUEST_MODE__?: boolean;
+  }
+}
+
 let hasSeededProjectCatalog = false;
 
 type Status = 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
@@ -2629,6 +2635,16 @@ const loadDepartmentRecords = (): DepartmentRecord[] => {
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? '';
 
 const apiRequest = async <T,>(path: string, init?: RequestInit): Promise<T> => {
+  const method = (init?.method ?? 'GET').toUpperCase();
+  if (
+    typeof window !== 'undefined'
+    && window.__HSE_GUEST_MODE__
+    && method !== 'GET'
+    && method !== 'HEAD'
+  ) {
+    throw new Error('GUEST_MODE_WRITE_BLOCKED');
+  }
+
   const response = await fetch(`${apiBaseUrl}${path}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -3099,14 +3115,53 @@ const weatherCodeMeta = (code: number, language: Language) => {
 const directionFromDegrees = (degrees: number, language: Language) => {
   const trDirections = ['K', 'KD', 'D', 'GD', 'G', 'GB', 'B', 'KB'];
   const enDirections = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  const labels = language === 'en' ? enDirections : trDirections;
+  const ruDirections = ['С', 'СВ', 'В', 'ЮВ', 'Ю', 'ЮЗ', 'З', 'СЗ'];
+  const labels = language === 'en' ? enDirections : language === 'ru' ? ruDirections : trDirections;
   const normalized = ((degrees % 360) + 360) % 360;
   const index = Math.round(normalized / 45) % 8;
   return labels[index];
 };
 
+const AUTH_EMAIL_SESSION_KEY = 'HSE_AUTH_EMAIL';
+
+const detectLanguageFromPath = (pathname: string): Language => {
+  const normalized = pathname.toLowerCase();
+  if (normalized.startsWith('/ru')) {
+    return 'ru';
+  }
+  if (normalized.startsWith('/eng') || normalized.startsWith('/en')) {
+    return 'en';
+  }
+  return 'tr';
+};
+
 export function App() {
-  const [language] = useState<Language>('tr');
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window === 'undefined') {
+      return 'tr';
+    }
+    return detectLanguageFromPath(window.location.pathname);
+  });
+  const [accessLevel, setAccessLevel] = useState<'locked' | 'authorized' | 'guest'>('locked');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+
+  const allowedEmails = useMemo(() => {
+    const raw = import.meta.env.VITE_ALLOWED_EMAILS ?? '';
+    const parsed = raw
+      .split(',')
+      .map((item: string) => item.trim().toLowerCase())
+      .filter((item: string) => item.length > 0);
+    return parsed.length > 0 ? parsed : ['admin@gohse.blog'];
+  }, []);
+
+  const accessPassword = useMemo(
+    () => (import.meta.env.VITE_ACCESS_PASSWORD ?? 'ChangeMe123!').trim(),
+    []
+  );
+
+  const isAuthorizedViewer = accessLevel === 'authorized';
   const t = uiText[language];
   const moduleLabels = moduleLabelsByLanguage[language];
 
@@ -3120,10 +3175,20 @@ export function App() {
     system: true
   });
 
-  const [moduleData, setModuleData] = useState(recordsByModule);
+  const [moduleData, setModuleData] = useState<Record<ModuleKey, ModuleRecord[]>>(() => {
+    if (isAuthorizedViewer) {
+      return recordsByModule;
+    }
+
+    const emptyModuleData = {} as Record<ModuleKey, ModuleRecord[]>;
+    (Object.keys(recordsByModule) as ModuleKey[]).forEach((key) => {
+      emptyModuleData[key] = [];
+    });
+    return emptyModuleData;
+  });
   const [editingEnvironmentalIndex, setEditingEnvironmentalIndex] = useState<number | null>(null);
   const [editingModuleRecord, setEditingModuleRecord] = useState<{ module: Exclude<ModuleKey, 'dashboard' | 'occupational-health' | 'projects' | 'legal-register' | 'documents' | 'reports' | 'export-center' | 'departments' | 'contractors' | 'settings' | 'inspections' | 'observations' | 'risk-assessments' | 'permit-to-work' | 'incidents' | 'environmental' | 'action-tracker' | 'kpis-analytics' | 'equipment-management' | 'emergency-preparedness' | 'employees' | 'trainings' | 'ppe-stocks'>; index: number } | null>(null);
-  const [projectCatalog, setProjectCatalog] = useState<Project[]>(() => loadProjectCatalog());
+  const [projectCatalog, setProjectCatalog] = useState<Project[]>(() => (isAuthorizedViewer ? loadProjectCatalog() : []));
   const [projectForm, setProjectForm] = useState<Omit<Project, 'id'>>({
     name: '',
     country: '',
@@ -3133,7 +3198,7 @@ export function App() {
   });
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [projectSaveFeedback, setProjectSaveFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [departmentRecords, setDepartmentRecords] = useState<DepartmentRecord[]>(() => loadDepartmentRecords());
+  const [departmentRecords, setDepartmentRecords] = useState<DepartmentRecord[]>(() => (isAuthorizedViewer ? loadDepartmentRecords() : []));
   const [departmentForm, setDepartmentForm] = useState<DepartmentForm>({
     name: '',
     code: '',
@@ -3141,7 +3206,7 @@ export function App() {
   });
   const [editingDepartmentId, setEditingDepartmentId] = useState<string | null>(null);
   const departmentNames = useMemo(() => departmentRecords.map((department) => department.name), [departmentRecords]);
-  const [contractorRecords, setContractorRecords] = useState<ContractorMasterRecord[]>(() => loadContractorRecords());
+  const [contractorRecords, setContractorRecords] = useState<ContractorMasterRecord[]>(() => (isAuthorizedViewer ? loadContractorRecords() : []));
   const [contractorForm, setContractorForm] = useState<ContractorMasterForm>({
     companyName: '',
     projectId: projectCatalog[0]?.id ?? '',
@@ -3165,14 +3230,50 @@ export function App() {
   const [settingsConfig, setSettingsConfig] = useState<SettingsConfig>(initialSettingsConfig);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const modeFromQuery = new URLSearchParams(window.location.search).get('mode');
+    const rememberedEmail = window.sessionStorage.getItem(AUTH_EMAIL_SESSION_KEY)?.toLowerCase() ?? '';
+
+    if (rememberedEmail && allowedEmails.includes(rememberedEmail)) {
+      setAccessLevel('authorized');
+      setLoginEmail(rememberedEmail);
+      return;
+    }
+
+    if (modeFromQuery === 'guest') {
+      setAccessLevel('guest');
+      return;
+    }
+
+    setAccessLevel('locked');
+  }, [allowedEmails]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.__HSE_GUEST_MODE__ = accessLevel === 'guest';
+  }, [accessLevel]);
+
+  useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     try {
       window.localStorage.setItem(PROJECTS_STORAGE_KEY, JSON.stringify(projectCatalog));
     } catch {
       // Ignore storage write failures and keep in-memory behavior.
     }
-  }, [projectCatalog]);
+  }, [isAuthorizedViewer, projectCatalog]);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     const syncProjectCatalog = async () => {
       try {
         const rows = await apiRequest<Array<{ id: string; name: string; country: string; city: string; address: string; contractScope: string }>>('/api/master/projects');
@@ -3197,17 +3298,23 @@ export function App() {
     };
 
     void syncProjectCatalog();
-  }, []);
+  }, [isAuthorizedViewer]);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     try {
       window.localStorage.setItem(DEPARTMENTS_STORAGE_KEY, JSON.stringify(departmentRecords));
     } catch {
       // Ignore storage write failures and keep in-memory behavior.
     }
-  }, [departmentRecords]);
+  }, [departmentRecords, isAuthorizedViewer]);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     const syncDepartments = async () => {
       try {
         const rows = await apiRequest<Array<{ id: string; name: string; code: string; description: string | null }>>('/api/master/departments');
@@ -3225,17 +3332,23 @@ export function App() {
     };
 
     void syncDepartments();
-  }, []);
+  }, [isAuthorizedViewer]);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     try {
       window.localStorage.setItem(CONTRACTORS_STORAGE_KEY, JSON.stringify(contractorRecords));
     } catch {
       // Ignore storage write failures and keep in-memory behavior.
     }
-  }, [contractorRecords]);
+  }, [contractorRecords, isAuthorizedViewer]);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     const syncContractors = async () => {
       try {
         const rows = await apiRequest<Array<{
@@ -3283,9 +3396,9 @@ export function App() {
     };
 
     void syncContractors();
-  }, [projectCatalog]);
+  }, [isAuthorizedViewer, projectCatalog]);
 
-  const [healthRecords, setHealthRecords] = useState<HealthRecord[]>(() => loadHealthRecords());
+  const [healthRecords, setHealthRecords] = useState<HealthRecord[]>(() => (isAuthorizedViewer ? loadHealthRecords() : []));
 
   const [healthForm, setHealthForm] = useState<HealthRecord>({
     employeeName: '',
@@ -3308,15 +3421,18 @@ export function App() {
   const [editingHealthEmployeeId, setEditingHealthEmployeeId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     try {
       window.localStorage.setItem(HEALTH_RECORDS_STORAGE_KEY, JSON.stringify(healthRecords));
     } catch {
       // Ignore storage write failures and keep in-memory behavior.
     }
-  }, [healthRecords]);
+  }, [healthRecords, isAuthorizedViewer]);
 
-  const [legalRecords, setLegalRecords] = useState<LegalRecord[]>(initialLegalRecords);
-  const [selectedLegalRecordId, setSelectedLegalRecordId] = useState<string | null>(initialLegalRecords[0]?.id ?? null);
+  const [legalRecords, setLegalRecords] = useState<LegalRecord[]>(() => (isAuthorizedViewer ? initialLegalRecords : []));
+  const [selectedLegalRecordId, setSelectedLegalRecordId] = useState<string | null>(() => (isAuthorizedViewer ? initialLegalRecords[0]?.id ?? null : null));
   const [legalUserRole, setLegalUserRole] = useState<LegalUserRole>('CORPORATE_HSE_MANAGER');
   const [legalViewerZoom, setLegalViewerZoom] = useState<number>(120);
   const [legalViewerPage, setLegalViewerPage] = useState<number>(1);
@@ -3352,8 +3468,8 @@ export function App() {
     notes: ''
   });
 
-  const [controlledDocuments, setControlledDocuments] = useState<ControlledDocumentRecord[]>(initialControlledDocumentRecords);
-  const [selectedControlledDocumentId, setSelectedControlledDocumentId] = useState<string | null>(initialControlledDocumentRecords[0]?.id ?? null);
+  const [controlledDocuments, setControlledDocuments] = useState<ControlledDocumentRecord[]>(() => (isAuthorizedViewer ? initialControlledDocumentRecords : []));
+  const [selectedControlledDocumentId, setSelectedControlledDocumentId] = useState<string | null>(() => (isAuthorizedViewer ? initialControlledDocumentRecords[0]?.id ?? null : null));
   const [controlledDocumentFilters, setControlledDocumentFilters] = useState<{
     projectId: string;
     category: string;
@@ -3403,8 +3519,8 @@ export function App() {
     periodEnd: new Date().toISOString().slice(0, 10),
     format: 'PDF'
   });
-  const [generatedCorporateReports, setGeneratedCorporateReports] = useState<GeneratedCorporateReport[]>(initialGeneratedReports);
-  const [selectedCorporateReportId, setSelectedCorporateReportId] = useState<string | null>(initialGeneratedReports[0]?.id ?? null);
+  const [generatedCorporateReports, setGeneratedCorporateReports] = useState<GeneratedCorporateReport[]>(() => (isAuthorizedViewer ? initialGeneratedReports : []));
+  const [selectedCorporateReportId, setSelectedCorporateReportId] = useState<string | null>(() => (isAuthorizedViewer ? initialGeneratedReports[0]?.id ?? null : null));
 
   const [form, setForm] = useState<ModuleRecord>({
     projectId: projectCatalog[0]?.id ?? '',
@@ -3425,8 +3541,8 @@ export function App() {
   });
   const [editingIncidentIndex, setEditingIncidentIndex] = useState<number | null>(null);
 
-  const [emergencyDrillRecords, setEmergencyDrillRecords] = useState<EmergencyDrillRecord[]>(initialEmergencyDrillRecords);
-  const [selectedEmergencyDrillId, setSelectedEmergencyDrillId] = useState<string | null>(initialEmergencyDrillRecords[0]?.id ?? null);
+  const [emergencyDrillRecords, setEmergencyDrillRecords] = useState<EmergencyDrillRecord[]>(() => (isAuthorizedViewer ? initialEmergencyDrillRecords : []));
+  const [selectedEmergencyDrillId, setSelectedEmergencyDrillId] = useState<string | null>(() => (isAuthorizedViewer ? initialEmergencyDrillRecords[0]?.id ?? null : null));
   const [emergencyDrillForm, setEmergencyDrillForm] = useState<EmergencyDrillForm>({
     projectId: projectCatalog[0]?.id ?? '',
     emergencyType: 'TAHLIYE',
@@ -3444,7 +3560,7 @@ export function App() {
     photos: [],
     notes: ''
   });
-  const [workforceRecords, setWorkforceRecords] = useState<WorkforceRecord[]>(initialWorkforceRecords);
+  const [workforceRecords, setWorkforceRecords] = useState<WorkforceRecord[]>(() => (isAuthorizedViewer ? initialWorkforceRecords : []));
   const [editingWorkforceId, setEditingWorkforceId] = useState<string | null>(null);
   const [workforceForm, setWorkforceForm] = useState<WorkforceForm>({
     projectId: projectCatalog[0]?.id ?? '',
@@ -3466,7 +3582,7 @@ export function App() {
     status: 'OPEN',
     notes: ''
   });
-  const [trainingRecords, setTrainingRecords] = useState<TrainingRecord[]>(initialTrainingRecords);
+  const [trainingRecords, setTrainingRecords] = useState<TrainingRecord[]>(() => (isAuthorizedViewer ? initialTrainingRecords : []));
   const [trainingForm, setTrainingForm] = useState<TrainingForm>({
     projectId: projectCatalog[0]?.id ?? '',
     trainingType: trainingTypeOptions[0],
@@ -3489,7 +3605,7 @@ export function App() {
   });
   const [editingTrainingId, setEditingTrainingId] = useState<string | null>(null);
 
-  const [ppeTransactions, setPpeTransactions] = useState<PpeTransactionRecord[]>(() => loadPpeTransactions());
+  const [ppeTransactions, setPpeTransactions] = useState<PpeTransactionRecord[]>(() => (isAuthorizedViewer ? loadPpeTransactions() : []));
   const [ppeDashboardProjectFilter, setPpeDashboardProjectFilter] = useState<string>('all');
   const [ppeTransactionForm, setPpeTransactionForm] = useState<PpeTransactionForm>({
     transactionType: 'STOK_GIRISI',
@@ -3512,15 +3628,18 @@ export function App() {
   const [editingPpeTransactionId, setEditingPpeTransactionId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     try {
       window.localStorage.setItem(PPE_TRANSACTIONS_STORAGE_KEY, JSON.stringify(ppeTransactions));
     } catch {
       // Ignore storage write failures and keep in-memory behavior.
     }
-  }, [ppeTransactions]);
+  }, [isAuthorizedViewer, ppeTransactions]);
 
-  const [equipmentRecords, setEquipmentRecords] = useState<EquipmentRecord[]>(initialEquipmentRecords);
-  const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(initialEquipmentRecords[0]?.id ?? null);
+  const [equipmentRecords, setEquipmentRecords] = useState<EquipmentRecord[]>(() => (isAuthorizedViewer ? initialEquipmentRecords : []));
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState<string | null>(() => (isAuthorizedViewer ? initialEquipmentRecords[0]?.id ?? null : null));
   const [equipmentForm, setEquipmentForm] = useState<EquipmentForm>({
     projectId: projectCatalog[0]?.id ?? '',
     equipmentName: '',
@@ -3542,8 +3661,8 @@ export function App() {
     notes: ''
   });
 
-  const [riskRecords, setRiskRecords] = useState<RiskRecord[]>(initialRiskRecords);
-  const [selectedRiskId, setSelectedRiskId] = useState<string | null>(initialRiskRecords[0]?.id ?? null);
+  const [riskRecords, setRiskRecords] = useState<RiskRecord[]>(() => (isAuthorizedViewer ? initialRiskRecords : []));
+  const [selectedRiskId, setSelectedRiskId] = useState<string | null>(() => (isAuthorizedViewer ? initialRiskRecords[0]?.id ?? null : null));
   const [riskForm, setRiskForm] = useState<RiskForm>({
     projectId: projectCatalog[0]?.id ?? '',
     departmentActivity: '',
@@ -3579,7 +3698,7 @@ export function App() {
   const [skippedChecklistSections, setSkippedChecklistSections] = useState<Record<string, boolean>>({});
   const [manualActionText, setManualActionText] = useState('');
   const [manualActions, setManualActions] = useState<CorrectiveAction[]>([]);
-  const [observationRecords, setObservationRecords] = useState<ObservationRecord[]>(() => loadObservationRecords());
+  const [observationRecords, setObservationRecords] = useState<ObservationRecord[]>(() => (isAuthorizedViewer ? loadObservationRecords() : []));
   const [observationForm, setObservationForm] = useState<ObservationForm>(() => createEmptyObservationForm(projectCatalog[0]));
   const [observationDraftAttachments, setObservationDraftAttachments] = useState<ObservationAttachmentRecord[]>([]);
   const [editingObservationId, setEditingObservationId] = useState<string | null>(null);
@@ -3587,12 +3706,82 @@ export function App() {
   const [observationDragActive, setObservationDragActive] = useState(false);
 
   useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
     try {
       window.localStorage.setItem(OBSERVATION_RECORDS_STORAGE_KEY, JSON.stringify(observationRecords));
     } catch {
       // Ignore storage write failures and keep in-memory behavior.
     }
-  }, [observationRecords]);
+  }, [isAuthorizedViewer, observationRecords]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const syncFromPath = () => {
+      setLanguage(detectLanguageFromPath(window.location.pathname));
+    };
+
+    syncFromPath();
+    window.addEventListener('popstate', syncFromPath);
+
+    return () => {
+      window.removeEventListener('popstate', syncFromPath);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (accessLevel !== 'authorized') {
+      return;
+    }
+
+    const rememberedEmail = window.sessionStorage.getItem(AUTH_EMAIL_SESSION_KEY);
+    if (!rememberedEmail) {
+      return;
+    }
+
+    if (allowedEmails.includes(rememberedEmail.toLowerCase())) {
+      setLoginEmail(rememberedEmail);
+    }
+  }, [accessLevel, allowedEmails]);
+
+  const handleAuthorizedLogin = () => {
+    const normalizedEmail = loginEmail.trim().toLowerCase();
+    if (!normalizedEmail || !loginPassword.trim()) {
+      setLoginError(language === 'en' ? 'Email and password are required.' : language === 'ru' ? 'Требуются email и пароль.' : 'E-posta ve parola zorunludur.');
+      return;
+    }
+
+    if (!allowedEmails.includes(normalizedEmail)) {
+      setLoginError(language === 'en' ? 'This email is not authorized.' : language === 'ru' ? 'Этот email не авторизован.' : 'Bu e-posta yetkili değil.');
+      return;
+    }
+
+    if (loginPassword !== accessPassword) {
+      setLoginError(language === 'en' ? 'Incorrect password.' : language === 'ru' ? 'Неверный пароль.' : 'Parola hatalı.');
+      return;
+    }
+
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.setItem(AUTH_EMAIL_SESSION_KEY, normalizedEmail);
+      window.location.reload();
+    }
+  };
+
+  const continueAsGuest = () => {
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem(AUTH_EMAIL_SESSION_KEY);
+    }
+    setAccessLevel('guest');
+    setLoginError('');
+  };
 
   useEffect(() => {
     if (!observationForm.projectId && projectCatalog.length > 0 && !editingObservationId) {
@@ -8964,6 +9153,71 @@ export function App() {
     };
   }, [language, selectedProject?.name, selectedProject?.city, selectedProject?.address, selectedProject?.country, weatherCity]);
   const footerYear = new Date().getFullYear();
+
+  if (accessLevel !== 'authorized') {
+    const title =
+      language === 'en'
+        ? 'HSE Compliance Platform'
+        : language === 'ru'
+          ? 'Платформа соответствия HSE'
+          : 'HSE Uyum Platformu';
+    const subtitle =
+      language === 'en'
+        ? 'Sign in with an authorized email to view company records.'
+        : language === 'ru'
+          ? 'Войдите с авторизованным email, чтобы видеть корпоративные записи.'
+          : 'Kurumsal kayıtları görmek için yetkili e-posta ile giriş yapın.';
+    const guestHint =
+      language === 'en'
+        ? 'Guest mode allows test data entry but does not save records.'
+        : language === 'ru'
+          ? 'Гостевой режим позволяет тестовый ввод, но не сохраняет записи.'
+          : 'Misafir modu test veri girişi sağlar ancak kayıtları saklamaz.';
+
+    return (
+      <div className="page">
+        <section className="panel" style={{ maxWidth: 620, margin: '40px auto' }}>
+          <h2 style={{ marginTop: 0 }}>{title}</h2>
+          <p>{subtitle}</p>
+
+          <div className="form-grid" style={{ marginTop: 14 }}>
+            <label>
+              {language === 'en' ? 'Authorized Email' : language === 'ru' ? 'Авторизованный Email' : 'Yetkili E-posta'}
+              <input
+                type="email"
+                value={loginEmail}
+                onChange={(event) => setLoginEmail(event.target.value)}
+                placeholder="name@company.com"
+              />
+            </label>
+
+            <label>
+              {language === 'en' ? 'Password' : language === 'ru' ? 'Пароль' : 'Parola'}
+              <input
+                type="password"
+                value={loginPassword}
+                onChange={(event) => setLoginPassword(event.target.value)}
+                placeholder="********"
+              />
+            </label>
+          </div>
+
+          {loginError ? <p className="message error-message">{loginError}</p> : null}
+
+          <div className="actions" style={{ marginTop: 12 }}>
+            <button type="button" onClick={handleAuthorizedLogin}>
+              {language === 'en' ? 'Sign In' : language === 'ru' ? 'Войти' : 'Giriş Yap'}
+            </button>
+            <button type="button" className="table-action-button" onClick={continueAsGuest}>
+              {language === 'en' ? 'Continue as Guest' : language === 'ru' ? 'Продолжить как гость' : 'Misafir Olarak Devam Et'}
+            </button>
+          </div>
+
+          <p style={{ marginTop: 10, color: '#526074', fontSize: '0.84rem' }}>{guestHint}</p>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="page shell-layout">
