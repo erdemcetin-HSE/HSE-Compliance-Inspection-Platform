@@ -1332,6 +1332,14 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Project master data management.': 'Proje ana veri yönetimi.',
     'Subcontractor master data management.': 'Alt yüklenici ana veri yönetimi.',
     'System configuration and governance settings.': 'Sistem yapılandırması ve yönetişim ayarları.',
+    'Permit to Work': 'Çalışma İzni',
+    'Weather Summary': 'Hava durumu özeti',
+    'Wind Summary': 'Rüzgar özeti',
+    'Incident Executive KPI Summary': 'Olay Yönetici KPI Özeti',
+    'HSE Activity by Project': 'Projelere Göre HSE Aktivitesi',
+    'HSE Activity by Department': 'Departmanlara Göre HSE Aktivitesi',
+    'Project Distribution': 'Proje Dağılımı',
+    'Department Distribution': 'Departman Dağılımı',
     Period: 'Periyot',
     Daily: 'Günlük',
     Weekly: 'Haftalık',
@@ -1549,6 +1557,14 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Project master data management.': 'Управление основными данными проекта.',
     'Subcontractor master data management.': 'Управление основными данными подрядчиков.',
     'System configuration and governance settings.': 'Системные настройки и параметры управления.',
+    'Permit to Work': 'Наряд-допуск',
+    'Weather Summary': 'Сводка погоды',
+    'Wind Summary': 'Сводка ветра',
+    'Incident Executive KPI Summary': 'Сводка KPI по инцидентам для руководства',
+    'HSE Activity by Project': 'HSE-активность по проектам',
+    'HSE Activity by Department': 'HSE-активность по отделам',
+    'Project Distribution': 'Распределение по проектам',
+    'Department Distribution': 'Распределение по отделам',
     Period: 'Период',
     Daily: 'Ежедневно',
     Weekly: 'Еженедельно',
@@ -5829,52 +5845,52 @@ export function App() {
 
     const incidentsExecutiveKpis: IncidentExecutiveKpi[] = [
       {
-        label: language === 'en' ? 'Total Incidents' : 'Toplam Olay',
+        label: 'Total Incidents',
         value: String(totalIncidents),
         status: incidentStatus(totalIncidents, 6, 10, 14),
-        note: language === 'en' ? 'Target <= 10' : 'Hedef <= 10'
+        note: 'Target <= 10'
       },
       {
         label: 'LTI',
         value: String(lti),
         status: incidentStatus(lti, 1, 2, 3),
-        note: language === 'en' ? 'Zero harm target' : 'Sıfır yaralanma hedefi'
+        note: 'Zero harm target'
       },
       {
-        label: language === 'en' ? 'Near Miss' : 'Ramak Kala Olay',
+        label: 'Near Miss',
         value: String(nearMisses),
         status: incidentStatus(nearMisses, 8, 14, 20),
-        note: language === 'en' ? 'Track by shift' : 'Vardiya bazlı izle'
+        note: 'Track by shift'
       },
       {
-        label: language === 'en' ? 'First Aid Cases' : 'İlk Yardım Vakaları',
+        label: 'First Aid Cases',
         value: String(firstAidCases),
         status: incidentStatus(firstAidCases, 4, 7, 10),
-        note: language === 'en' ? 'Target <= 5' : 'Hedef <= 5'
+        note: 'Target <= 5'
       },
       {
-        label: language === 'en' ? 'Unsafe Acts' : 'Güvensiz Davranışlar',
+        label: 'Unsafe Acts',
         value: String(unsafeActs),
         status: incidentStatus(unsafeActs, 12, 18, 24),
-        note: language === 'en' ? 'Behavior actions' : 'Davranış aksiyonları'
+        note: 'Behavior actions'
       },
       {
-        label: language === 'en' ? 'Unsafe Conditions' : 'Güvensiz Koşullar',
+        label: 'Unsafe Conditions',
         value: String(unsafeConditions),
         status: incidentStatus(unsafeConditions, 10, 15, 20),
-        note: language === 'en' ? 'Engineering controls' : 'Mühendislik kontrolü'
+        note: 'Engineering controls'
       },
       {
-        label: language === 'en' ? 'Near Miss Reports' : 'Ramak Kala Olay Bildirimleri',
+        label: 'Near Miss Reports',
         value: String(nearMissReports),
         status: incidentStatus(nearMissReports, 10, 16, 24),
-        note: language === 'en' ? 'Reporting momentum' : 'Bildirim ivmesi'
+        note: 'Reporting momentum'
       },
       {
-        label: language === 'en' ? 'Critical Incidents' : 'Kritik Olaylar',
+        label: 'Critical Incidents',
         value: String(criticalIncidents),
         status: incidentStatus(criticalIncidents, 1, 2, 3),
-        note: language === 'en' ? 'Immediate escalation' : 'Anında eskalasyon'
+        note: 'Immediate escalation'
       }
     ];
 
@@ -5884,7 +5900,7 @@ export function App() {
       { label: 'LTIFR', value: ltifr, trend: '-0.1' },
       { label: 'Open Findings', value: String(openFindings), trend: '-4' },
       {
-        label: language === 'en' ? 'PTW Active' : 'Aktif Çalışma İzni',
+        label: 'PTW Active',
         value: String(ptwRows.filter((row) => row.status !== 'CLOSED').length),
         trend: '+1'
       },
@@ -5904,47 +5920,47 @@ export function App() {
         highlights: [
           { label: 'TRIR', value: trir },
           { label: 'LTIFR', value: ltifr },
-          { label: language === 'en' ? 'Near Miss' : 'Ramak Kala Olay', value: String(nearMisses) }
+          { label: 'Near Miss', value: String(nearMisses) }
         ],
         details: [
           { label: 'LTI', value: String(lti) },
           { label: 'MTI', value: String(mti) },
           { label: 'First Aid Cases', value: String(firstAidCases) },
-          { label: language === 'en' ? 'Safe Man-Hours - Daily' : 'Güvenli Adam-Saat - Günlük', value: String(safeDaily) },
-          { label: language === 'en' ? 'Safe Man-Hours - Weekly' : 'Güvenli Adam-Saat - Haftalık', value: String(safeWeekly) },
-          { label: language === 'en' ? 'Safe Man-Hours - Monthly' : 'Güvenli Adam-Saat - Aylık', value: String(safeMonthly) },
-          { label: language === 'en' ? 'Safe Man-Hours - Total' : 'Güvenli Adam-Saat - Toplam', value: String(safeTotal), note: language === 'en' ? 'Daily x weekly x monthly annualized capacity' : 'Günlük, haftalık ve aylık güvenli kapasitenin yıllık toplamı' }
+          { label: 'Safe Man-Hours - Daily', value: String(safeDaily) },
+          { label: 'Safe Man-Hours - Weekly', value: String(safeWeekly) },
+          { label: 'Safe Man-Hours - Monthly', value: String(safeMonthly) },
+          { label: 'Safe Man-Hours - Total', value: String(safeTotal), note: 'Daily x weekly x monthly annualized capacity' }
         ]
       },
       {
         key: 'ptw',
-        title: 'Çalışma İzni',
+        title: 'Permit to Work',
         chartA: {
           type: 'area',
           values: scaleSeries([6, 8, 7, 9, 10, 9, 11]),
-          label: language === 'en' ? 'PTW Volume Trend' : 'Çalışma İzni Hacim Trendi'
+          label: 'PTW Volume Trend'
         },
         chartB: {
           type: 'donut',
           values: [9, 2, 1],
-          label: language === 'en' ? 'PTW Status Distribution' : 'Çalışma İzni Durum Dağılımı'
+          label: 'PTW Status Distribution'
         },
         highlights: [
           {
-            label: language === 'en' ? 'PTW Active' : 'Aktif Çalışma İzni',
+            label: 'PTW Active',
             value: String(ptwRows.filter((row) => row.status !== 'CLOSED').length)
           },
           {
-            label: language === 'en' ? 'PTW Closed' : 'Kapatılan Çalışma İzni',
+            label: 'PTW Closed',
             value: String(ptwRows.filter((row) => row.status === 'CLOSED').length)
           },
-          { label: 'Uygunluk', value: '91%' }
+          { label: 'Compliance', value: '91%' }
         ],
         details: [
-          { label: language === 'en' ? 'Hot Work' : 'Sıcak Çalışma', value: '4' },
-          { label: language === 'en' ? 'Confined Space' : 'Kapalı Alan', value: '2' },
-          { label: language === 'en' ? 'Work at Height' : 'Yüksekte Çalışma', value: '3' },
-          { label: language === 'en' ? 'PTW Violation' : 'Çalışma İzni İhlali', value: '0' }
+          { label: 'Hot Work', value: '4' },
+          { label: 'Confined Space', value: '2' },
+          { label: 'Work at Height', value: '3' },
+          { label: 'PTW Violation', value: '0' }
         ]
       },
       {
@@ -6145,12 +6161,13 @@ export function App() {
   const dashboardXAxisLabels = useMemo(() => {
     const monthlyTr = ['Oca', 'Sub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara'];
     const monthlyEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthlyRu = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
 
     const buildWeekly = (count: number) => Array.from({ length: count }, (_, index) => `W${index + 1}`);
 
     const buildDaily = (count: number) =>
       Array.from({ length: count }, (_, index) =>
-        language === 'en' ? `D${index + 1}` : `${index + 1}.G`
+        language === 'en' ? `D${index + 1}` : language === 'ru' ? `Д${index + 1}` : `${index + 1}.G`
       );
 
     const buildYearly = (count: number) => {
@@ -6173,7 +6190,7 @@ export function App() {
         return buildYearly(count);
       }
       if (dashboardFilters.period === 'monthly') {
-        const labels = language === 'en' ? monthlyEn : monthlyTr;
+        const labels = language === 'en' ? monthlyEn : language === 'ru' ? monthlyRu : monthlyTr;
         return labels.slice(Math.max(labels.length - count, 0));
       }
 
@@ -10158,7 +10175,7 @@ export function App() {
         }
 
         const weatherMeta = weatherCodeMeta(current.weather_code ?? 0, language);
-        const updatedAt = new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'tr-TR', {
+        const updatedAt = new Intl.DateTimeFormat(language === 'en' ? 'en-US' : language === 'ru' ? 'ru-RU' : 'tr-TR', {
           hour: '2-digit',
           minute: '2-digit',
           hour12: false
@@ -10178,7 +10195,7 @@ export function App() {
           return;
         }
 
-        const updatedAt = new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'tr-TR', {
+        const updatedAt = new Intl.DateTimeFormat(language === 'en' ? 'en-US' : language === 'ru' ? 'ru-RU' : 'tr-TR', {
           hour: '2-digit',
           minute: '2-digit',
           hour12: false
@@ -10278,7 +10295,7 @@ export function App() {
   return (
     <div className="page shell-layout">
       <aside className="sidebar">
-        <p className="brand-subtitle">HSE Uyum Platformu</p>
+        <p className="brand-subtitle">{localizeText('HSE Compliance Platform', language)}</p>
 
         <button
           type="button"
@@ -10320,7 +10337,7 @@ export function App() {
           </div>
         ))}
 
-        <small className="credit">Erdem Cetin tarafından tasarlandı ve geliştirildi</small>
+        <small className="credit">{localizeText('Designed and developed by Erdem Cetin', language)}</small>
       </aside>
 
       <main className="content">
@@ -10344,7 +10361,7 @@ export function App() {
               </label>
 
               <div className="executive-widget-stack weather-widget-row">
-                <article className="mini-widget weather-widget" aria-label="Hava durumu özeti">
+                <article className="mini-widget weather-widget" aria-label={localizeText('Weather Summary', language)}>
                   <div className="mini-widget-icon">{liveWeather.icon}</div>
                   <div className="mini-widget-body">
                     <strong>{liveWeather.temperature}</strong>
@@ -10353,12 +10370,12 @@ export function App() {
                   </div>
                 </article>
 
-                <article className="mini-widget wind-widget" aria-label="Rüzgar özeti">
+                <article className="mini-widget wind-widget" aria-label={localizeText('Wind Summary', language)}>
                   <div className="mini-widget-icon">💨</div>
                   <div className="mini-widget-body">
                     <strong>{liveWeather.windSpeed}</strong>
                     <span>{liveWeather.windDirection}</span>
-                    <small>{language === 'en' ? 'Wind Direction' : 'Rüzgar Yönü'}</small>
+                    <small>{localizeText('Wind Direction', language)}</small>
                   </div>
                 </article>
               </div>
@@ -10372,23 +10389,23 @@ export function App() {
             <div className="dashboard-toolbar enterprise-filter-toolbar" role="toolbar" aria-label="kpi filters">
               <div className="enterprise-filter-primary-row">
                 <label>
-                  {language === 'en' ? 'Period' : 'Periyot'}
+                  {localizeText('Period', language)}
                   <select
                     value={dashboardFilterDraft.period}
                     onChange={(event) =>
                       setDashboardFilterDraft((prev) => ({ ...prev, period: event.target.value as DashboardPeriod }))
                     }
                   >
-                    <option value="daily">{language === 'en' ? 'Daily' : 'Günlük'}</option>
-                    <option value="weekly">{language === 'en' ? 'Weekly' : 'Haftalık'}</option>
-                    <option value="monthly">{language === 'en' ? 'Monthly' : 'Aylık'}</option>
-                    <option value="yearly">{language === 'en' ? 'Yearly' : 'Yıllık'}</option>
-                    <option value="custom">{language === 'en' ? 'Custom Date Range' : 'Özel Tarih Aralığı'}</option>
+                    <option value="daily">{localizeText('Daily', language)}</option>
+                    <option value="weekly">{localizeText('Weekly', language)}</option>
+                    <option value="monthly">{localizeText('Monthly', language)}</option>
+                    <option value="yearly">{localizeText('Yearly', language)}</option>
+                    <option value="custom">{localizeText('Custom Date Range', language)}</option>
                   </select>
                 </label>
 
                 <label>
-                  {language === 'en' ? 'Project' : 'Proje'}
+                  {localizeText('Project', language)}
                   <select
                     value={dashboardFilterDraft.projectId}
                     onChange={(event) =>
@@ -10404,22 +10421,22 @@ export function App() {
                 </label>
 
                 <label>
-                  {language === 'en' ? 'Comparison' : 'Karşılaştırma'}
+                  {localizeText('Comparison', language)}
                   <select
                     value={dashboardFilterDraft.comparisonType}
                     onChange={(event) =>
                       setDashboardFilterDraft((prev) => ({ ...prev, comparisonType: event.target.value as ComparisonMode }))
                     }
                   >
-                    <option value="none">{language === 'en' ? 'None' : 'Yok'}</option>
-                    <option value="project">{language === 'en' ? 'Project Comparison' : 'Proje Karşılaştırma'}</option>
-                    <option value="department">{language === 'en' ? 'Department Comparison' : 'Departman Karşılaştırma'}</option>
+                    <option value="none">{localizeText('None', language)}</option>
+                    <option value="project">{localizeText('Project Comparison', language)}</option>
+                    <option value="department">{localizeText('Department Comparison', language)}</option>
                   </select>
                 </label>
 
                 <div className="filter-actions">
                   <button type="button" onClick={() => setDashboardFilters(dashboardFilterDraft)}>
-                    {language === 'en' ? 'Apply Filters' : 'Filtreleri Uygula'}
+                    {localizeText('Apply Filters', language)}
                   </button>
                   <button
                     type="button"
@@ -10437,10 +10454,10 @@ export function App() {
                       setDashboardFilters(resetState);
                     }}
                   >
-                    {language === 'en' ? 'Reset Filters' : 'Filtreleri Sıfırla'}
+                    {localizeText('Reset Filters', language)}
                   </button>
                   <button type="button" onClick={openDashboardExecutivePdf}>
-                    {language === 'en' ? 'Executive PDF Output' : 'Yönetici PDF Çıktısı'}
+                    {localizeText('Executive PDF Output', language)}
                   </button>
                 </div>
               </div>
@@ -10448,7 +10465,7 @@ export function App() {
               {dashboardFilterDraft.period === 'custom' ? (
                 <>
                   <label>
-                    {language === 'en' ? 'From' : 'Başlangıç'}
+                    {localizeText('From', language)}
                     <input
                       type="date"
                       value={dashboardFilterDraft.customStart}
@@ -10458,7 +10475,7 @@ export function App() {
                     />
                   </label>
                   <label>
-                    {language === 'en' ? 'To' : 'Bitiş'}
+                    {localizeText('To', language)}
                     <input
                       type="date"
                       value={dashboardFilterDraft.customEnd}
@@ -10472,7 +10489,7 @@ export function App() {
 
               {dashboardFilterDraft.comparisonType === 'project' ? (
                 <label>
-                  {language === 'en' ? 'Select Projects' : 'Projeleri Seç'}
+                  {localizeText('Select Projects', language)}
                   <select
                     multiple
                     value={dashboardFilterDraft.selectedProjects}
@@ -10494,7 +10511,7 @@ export function App() {
 
               {dashboardFilterDraft.comparisonType === 'department' ? (
                 <label>
-                  {language === 'en' ? 'Select Departments' : 'Departmanları Seç'}
+                  {localizeText('Select Departments', language)}
                   <select
                     multiple
                     value={dashboardFilterDraft.selectedDepartments}
@@ -10551,18 +10568,18 @@ export function App() {
                         ) : null}
                       </div>
 
-                      <div className="incident-executive-kpi-bar" aria-label={language === 'en' ? 'Incident Executive KPI Summary' : 'Olay Yönetici KPI Özeti'}>
+                      <div className="incident-executive-kpi-bar" aria-label={localizeText('Incident Executive KPI Summary', language)}>
                         {safetyPerformanceSection.incidentExecutiveKpis?.map((kpi) => (
                           <article key={kpi.label} className="incident-executive-kpi-card">
                             <div className="incident-kpi-header">
                               <span className={`incident-kpi-status incident-kpi-status-${kpi.status}`} aria-hidden="true" />
-                              <span className="incident-kpi-label">{kpi.label}</span>
+                              <span className="incident-kpi-label">{localizeText(kpi.label, language)}</span>
                             </div>
-                            {kpiTermHint(kpi.label, language) ? (
-                              <span className="kpi-term-hint">{kpiTermHint(kpi.label, language)}</span>
+                            {kpiTermHint(localizeText(kpi.label, language), language) ? (
+                              <span className="kpi-term-hint">{kpiTermHint(localizeText(kpi.label, language), language)}</span>
                             ) : null}
                             <strong className="incident-kpi-value">{kpi.value}</strong>
-                            {kpi.note ? <small className="incident-kpi-note">{kpi.note}</small> : null}
+                            {kpi.note ? <small className="incident-kpi-note">{localizeText(kpi.note, language)}</small> : null}
                           </article>
                         ))}
                       </div>
@@ -10576,7 +10593,7 @@ export function App() {
                                 <span className="kpi-term-hint">{kpiTermHint(localizeText(detail.label, language), language)}</span>
                               ) : null}
                               <strong>{detail.value}</strong>
-                              {detail.note ? <small className="executive-detail-note">{detail.note}</small> : null}
+                              {detail.note ? <small className="executive-detail-note">{localizeText(detail.note, language)}</small> : null}
                             </div>
                           ))}
                         </div>
@@ -10602,20 +10619,16 @@ export function App() {
                 <div className="executive-head">
                   <h3>
                     {dashboardFilters.comparisonType === 'project'
-                      ? (language === 'en' ? 'Project Comparison' : 'Proje Karşılaştırma')
-                      : language === 'en'
-                        ? 'Department Comparison'
-                        : 'Departman Karşılaştırma'}
+                      ? localizeText('Project Comparison', language)
+                      : localizeText('Department Comparison', language)}
                   </h3>
                 </div>
                 <div className="executive-charts-grid">
                   <div className="chart-card">
                     <strong>
                       {dashboardFilters.comparisonType === 'project'
-                        ? (language === 'en' ? 'HSE Activity by Project' : 'Projelere Göre HSE Aktivitesi')
-                        : language === 'en'
-                          ? 'HSE Activity by Department'
-                          : 'Departmanlara Göre HSE Aktivitesi'}
+                        ? localizeText('HSE Activity by Project', language)
+                        : localizeText('HSE Activity by Department', language)}
                     </strong>
                     <DashboardChart
                       type="bar"
@@ -10633,10 +10646,8 @@ export function App() {
                   <div className="chart-card">
                     <strong>
                       {dashboardFilters.comparisonType === 'project'
-                        ? (language === 'en' ? 'Project Distribution' : 'Proje Dağılımı')
-                        : language === 'en'
-                          ? 'Department Distribution'
-                          : 'Departman Dağılımı'}
+                        ? localizeText('Project Distribution', language)
+                        : localizeText('Department Distribution', language)}
                     </strong>
                     <DashboardChart
                       type="donut"
@@ -10691,18 +10702,18 @@ export function App() {
                   </div>
 
                   {section.incidentExecutiveKpis ? (
-                    <div className="incident-executive-kpi-bar" aria-label={language === 'en' ? 'Incident Executive KPI Summary' : 'Olay Yönetici KPI Özeti'}>
+                    <div className="incident-executive-kpi-bar" aria-label={localizeText('Incident Executive KPI Summary', language)}>
                       {section.incidentExecutiveKpis.map((kpi) => (
                         <article key={kpi.label} className="incident-executive-kpi-card">
                           <div className="incident-kpi-header">
                             <span className={`incident-kpi-status incident-kpi-status-${kpi.status}`} aria-hidden="true" />
-                            <span className="incident-kpi-label">{kpi.label}</span>
+                            <span className="incident-kpi-label">{localizeText(kpi.label, language)}</span>
                           </div>
-                          {kpiTermHint(kpi.label, language) ? (
-                            <span className="kpi-term-hint">{kpiTermHint(kpi.label, language)}</span>
+                          {kpiTermHint(localizeText(kpi.label, language), language) ? (
+                            <span className="kpi-term-hint">{kpiTermHint(localizeText(kpi.label, language), language)}</span>
                           ) : null}
                           <strong className="incident-kpi-value">{kpi.value}</strong>
-                          {kpi.note ? <small className="incident-kpi-note">{kpi.note}</small> : null}
+                          {kpi.note ? <small className="incident-kpi-note">{localizeText(kpi.note, language)}</small> : null}
                         </article>
                       ))}
                     </div>
