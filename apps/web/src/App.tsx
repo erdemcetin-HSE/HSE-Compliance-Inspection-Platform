@@ -1300,7 +1300,7 @@ const moduleLabelsByLanguage: Record<Language, Record<ModuleKey, string>> = {
     inspections: 'Инспекции',
     observations: 'Предписания',
     'risk-assessments': 'Оценка рисков',
-    'permit-to-work': 'Разрешение на работы',
+    'permit-to-work': 'Наряд-допуск',
     incidents: 'Инциденты',
     audits: 'Аудиты',
     'equipment-management': 'Управление оборудованием',
@@ -4099,6 +4099,48 @@ export function App() {
     responsibilityAndDue: language === 'ru' ? 'Ответственность и срок' : 'Sorumluluk ve Termin',
     noAttachment: language === 'ru' ? 'Вложения отсутствуют.' : 'Ek bulunmuyor.',
     noPhoto: language === 'ru' ? 'Фотографии отсутствуют.' : 'Fotoğraf bulunmuyor.'
+  };
+
+  const ptwCopy = {
+    formTitle: language === 'ru' ? 'Корпоративная система регистрации нарядов-допусков (PTW)' : 'Çalışma İzni (PTW) - Kurumsal Narad-Dopusk Kayıt Ekranı',
+    tabMain: language === 'ru' ? 'Основная информация' : 'PTW Kayıt Bilgileri',
+    tabResponsible: language === 'ru' ? 'Ответственные лица' : 'Sorumlular',
+    tabTeam: language === 'ru' ? 'Состав бригады' : 'Ekip Bilgileri',
+    tabWork: language === 'ru' ? 'Информация о работе' : 'İş Bilgileri',
+    tabRisks: language === 'ru' ? 'Риски' : 'Riskler',
+    tabHeightSafety: language === 'ru' ? 'Системы безопасности при работах на высоте' : 'Yüksekte Çalışma Güvenlik Sistemleri',
+    tabEquipment: language === 'ru' ? 'Используемое оборудование' : 'Kullanılacak Ekipman',
+    tabPreChecks: language === 'ru' ? 'Проверки перед началом работ' : 'Çalışma Öncesi Kontroller',
+    tabPrecautions: language === 'ru' ? 'Меры безопасности во время выполнения работ' : 'Çalışma Sırasında Alınacak Tedbirler',
+    tabSpecial: language === 'ru' ? 'Особые условия' : 'Özel Şartlar',
+    tabApprovals: language === 'ru' ? 'Согласования' : 'Onaylar',
+    tabDaily: language === 'ru' ? 'Ежедневный контроль наряда-допуска' : 'Günlük PTW Takibi',
+    tabTeamChange: language === 'ru' ? 'Изменения состава бригады' : 'Ekip Değişiklikleri',
+    tabClose: language === 'ru' ? 'Закрытие наряда' : 'Kapanış',
+    tabAttachments: language === 'ru' ? 'Вложения' : 'Dosya Ekleri',
+    sectionMain: language === 'ru' ? 'Информация о наряде-допуске' : 'PTW Kayıt Bilgileri',
+    ptwNo: language === 'ru' ? '№ наряда-допуска (автоматически)' : 'PTW No (Otomatik)',
+    organization: language === 'ru' ? 'Организация' : 'Organizasyon',
+    department: language === 'ru' ? 'Подразделение' : 'Departman',
+    location: language === 'ru' ? 'Место выполнения работ' : 'Lokasyon',
+    ptwType: language === 'ru' ? 'Тип наряда-допуска' : 'PTW Türü',
+    issueDate: language === 'ru' ? 'Дата оформления' : 'Düzenlenme Tarihi',
+    validFrom: language === 'ru' ? 'Дата начала действия' : 'Geçerlilik Başlangıcı',
+    validTo: language === 'ru' ? 'Дата окончания действия' : 'Geçerlilik Bitişi',
+    status: language === 'ru' ? 'Статус' : 'Durum',
+    reportActions: language === 'ru' ? 'Отчёты' : 'Rapor İşlemleri',
+    summaryReport: language === 'ru' ? 'Сводный отчёт' : 'Özet Rapor',
+    exportDocx: language === 'ru' ? 'Экспорт в DOCX' : 'DOCX Dışa Aktar',
+    exportPdf: language === 'ru' ? 'Экспорт в PDF' : 'PDF Dışa Aktar',
+    exportActionCsv: language === 'ru' ? 'Экспорт действий в CSV' : 'Aksiyon CSV Dışa Aktar',
+    exportFullCsv: language === 'ru' ? 'Полный экспорт CSV' : 'Tam CSV Dışa Aktar',
+    sendMail: language === 'ru' ? 'Отправить отчёт по электронной почте' : 'Özeti E-posta ile Gönder',
+    printPdf: language === 'ru' ? 'Печать / PDF' : 'Yazdır / PDF',
+    downloadAttachments: language === 'ru' ? 'Скачать вложения' : 'Ekleri İndir',
+    reset: language === 'ru' ? 'Сбросить форму' : 'PTW Sıfırla',
+    saveDraft: language === 'ru' ? 'Сохранить как черновик' : 'Taslak Kaydet',
+    submitApproval: language === 'ru' ? 'Отправить на согласование' : 'Onaya Gönder',
+    closePtw: language === 'ru' ? 'Закрыть наряд-допуск' : 'PTW Kapat'
   };
 
   const locationTypesLocalized =
@@ -10265,6 +10307,12 @@ export function App() {
       : language === 'en'
         ? 'Risk assessment data entry and analytics.'
         : 'Risk değerlendirme veri girişi ve analitiği.';
+  } else if (activeModule === 'permit-to-work') {
+    headerSubtitle = language === 'ru'
+      ? 'Ввод данных и аналитика нарядов-допусков'
+      : language === 'en'
+        ? 'Permit to Work data entry and analytics.'
+        : 'Çalışma izni veri girişi ve analitiği.';
   } else if (activeModule === 'reports') {
     headerSubtitle = language === 'en' ? 'Corporate report center and automated output generation.' : 'Kurumsal raporlama merkezi ve otomatik çıktı üretimi.';
   } else if (activeModule === 'projects') {
@@ -12030,7 +12078,7 @@ export function App() {
         {activeModule === 'permit-to-work' ? (
           <>
             <section className="panel">
-              <h2>Çalışma İzni (PTW) - Kurumsal Narad-Dopusk Kayıt Ekranı</h2>
+              <h2>{ptwCopy.formTitle}</h2>
               <div className="ptw-tabs">
                 {ptwTablar.map((tab) => (
                   <button
@@ -12039,7 +12087,24 @@ export function App() {
                     className={activePtwTab === tab.key ? 'ptw-tab active-ptw-tab' : 'ptw-tab'}
                     onClick={() => setActivePtwTab(tab.key)}
                   >
-                    {tab.label}
+                    {(() => {
+                      if (tab.key === 'kayit') return ptwCopy.tabMain;
+                      if (tab.key === 'sorumlular') return ptwCopy.tabResponsible;
+                      if (tab.key === 'ekip') return ptwCopy.tabTeam;
+                      if (tab.key === 'is-bilgileri') return ptwCopy.tabWork;
+                      if (tab.key === 'riskler') return ptwCopy.tabRisks;
+                      if (tab.key === 'guvenlik-sistemleri') return ptwCopy.tabHeightSafety;
+                      if (tab.key === 'ekipman') return ptwCopy.tabEquipment;
+                      if (tab.key === 'on-kontroller') return ptwCopy.tabPreChecks;
+                      if (tab.key === 'tedbirler') return ptwCopy.tabPrecautions;
+                      if (tab.key === 'ozel-sartlar') return ptwCopy.tabSpecial;
+                      if (tab.key === 'onaylar') return ptwCopy.tabApprovals;
+                      if (tab.key === 'gunluk-takip') return ptwCopy.tabDaily;
+                      if (tab.key === 'ekip-degisiklik') return ptwCopy.tabTeamChange;
+                      if (tab.key === 'kapanis') return ptwCopy.tabClose;
+                      if (tab.key === 'dosya-ekleri') return ptwCopy.tabAttachments;
+                      return tab.label;
+                    })()}
                   </button>
                 ))}
               </div>
@@ -12047,19 +12112,19 @@ export function App() {
 
             {activePtwTab === 'kayit' ? (
               <section className="panel">
-                <h2>PTW Kayıt Bilgileri</h2>
+                <h2>{ptwCopy.sectionMain}</h2>
                 <div className="form-grid">
-                  <label>PTW No (Otomatik)<input value={ptwForm.ptwNo} disabled /></label>
-                  <label>Organizasyon<input value={ptwForm.organizasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, organizasyon: event.target.value }))} /></label>
-                  <label>Departman<input value={ptwForm.departman} onChange={(event) => setPtwForm((prev) => ({ ...prev, departman: event.target.value }))} /></label>
+                  <label>{ptwCopy.ptwNo}<input value={ptwForm.ptwNo} disabled /></label>
+                  <label>{ptwCopy.organization}<input value={ptwForm.organizasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, organizasyon: event.target.value }))} /></label>
+                  <label>{ptwCopy.department}<input value={ptwForm.departman} onChange={(event) => setPtwForm((prev) => ({ ...prev, departman: event.target.value }))} /></label>
                   <label>Proje<input value={ptwForm.proje} onChange={(event) => setPtwForm((prev) => ({ ...prev, proje: event.target.value }))} /></label>
-                  <label>Lokasyon<input value={ptwForm.lokasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, lokasyon: event.target.value }))} /></label>
-                  <label>PTW Türü<input value={ptwForm.ptwTuru} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwTuru: event.target.value }))} /></label>
-                  <label>Düzenlenme Tarihi<input type="date" value={ptwForm.duzenlenmeTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, duzenlenmeTarihi: event.target.value }))} /></label>
-                  <label>Geçerlilik Başlangıcı<input type="date" value={ptwForm.gecerlilikBaslangici} onChange={(event) => setPtwForm((prev) => ({ ...prev, gecerlilikBaslangici: event.target.value }))} /></label>
-                  <label>Geçerlilik Bitişi<input type="date" value={ptwForm.gecerlilikBitisi} onChange={(event) => setPtwForm((prev) => ({ ...prev, gecerlilikBitisi: event.target.value }))} /></label>
+                  <label>{ptwCopy.location}<input value={ptwForm.lokasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, lokasyon: event.target.value }))} /></label>
+                  <label>{ptwCopy.ptwType}<input value={ptwForm.ptwTuru} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwTuru: event.target.value }))} /></label>
+                  <label>{ptwCopy.issueDate}<input type="date" value={ptwForm.duzenlenmeTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, duzenlenmeTarihi: event.target.value }))} /></label>
+                  <label>{ptwCopy.validFrom}<input type="date" value={ptwForm.gecerlilikBaslangici} onChange={(event) => setPtwForm((prev) => ({ ...prev, gecerlilikBaslangici: event.target.value }))} /></label>
+                  <label>{ptwCopy.validTo}<input type="date" value={ptwForm.gecerlilikBitisi} onChange={(event) => setPtwForm((prev) => ({ ...prev, gecerlilikBitisi: event.target.value }))} /></label>
                   <label>
-                    Durum
+                    {ptwCopy.status}
                     <select value={ptwForm.durum} onChange={(event) => setPtwForm((prev) => ({ ...prev, durum: event.target.value as PtwStatus }))}>
                       {ptwDurumlar.map((durum) => (
                         <option key={durum} value={durum}>{durum}</option>
@@ -12072,7 +12137,7 @@ export function App() {
 
             {activePtwTab === 'sorumlular' ? (
               <section className="panel">
-                <h2>Sorumlular</h2>
+                <h2>{ptwCopy.tabResponsible}</h2>
                 <div className="form-grid">
                   <label>İşi Talep Eden<input value={ptwForm.isiTalepEden} onChange={(event) => setPtwForm((prev) => ({ ...prev, isiTalepEden: event.target.value }))} /></label>
                   <label>İşi Veren<input value={ptwForm.isiVeren} onChange={(event) => setPtwForm((prev) => ({ ...prev, isiVeren: event.target.value }))} /></label>
@@ -12085,7 +12150,7 @@ export function App() {
 
             {activePtwTab === 'ekip' ? (
               <section className="panel table-wrap">
-                <h2>Ekip Bilgileri</h2>
+                <h2>{ptwCopy.tabTeam}</h2>
                 <table>
                   <thead>
                     <tr>
@@ -12114,7 +12179,7 @@ export function App() {
 
             {activePtwTab === 'is-bilgileri' ? (
               <section className="panel">
-                <h2>İş Bilgileri</h2>
+                <h2>{ptwCopy.tabWork}</h2>
                 <div className="form-grid">
                   <label>İşin Adı<input value={ptwForm.isinAdi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isinAdi: event.target.value }))} /></label>
                   <label>Çalışma Alanı<input value={ptwForm.calismaAlani} onChange={(event) => setPtwForm((prev) => ({ ...prev, calismaAlani: event.target.value }))} /></label>
@@ -12131,7 +12196,7 @@ export function App() {
 
             {activePtwTab === 'riskler' ? (
               <section className="panel">
-                <h2>Riskler</h2>
+                <h2>{ptwCopy.tabRisks}</h2>
                 <div className="checkbox-grid">
                   {ptwTehlikeSecenekleri.map((tehlike) => (
                     <label key={tehlike} className="checkbox-item">
@@ -12149,7 +12214,7 @@ export function App() {
 
             {activePtwTab === 'guvenlik-sistemleri' ? (
               <section className="panel">
-                <h2>Yüksekte Çalışma Güvenlik Sistemleri</h2>
+                <h2>{ptwCopy.tabHeightSafety}</h2>
                 <div className="checkbox-grid">
                   {ptwGuvenlikSistemleri.map((sistem) => (
                     <label key={sistem} className="checkbox-item">
@@ -12167,7 +12232,7 @@ export function App() {
 
             {activePtwTab === 'ekipman' ? (
               <section className="panel">
-                <h2>Kullanılacak Ekipman</h2>
+                <h2>{ptwCopy.tabEquipment}</h2>
                 <div className="checkbox-grid">
                   {ptwEkipmanSecenekleri.map((ekipman) => (
                     <label key={ekipman} className="checkbox-item">
@@ -12185,7 +12250,7 @@ export function App() {
 
             {activePtwTab === 'on-kontroller' ? (
               <section className="panel table-wrap">
-                <h2>Çalışma Öncesi Kontroller</h2>
+                <h2>{ptwCopy.tabPreChecks}</h2>
                 <table>
                   <thead>
                     <tr>
@@ -12216,7 +12281,7 @@ export function App() {
 
             {activePtwTab === 'tedbirler' ? (
               <section className="panel table-wrap">
-                <h2>Çalışma Sırasında Alınacak Tedbirler</h2>
+                <h2>{ptwCopy.tabPrecautions}</h2>
                 <table>
                   <thead>
                     <tr>
@@ -12249,14 +12314,14 @@ export function App() {
 
             {activePtwTab === 'ozel-sartlar' ? (
               <section className="panel">
-                <h2>Özel Şartlar</h2>
+                <h2>{ptwCopy.tabSpecial}</h2>
                 <textarea rows={8} value={ptwForm.ozelSartlar} onChange={(event) => setPtwForm((prev) => ({ ...prev, ozelSartlar: event.target.value }))} />
               </section>
             ) : null}
 
             {activePtwTab === 'onaylar' ? (
               <section className="panel">
-                <h2>Onaylar</h2>
+                <h2>{ptwCopy.tabApprovals}</h2>
                 <div className="form-grid">
                   <label>PTW Hazırlayan<input value={ptwForm.ptwHazirlayan} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwHazirlayan: event.target.value }))} /></label>
                   <label>HSE Onayı<input value={ptwForm.hseOnayi} onChange={(event) => setPtwForm((prev) => ({ ...prev, hseOnayi: event.target.value }))} /></label>
@@ -12270,7 +12335,7 @@ export function App() {
 
             {activePtwTab === 'gunluk-takip' ? (
               <section className="panel table-wrap">
-                <h2>Günlük PTW Takibi</h2>
+                <h2>{ptwCopy.tabDaily}</h2>
                 <table>
                   <thead>
                     <tr>
@@ -12301,7 +12366,7 @@ export function App() {
 
             {activePtwTab === 'ekip-degisiklik' ? (
               <section className="panel table-wrap">
-                <h2>Ekip Değişiklikleri</h2>
+                <h2>{ptwCopy.tabTeamChange}</h2>
                 <table>
                   <thead>
                     <tr>
@@ -12328,7 +12393,7 @@ export function App() {
 
             {activePtwTab === 'kapanis' ? (
               <section className="panel">
-                <h2>Kapanış</h2>
+                <h2>{ptwCopy.tabClose}</h2>
                 <div className="form-grid">
                   <label className="checkbox-item"><input type="checkbox" checked={ptwForm.isTamamlandi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isTamamlandi: event.target.checked }))} />İş Tamamlandı</label>
                   <label className="checkbox-item"><input type="checkbox" checked={ptwForm.alanGuvenli} onChange={(event) => setPtwForm((prev) => ({ ...prev, alanGuvenli: event.target.checked }))} />Alan Güvenli</label>
@@ -12343,7 +12408,7 @@ export function App() {
 
             {activePtwTab === 'dosya-ekleri' ? (
               <section className="panel table-wrap">
-                <h2>Dosya Ekleri</h2>
+                <h2>{ptwCopy.tabAttachments}</h2>
                 <div className="ptw-attachment-grid">
                   {ptwDosyaTipleri.map((tip) => (
                     <label key={tip}>
@@ -12378,20 +12443,20 @@ export function App() {
             ) : null}
 
             <section className="panel">
-              <h2>Rapor İşlemleri</h2>
+              <h2>{ptwCopy.reportActions}</h2>
               <div className="report-action-buttons">
-                <button type="button">Özet Rapor</button>
-                <button type="button">DOCX Dışa Aktar</button>
-                <button type="button">PDF Dışa Aktar</button>
-                <button type="button">Aksiyon CSV Dışa Aktar</button>
-                <button type="button">Tam CSV Dışa Aktar</button>
-                <button type="button">Özeti E-posta ile Gönder</button>
-                <button type="button">Yazdır / PDF</button>
-                <button type="button">Ekleri İndir</button>
-                <button type="button" onClick={resetPtw}>PTW Sıfırla</button>
-                <button type="button">Taslak Kaydet</button>
-                <button type="button">Onaya Gönder</button>
-                <button type="button">PTW Kapat</button>
+                <button type="button">{ptwCopy.summaryReport}</button>
+                <button type="button">{ptwCopy.exportDocx}</button>
+                <button type="button">{ptwCopy.exportPdf}</button>
+                <button type="button">{ptwCopy.exportActionCsv}</button>
+                <button type="button">{ptwCopy.exportFullCsv}</button>
+                <button type="button">{ptwCopy.sendMail}</button>
+                <button type="button">{ptwCopy.printPdf}</button>
+                <button type="button">{ptwCopy.downloadAttachments}</button>
+                <button type="button" onClick={resetPtw}>{ptwCopy.reset}</button>
+                <button type="button">{ptwCopy.saveDraft}</button>
+                <button type="button">{ptwCopy.submitApproval}</button>
+                <button type="button">{ptwCopy.closePtw}</button>
               </div>
             </section>
           </>
