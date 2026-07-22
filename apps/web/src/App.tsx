@@ -14386,9 +14386,9 @@ export function App() {
                     value={riskForm.status}
                     onChange={(event) => setRiskForm((prev) => ({ ...prev, status: event.target.value as Status }))}
                   >
-                    <option value="OPEN">Açık</option>
-                    <option value="IN_PROGRESS">Devam Ediyor</option>
-                    <option value="CLOSED">Kapalı</option>
+                    <option value="OPEN">{language === 'ru' ? 'Открыто' : 'Açık'}</option>
+                    <option value="IN_PROGRESS">{language === 'ru' ? 'В работе' : 'Devam Ediyor'}</option>
+                    <option value="CLOSED">{language === 'ru' ? 'Закрыто' : 'Kapalı'}</option>
                   </select>
                 </label>
 
