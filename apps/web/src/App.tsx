@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { countryList, getCitiesForCountry } from './data/locations';
 
 declare global {
@@ -130,6 +130,62 @@ type ModuleRecord = {
   valueB: number;
   status: Status;
 };
+
+type CustomFileUploadProps = {
+  buttonLabel: string;
+  emptyLabel: string;
+  singleLabel: string;
+  multipleLabel: string;
+  accept?: string;
+  multiple?: boolean;
+  onFilesChange: (files: File[]) => void;
+};
+
+function CustomFileUpload({
+  buttonLabel,
+  emptyLabel,
+  singleLabel,
+  multipleLabel,
+  accept,
+  multiple = false,
+  onFilesChange
+}: CustomFileUploadProps) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const handleFiles = (incomingFiles: File[]) => {
+    const nextFiles = multiple ? incomingFiles : incomingFiles.slice(0, 1);
+    setSelectedFiles(nextFiles);
+    onFilesChange(nextFiles);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  const summaryText =
+    selectedFiles.length === 0
+      ? emptyLabel
+      : selectedFiles.length === 1
+        ? `${singleLabel}${selectedFiles[0]?.name ?? ''}`
+        : `${multipleLabel}${selectedFiles.length}`;
+
+  return (
+    <div className="custom-file-upload">
+      <div className="custom-file-upload-summary">{summaryText}</div>
+      <button type="button" className="secondary" onClick={() => inputRef.current?.click()}>
+        {buttonLabel}
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        multiple={multiple}
+        onChange={(event) => handleFiles(Array.from(event.target.files ?? []))}
+        style={{ display: 'none' }}
+      />
+    </div>
+  );
+}
 
 type ObservationPriority = 'DUSUK' | 'ORTA' | 'YUKSEK' | 'KRITIK';
 type ObservationWorkflowStatus = 'ACIK' | 'DEVAM_EDIYOR' | 'KAPALI';
@@ -15166,27 +15222,50 @@ export function App() {
 
                 <label>
                   {riskCopy.attachments}
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setRiskForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      multiple
+                      onFilesChange={(files) => setRiskForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setRiskForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label>
                   {riskCopy.photos}
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setRiskForm((prev) => ({ ...prev, photos: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      accept="image/*"
+                      multiple
+                      onFilesChange={(files) => setRiskForm((prev) => ({ ...prev, photos: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setRiskForm((prev) => ({ ...prev, photos: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label className="full-row">
