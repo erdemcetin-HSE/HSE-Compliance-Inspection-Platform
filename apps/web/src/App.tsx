@@ -924,6 +924,30 @@ const observationStatusLabel: Record<ObservationWorkflowStatus, string> = {
   KAPALI: 'Kapalı'
 };
 
+const observationCategoryOptionsRu: Record<string, string> = {
+  'Güvensiz Davranış': 'Небезопасные действия',
+  'Güvensiz Durum': 'Небезопасные условия',
+  'Çevresel Uygunsuzluk': 'Экологическое несоответствие',
+  'Yangın Güvenliği': 'Пожарная безопасность',
+  'KKD Uygunsuzluğu': 'Несоответствие по СИЗ',
+  Housekeeping: 'Содержание рабочих мест',
+  'Pozitif Gözlem': 'Позитивное предписание',
+  'Diğer': 'Прочее'
+};
+
+const observationPriorityLabelRu: Record<ObservationPriority, string> = {
+  DUSUK: 'Низкий',
+  ORTA: 'Средний',
+  YUKSEK: 'Высокий',
+  KRITIK: 'Критический'
+};
+
+const observationStatusLabelRu: Record<ObservationWorkflowStatus, string> = {
+  ACIK: 'Открыто',
+  DEVAM_EDIYOR: 'В работе',
+  KAPALI: 'Закрыто'
+};
+
 const createEmptyObservationForm = (project?: Project): ObservationForm => ({
   projectId: project?.id ?? '',
   country: project?.country ?? '',
@@ -1274,7 +1298,7 @@ const moduleLabelsByLanguage: Record<Language, Record<ModuleKey, string>> = {
   ru: {
     dashboard: 'Панель',
     inspections: 'Инспекции',
-    observations: 'Наблюдения',
+    observations: 'Предписания',
     'risk-assessments': 'Оценка рисков',
     'permit-to-work': 'Разрешение на работы',
     incidents: 'Инциденты',
@@ -1653,7 +1677,7 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Closed CAPA': 'Закрытые CAPA',
     'Open CAPA': 'Открытые CAPA',
     'Workforce Safety': 'Безопасность персонала',
-    'Inspections & Observations': 'Инспекции и наблюдения',
+    'Inspections & Observations': 'Инспекции и предписания',
     Training: 'Обучение',
     'PPE Management': 'Управление СИЗ',
     'Equipment Management': 'Управление оборудованием',
@@ -1667,8 +1691,8 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Safe Man-Hours (Daily / Weekly / Monthly / Total)': 'Безопасные человеко-часы (день / неделя / месяц / всего)',
     'Open Findings': 'Открытые замечания',
     'Closed Findings': 'Закрытые замечания',
-    'Safety Observations': 'Наблюдения по безопасности',
-    'Positive Observations': 'Позитивные наблюдения',
+    'Safety Observations': 'Предписания по безопасности',
+    'Positive Observations': 'Позитивные предписания',
     'Overdue Actions': 'Просроченные действия',
     'Weekly Inspection Performance': 'Недельная эффективность инспекций',
     'Total Employees': 'Всего сотрудников',
@@ -3975,6 +3999,61 @@ export function App() {
     printPdf: language === 'ru' ? 'Печать / PDF' : 'Yazdır / PDF',
     resetInspection: language === 'ru' ? 'Сбросить инспекцию' : 'Denetimi Sıfırla',
     preparedBy: language === 'ru' ? 'Подготовлено Erdem Cetin' : 'Erdem Cetin tarafından hazırlandı'
+  };
+
+  const observationCopy = {
+    moduleSubtitle: language === 'ru' ? 'Ввод данных и аналитика предписаний' : 'Gözlem veri girişi ve analizi',
+    formTitle: language === 'ru' ? 'Корпоративная форма регистрации предписаний по охране труда' : 'Kurumsal İSG Gözlem Giriş Formu',
+    observationNo: language === 'ru' ? '№ предписания' : 'Gözlem No',
+    project: language === 'ru' ? 'Проект' : 'Proje',
+    selectProject: language === 'ru' ? 'Выберите проект' : 'Proje seçin',
+    projectLocation: language === 'ru' ? 'Местоположение проекта' : 'Proje Konumu',
+    inspectionDate: language === 'ru' ? 'Дата проверки' : 'Denetim Tarihi',
+    inspectionTime: language === 'ru' ? 'Время проверки' : 'Denetim Saati',
+    inspectorName: language === 'ru' ? 'Инспектор' : 'Denetçi Adı',
+    contractor: language === 'ru' ? 'Генеральный подрядчик' : 'Yüklenici',
+    subcontractor: language === 'ru' ? 'Субподрядчик' : 'Alt Yüklenici',
+    responsiblePerson: language === 'ru' ? 'Ответственный' : 'Sorumlu Kişi',
+    category: language === 'ru' ? 'Категория предписания' : 'Gözlem Kategorisi',
+    subject: language === 'ru' ? 'Тема предписания' : 'Gözlem Konusu',
+    observationLocation: language === 'ru' ? 'Место выявления' : 'Gözlem Yeri',
+    violatedRequirement: language === 'ru' ? 'Нарушенное требование' : 'İhlal Edilen Gereklilik',
+    observationDescription: language === 'ru' ? 'Описание нарушения' : 'Gözlem Açıklaması',
+    correctiveAction: language === 'ru' ? 'Корректирующие мероприятия' : 'Gereken Düzeltici Faaliyet',
+    dueDate: language === 'ru' ? 'Срок устранения' : 'Bitiş Tarihi',
+    priority: language === 'ru' ? 'Приоритет' : 'Öncelik',
+    status: language === 'ru' ? 'Статус' : 'Durum',
+    comment: language === 'ru' ? 'Комментарий' : 'Yorum',
+    attachmentsTitle: language === 'ru' ? 'Фото-приложения' : 'Fotoğraf Ekleri',
+    dragDropHint: language === 'ru' ? 'Перетащите файлы сюда или выберите файл (jpg, jpeg, png, pdf)' : 'Sürükle ve Bırak veya dosya seçin (jpg, jpeg, png, pdf)',
+    browseFiles: language === 'ru' ? 'Выбрать файлы' : 'Dosyalara Göz At',
+    removeImage: language === 'ru' ? 'Удалить файл' : 'Resmi Kaldır',
+    saveObservation: language === 'ru' ? 'Сохранить предписание' : 'Kaydet',
+    updateObservation: language === 'ru' ? 'Обновить предписание' : 'Güncelle',
+    cancel: language === 'ru' ? 'Отмена' : 'Vazgeç',
+    registryTitle: language === 'ru' ? 'Реестр предписаний' : 'Gözlem Kayıtları',
+    tableCategory: language === 'ru' ? 'Категория' : 'Kategori',
+    tableSubject: language === 'ru' ? 'Тема' : 'Konu',
+    tableActions: language === 'ru' ? 'Действия' : 'İşlemler',
+    view: language === 'ru' ? 'Просмотр' : 'Görüntüle',
+    edit: language === 'ru' ? 'Редактировать' : 'Düzenle',
+    delete: language === 'ru' ? 'Удалить' : 'Sil',
+    reportActions: language === 'ru' ? 'Операции с отчетом' : 'Rapor İşlemleri',
+    generatePdf: language === 'ru' ? 'Сформировать PDF' : 'PDF Oluştur',
+    printReport: language === 'ru' ? 'Печать отчета' : 'Raporu Yazdır',
+    noPhotoAttached: language === 'ru' ? 'Фото не приложены.' : 'Ekli fotoğraf bulunmamaktadır.',
+    pdfAttachment: language === 'ru' ? 'PDF-приложение' : 'PDF Ek',
+    confirmationDelete: language === 'ru' ? 'Удалить предписание №' : 'numaralı gözlem kaydı silinsin mi?',
+    reportTitle: language === 'ru' ? 'Форма предписания' : 'Gözlem Formu',
+    reportHeaderTitle: language === 'ru' ? 'КОРПОРАТИВНАЯ ФОРМА ПРЕДПИСАНИЯ ПО ОХРАНЕ ТРУДА' : 'KURUMSAL İSG GÖZLEM FORMU',
+    formNo: language === 'ru' ? 'Форма №' : 'Form No',
+    revision: language === 'ru' ? 'Ревизия' : 'Revizyon',
+    reportSystemName: language === 'ru' ? 'Корпоративная система управления предписаниями по ОТ и ПБ' : 'Kurumsal İSG Gözlem Yönetim Sistemi',
+    page: language === 'ru' ? 'Страница' : 'Sayfa',
+    preparedBy: language === 'ru' ? 'Подготовил' : 'Hazırlayan',
+    reviewedBy: language === 'ru' ? 'Проверил' : 'Kontrol Eden',
+    approvedBy: language === 'ru' ? 'Утвердил' : 'Onaylayan',
+    nameSignature: language === 'ru' ? 'ФИО / Подпись' : 'Ad Soyad / İmza'
   };
 
   const locationTypesLocalized =
@@ -6371,7 +6450,7 @@ export function App() {
     if (!target) {
       return;
     }
-    if (!window.confirm(`\"${target.observationNo}\" numaralı gözlem kaydı silinsin mi?`)) {
+    if (!window.confirm(language === 'ru' ? `Удалить предписание № \"${target.observationNo}\"?` : `\"${target.observationNo}\" numaralı gözlem kaydı silinsin mi?`)) {
       return;
     }
     setObservationRecords((prev) => prev.filter((record) => record.id !== recordId));
@@ -6388,12 +6467,15 @@ export function App() {
     const imageAttachments = record.attachments.filter((attachment) => attachment.mimeType.startsWith('image/'));
     const pdfAttachments = record.attachments.filter((attachment) => attachment.mimeType === 'application/pdf');
 
+    const reportPriorityLabel = language === 'ru' ? observationPriorityLabelRu[record.priority] : observationPriorityLabel[record.priority];
+    const reportStatusLabel = language === 'ru' ? observationStatusLabelRu[record.status] : observationStatusLabel[record.status];
+
     return `
       <!doctype html>
-      <html lang="tr">
+      <html lang="${language === 'ru' ? 'ru' : 'tr'}">
       <head>
         <meta charset="utf-8" />
-        <title>Gözlem Formu - ${record.observationNo}</title>
+        <title>${observationCopy.reportTitle} - ${record.observationNo}</title>
         <style>
           @page { size: A4 portrait; margin: 10mm 10mm 12mm 10mm; }
           body { margin: 0; font-family: Arial, sans-serif; color: #0f172a; }
@@ -6499,14 +6581,14 @@ export function App() {
             </colgroup>
             <tr>
               <td class="header-logo" rowspan="3">ŞİRKET LOGOSU</td>
-              <td class="header-title" rowspan="3">KURUMSAL İSG GÖZLEM FORMU</td>
-              <td class="meta-cell"><strong>Form No:</strong> HSE-OBS-001</td>
+              <td class="header-title" rowspan="3">${observationCopy.reportHeaderTitle}</td>
+              <td class="meta-cell"><strong>${observationCopy.formNo}:</strong> HSE-OBS-001</td>
             </tr>
             <tr>
-              <td class="meta-cell"><strong>Revizyon:</strong> 00</td>
+              <td class="meta-cell"><strong>${observationCopy.revision}:</strong> 00</td>
             </tr>
             <tr>
-              <td class="meta-cell"><strong>Gözlem No:</strong> ${record.observationNo}</td>
+              <td class="meta-cell"><strong>${observationCopy.observationNo}:</strong> ${record.observationNo}</td>
             </tr>
           </table>
 
@@ -6518,41 +6600,41 @@ export function App() {
               <col style="width: 32%" />
             </colgroup>
             <tr><td class="section-gap" colspan="4"></td></tr>
-            <tr><th>Proje</th><td>${projectName}</td><th>Proje Konumu</th><td>${record.projectLocation}</td></tr>
-            <tr><th>Denetim Tarihi</th><td>${record.inspectionDate}</td><th>Denetim Saati</th><td>${record.inspectionTime}</td></tr>
-            <tr><th>Denetçi Adı</th><td>${record.inspectorName}</td><th>Sorumlu Kişi</th><td>${record.responsiblePerson}</td></tr>
-            <tr><th>Yüklenici</th><td>${record.contractor}</td><th>Alt Yüklenici</th><td>${record.subcontractor}</td></tr>
-            <tr><th>Gözlem Kategorisi</th><td>${record.category}</td><th>Gözlem Konusu</th><td>${record.subject}</td></tr>
-            <tr><th>Gözlem Yeri</th><td colspan="3">${record.observationLocation}</td></tr>
-            <tr class="row-medium"><th>İhlal Edilen Gereklilik</th><td colspan="3">${record.violatedRequirement}</td></tr>
-            <tr class="row-tall"><th>Gözlem Açıklaması</th><td colspan="3">${record.observationDescription}</td></tr>
-            <tr class="row-tall"><th>Gereken Düzeltici Faaliyet</th><td colspan="3">${record.correctiveAction}</td></tr>
-            <tr><th>Bitiş Tarihi</th><td>${record.dueDate}</td><th>Öncelik / Durum</th><td>${observationPriorityLabel[record.priority]} / ${observationStatusLabel[record.status]}</td></tr>
-            <tr class="row-medium"><th>Yorum</th><td colspan="3">${record.comment}</td></tr>
+            <tr><th>${observationCopy.project}</th><td>${projectName}</td><th>${observationCopy.projectLocation}</th><td>${record.projectLocation}</td></tr>
+            <tr><th>${observationCopy.inspectionDate}</th><td>${record.inspectionDate}</td><th>${observationCopy.inspectionTime}</th><td>${record.inspectionTime}</td></tr>
+            <tr><th>${observationCopy.inspectorName}</th><td>${record.inspectorName}</td><th>${observationCopy.responsiblePerson}</th><td>${record.responsiblePerson}</td></tr>
+            <tr><th>${observationCopy.contractor}</th><td>${record.contractor}</td><th>${observationCopy.subcontractor}</th><td>${record.subcontractor}</td></tr>
+            <tr><th>${observationCopy.category}</th><td>${record.category}</td><th>${observationCopy.subject}</th><td>${record.subject}</td></tr>
+            <tr><th>${observationCopy.observationLocation}</th><td colspan="3">${record.observationLocation}</td></tr>
+            <tr class="row-medium"><th>${observationCopy.violatedRequirement}</th><td colspan="3">${record.violatedRequirement}</td></tr>
+            <tr class="row-tall"><th>${observationCopy.observationDescription}</th><td colspan="3">${record.observationDescription}</td></tr>
+            <tr class="row-tall"><th>${observationCopy.correctiveAction}</th><td colspan="3">${record.correctiveAction}</td></tr>
+            <tr><th>${observationCopy.dueDate}</th><td>${record.dueDate}</td><th>${observationCopy.priority} / ${observationCopy.status}</th><td>${reportPriorityLabel} / ${reportStatusLabel}</td></tr>
+            <tr class="row-medium"><th>${observationCopy.comment}</th><td colspan="3">${record.comment}</td></tr>
             <tr class="row-photos">
-              <th>Fotoğraf Ekleri</th>
+              <th>${observationCopy.attachmentsTitle}</th>
               <td colspan="3">
                 ${imageAttachments.length > 0
                   ? `<div class="attachments-grid">${imageAttachments
                     .map((attachment) => `<div class="attachment-card"><img src="${attachment.dataUrl}" alt="${attachment.name}" /><p>${attachment.name}</p></div>`)
                     .join('')}</div>`
-                  : 'Ekli fotoğraf bulunmamaktadır.'}
+                  : observationCopy.noPhotoAttached}
                 ${pdfAttachments.length > 0
-                  ? `<div class="pdf-list">${pdfAttachments.map((attachment) => `<div>${attachment.name} (PDF Ek)</div>`).join('')}</div>`
+                  ? `<div class="pdf-list">${pdfAttachments.map((attachment) => `<div>${attachment.name} (${observationCopy.pdfAttachment})</div>`).join('')}</div>`
                   : ''}
               </td>
             </tr>
           </table>
 
           <section class="signature-grid">
-            <article class="signature-card"><strong>Hazırlayan</strong><div class="signature-line">Ad Soyad / İmza</div></article>
-            <article class="signature-card"><strong>Kontrol Eden</strong><div class="signature-line">Ad Soyad / İmza</div></article>
-            <article class="signature-card"><strong>Onaylayan</strong><div class="signature-line">Ad Soyad / İmza</div></article>
+            <article class="signature-card"><strong>${observationCopy.preparedBy}</strong><div class="signature-line">${observationCopy.nameSignature}</div></article>
+            <article class="signature-card"><strong>${observationCopy.reviewedBy}</strong><div class="signature-line">${observationCopy.nameSignature}</div></article>
+            <article class="signature-card"><strong>${observationCopy.approvedBy}</strong><div class="signature-line">${observationCopy.nameSignature}</div></article>
           </section>
 
           <footer class="footer">
-            <span>Kurumsal İSG Gözlem Yönetim Sistemi</span>
-            <span>Sayfa 1/1</span>
+            <span>${observationCopy.reportSystemName}</span>
+            <span>${observationCopy.page} 1/1</span>
           </footer>
         </main>
       </body>
@@ -14988,106 +15070,107 @@ export function App() {
         {activeModule === 'observations' ? (
           <>
             <section className="panel observation-panel">
-              <h2>Kurumsal İSG Gözlem Giriş Formu</h2>
+              <h2>{observationCopy.formTitle}</h2>
+              <p>{observationCopy.moduleSubtitle}</p>
               <div className="observation-form-grid">
                 <label>
-                  Gözlem No
+                  {observationCopy.observationNo}
                   <input value={editingObservationId ? (observationRecords.find((record) => record.id === editingObservationId)?.observationNo ?? nextObservationNo) : nextObservationNo} readOnly />
                 </label>
                 <label>
-                  Proje
+                  {observationCopy.project}
                   <select value={observationForm.projectId} onChange={(event) => setObservationProject(event.target.value)}>
-                    <option value="">Proje seçin</option>
+                    <option value="">{observationCopy.selectProject}</option>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Proje Konumu
+                  {observationCopy.projectLocation}
                   <input value={observationForm.projectLocation} onChange={(event) => setObservationForm((prev) => ({ ...prev, projectLocation: event.target.value }))} />
                 </label>
                 <label>
-                  Denetim Tarihi
+                  {observationCopy.inspectionDate}
                   <input type="date" value={observationForm.inspectionDate} onChange={(event) => setObservationForm((prev) => ({ ...prev, inspectionDate: event.target.value }))} />
                 </label>
                 <label>
-                  Denetim Saati
+                  {observationCopy.inspectionTime}
                   <input type="time" value={observationForm.inspectionTime} onChange={(event) => setObservationForm((prev) => ({ ...prev, inspectionTime: event.target.value }))} />
                 </label>
                 <label>
-                  Denetçi Adı
+                  {observationCopy.inspectorName}
                   <input value={observationForm.inspectorName} onChange={(event) => setObservationForm((prev) => ({ ...prev, inspectorName: event.target.value }))} />
                 </label>
                 <label>
-                  Yüklenici
+                  {observationCopy.contractor}
                   <input value={observationForm.contractor} onChange={(event) => setObservationForm((prev) => ({ ...prev, contractor: event.target.value }))} />
                 </label>
                 <label>
-                  Alt Yüklenici
+                  {observationCopy.subcontractor}
                   <input value={observationForm.subcontractor} onChange={(event) => setObservationForm((prev) => ({ ...prev, subcontractor: event.target.value }))} />
                 </label>
                 <label>
-                  Sorumlu Kişi
+                  {observationCopy.responsiblePerson}
                   <input value={observationForm.responsiblePerson} onChange={(event) => setObservationForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))} />
                 </label>
                 <label>
-                  Gözlem Kategorisi
+                  {observationCopy.category}
                   <select value={observationForm.category} onChange={(event) => setObservationForm((prev) => ({ ...prev, category: event.target.value }))}>
                     {observationCategoryOptions.map((category) => (
-                      <option key={category} value={category}>{category}</option>
+                      <option key={category} value={category}>{language === 'ru' ? (observationCategoryOptionsRu[category] ?? category) : category}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Gözlem Konusu
+                  {observationCopy.subject}
                   <input value={observationForm.subject} onChange={(event) => setObservationForm((prev) => ({ ...prev, subject: event.target.value }))} />
                 </label>
                 <label>
-                  Gözlem Yeri
+                  {observationCopy.observationLocation}
                   <input value={observationForm.observationLocation} onChange={(event) => setObservationForm((prev) => ({ ...prev, observationLocation: event.target.value }))} />
                 </label>
                 <label className="full-row">
-                  İhlal Edilen Gereklilik
+                  {observationCopy.violatedRequirement}
                   <textarea rows={2} value={observationForm.violatedRequirement} onChange={(event) => setObservationForm((prev) => ({ ...prev, violatedRequirement: event.target.value }))} />
                 </label>
                 <label className="full-row">
-                  Gözlem Açıklaması
+                  {observationCopy.observationDescription}
                   <textarea rows={3} value={observationForm.observationDescription} onChange={(event) => setObservationForm((prev) => ({ ...prev, observationDescription: event.target.value }))} />
                 </label>
                 <label className="full-row">
-                  Gereken Düzeltici Faaliyet
+                  {observationCopy.correctiveAction}
                   <textarea rows={3} value={observationForm.correctiveAction} onChange={(event) => setObservationForm((prev) => ({ ...prev, correctiveAction: event.target.value }))} />
                 </label>
                 <label>
-                  Bitiş Tarihi
+                  {observationCopy.dueDate}
                   <input type="date" value={observationForm.dueDate} onChange={(event) => setObservationForm((prev) => ({ ...prev, dueDate: event.target.value }))} />
                 </label>
                 <label>
-                  Öncelik
+                  {observationCopy.priority}
                   <select value={observationForm.priority} onChange={(event) => setObservationForm((prev) => ({ ...prev, priority: event.target.value as ObservationPriority }))}>
-                    <option value="DUSUK">Düşük</option>
-                    <option value="ORTA">Orta</option>
-                    <option value="YUKSEK">Yüksek</option>
-                    <option value="KRITIK">Kritik</option>
+                    <option value="DUSUK">{language === 'ru' ? observationPriorityLabelRu.DUSUK : 'Düşük'}</option>
+                    <option value="ORTA">{language === 'ru' ? observationPriorityLabelRu.ORTA : 'Orta'}</option>
+                    <option value="YUKSEK">{language === 'ru' ? observationPriorityLabelRu.YUKSEK : 'Yüksek'}</option>
+                    <option value="KRITIK">{language === 'ru' ? observationPriorityLabelRu.KRITIK : 'Kritik'}</option>
                   </select>
                 </label>
                 <label>
-                  Durum
+                  {observationCopy.status}
                   <select value={observationForm.status} onChange={(event) => setObservationForm((prev) => ({ ...prev, status: event.target.value as ObservationWorkflowStatus }))}>
-                    <option value="ACIK">Açık</option>
-                    <option value="DEVAM_EDIYOR">Devam Ediyor</option>
-                    <option value="KAPALI">Kapalı</option>
+                    <option value="ACIK">{language === 'ru' ? observationStatusLabelRu.ACIK : 'Açık'}</option>
+                    <option value="DEVAM_EDIYOR">{language === 'ru' ? observationStatusLabelRu.DEVAM_EDIYOR : 'Devam Ediyor'}</option>
+                    <option value="KAPALI">{language === 'ru' ? observationStatusLabelRu.KAPALI : 'Kapalı'}</option>
                   </select>
                 </label>
                 <label className="full-row">
-                  Yorum
+                  {observationCopy.comment}
                   <textarea rows={2} value={observationForm.comment} onChange={(event) => setObservationForm((prev) => ({ ...prev, comment: event.target.value }))} />
                 </label>
               </div>
 
               <section className="observation-attachments">
-                <h3>Fotoğraf Ekleri</h3>
+                <h3>{observationCopy.attachmentsTitle}</h3>
                 <div
                   className={`observation-dropzone ${observationDragActive ? 'active' : ''}`}
                   onDragOver={(event) => {
@@ -15102,9 +15185,9 @@ export function App() {
                     void addObservationFiles(files);
                   }}
                 >
-                  <p>Sürükle ve Bırak veya dosya seçin (jpg, jpeg, png, pdf)</p>
+                  <p>{observationCopy.dragDropHint}</p>
                   <label className="browse-button">
-                    Dosyalara Göz At
+                    {observationCopy.browseFiles}
                     <input
                       type="file"
                       multiple
@@ -15128,7 +15211,7 @@ export function App() {
                           <div className="attachment-pdf">PDF</div>
                         )}
                         <p>{attachment.name}</p>
-                        <button type="button" className="danger" onClick={() => removeObservationAttachment(attachment.id)}>Resmi Kaldır</button>
+                        <button type="button" className="danger" onClick={() => removeObservationAttachment(attachment.id)}>{observationCopy.removeImage}</button>
                       </article>
                     ))}
                   </div>
@@ -15136,25 +15219,25 @@ export function App() {
               </section>
 
               <div className="full-row actions observation-actions-row">
-                <button type="button" onClick={saveObservationRecord}>{editingObservationId ? 'Güncelle' : 'Kaydet'}</button>
-                {editingObservationId ? <button type="button" className="secondary" onClick={resetObservationForm}>Vazgeç</button> : null}
+                <button type="button" onClick={saveObservationRecord}>{editingObservationId ? observationCopy.updateObservation : observationCopy.saveObservation}</button>
+                {editingObservationId ? <button type="button" className="secondary" onClick={resetObservationForm}>{observationCopy.cancel}</button> : null}
               </div>
             </section>
 
             <section className="panel table-wrap observation-table-panel">
-              <h2>Gözlem Kayıtları</h2>
+              <h2>{observationCopy.registryTitle}</h2>
               <table className="compact-actions-table">
                 <thead>
                   <tr>
-                    <th>Gözlem No</th>
-                    <th>Proje</th>
-                    <th>Kategori</th>
-                    <th>Konu</th>
-                    <th>Sorumlu Kişi</th>
-                    <th>Bitiş Tarihi</th>
-                    <th>Öncelik</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
+                    <th>{observationCopy.observationNo}</th>
+                    <th>{observationCopy.project}</th>
+                    <th>{observationCopy.tableCategory}</th>
+                    <th>{observationCopy.tableSubject}</th>
+                    <th>{observationCopy.responsiblePerson}</th>
+                    <th>{observationCopy.dueDate}</th>
+                    <th>{observationCopy.priority}</th>
+                    <th>{observationCopy.status}</th>
+                    <th>{observationCopy.tableActions}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -15163,17 +15246,17 @@ export function App() {
                       <tr key={record.id}>
                         <td>{record.observationNo}</td>
                         <td>{projectCatalog.find((project) => project.id === record.projectId)?.name ?? record.projectId}</td>
-                        <td>{record.category}</td>
+                        <td>{language === 'ru' ? (observationCategoryOptionsRu[record.category] ?? record.category) : record.category}</td>
                         <td>{record.subject}</td>
                         <td>{record.responsiblePerson}</td>
                         <td>{record.dueDate}</td>
-                        <td>{observationPriorityLabel[record.priority]}</td>
-                        <td>{observationStatusLabel[record.status]}</td>
+                        <td>{language === 'ru' ? observationPriorityLabelRu[record.priority] : observationPriorityLabel[record.priority]}</td>
+                        <td>{language === 'ru' ? observationStatusLabelRu[record.status] : observationStatusLabel[record.status]}</td>
                         <td>
                           <div className="table-actions compact">
-                            <button type="button" className="secondary" onClick={() => setViewingObservationId(record.id)}>Görüntüle</button>
-                            <button type="button" className="secondary" onClick={() => editObservationRecord(record.id)}>Düzenle</button>
-                            <button type="button" className="danger" onClick={() => deleteObservationRecord(record.id)}>Sil</button>
+                            <button type="button" className="secondary" onClick={() => setViewingObservationId(record.id)}>{observationCopy.view}</button>
+                            <button type="button" className="secondary" onClick={() => editObservationRecord(record.id)}>{observationCopy.edit}</button>
+                            <button type="button" className="danger" onClick={() => deleteObservationRecord(record.id)}>{observationCopy.delete}</button>
                           </div>
                         </td>
                       </tr>
@@ -15189,10 +15272,10 @@ export function App() {
 
             {selectedObservationRecord ? (
               <section className="panel observation-report-panel">
-                <h2>Rapor İşlemleri - {selectedObservationRecord.observationNo}</h2>
+                <h2>{observationCopy.reportActions} - {selectedObservationRecord.observationNo}</h2>
                 <div className="report-action-buttons">
-                  <button type="button" onClick={() => openObservationReport(selectedObservationRecord, false)}>PDF Oluştur</button>
-                  <button type="button" onClick={() => openObservationReport(selectedObservationRecord, true)}>Raporu Yazdır</button>
+                  <button type="button" onClick={() => openObservationReport(selectedObservationRecord, false)}>{observationCopy.generatePdf}</button>
+                  <button type="button" onClick={() => openObservationReport(selectedObservationRecord, true)}>{observationCopy.printReport}</button>
                 </div>
               </section>
             ) : null}
