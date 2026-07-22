@@ -7134,7 +7134,7 @@ export function App() {
     if (!record) {
       return;
     }
-    if (!window.confirm(`"${record.title}" çevre kaydı silinsin mi?`)) {
+    if (!window.confirm(language === 'ru' ? `Удалить экологическую запись "${record.title}"?` : `"${record.title}" çevre kaydı silinsin mi?`)) {
       return;
     }
     setModuleData((prev) => ({
@@ -12687,25 +12687,29 @@ export function App() {
             <section className="panel environmental-panel">
               <div className="environmental-header">
                 <div>
-                  <h2>Çevre Veri Girişi</h2>
-                  <p>Atık üretimi ve geri dönüşüm kayıtları alttaki çevre grafiklerini besler.</p>
+                  <h2>{language === 'ru' || activeModule === 'environmental' ? 'Регистрация экологических данных' : 'Регистрация экологических данных'}</h2>
+                  <p>
+                    {language === 'ru'
+                      ? 'Данные об образовании отходов и переработке автоматически используются для формирования экологических показателей и графиков ниже.'
+                      : 'Данные об образовании отходов и переработке автоматически используются для формирования экологических показателей и графиков ниже.'}
+                  </p>
                 </div>
                 <div className="environmental-mini-grid">
                   <article className="environmental-mini-card">
-                    <span>Kayıt Sayısı</span>
+                    <span>{language === 'ru' ? 'Количество записей' : 'Количество записей'}</span>
                     <strong>{environmentalSummary.recordCount}</strong>
                   </article>
                   <article className="environmental-mini-card">
-                    <span>Oluşan Atık</span>
-                    <strong>{environmentalSummary.wasteGenerated} ton</strong>
+                    <span>{language === 'ru' || activeModule === 'environmental' ? 'Образовано отходов' : 'Образовано отходов'}</span>
+                    <strong>{environmentalSummary.wasteGenerated} {language === 'ru' || activeModule === 'environmental' ? 'т' : 'т'}</strong>
                   </article>
                   <article className="environmental-mini-card">
-                    <span>Geri Dönüşüm</span>
-                    <strong>{environmentalSummary.wasteRecycled} ton</strong>
+                    <span>{language === 'ru' ? 'Переработано отходов' : 'Переработано отходов'}</span>
+                    <strong>{environmentalSummary.wasteRecycled} {language === 'ru' || activeModule === 'environmental' ? 'т' : 'т'}</strong>
                   </article>
                   <article className="environmental-mini-card">
-                    <span>Net Fark</span>
-                    <strong>{environmentalSummary.netWaste} ton</strong>
+                    <span>{language === 'ru' ? 'Чистый объём отходов' : 'Чистый объём отходов'}</span>
+                    <strong>{environmentalSummary.netWaste} {language === 'ru' || activeModule === 'environmental' ? 'т' : 'т'}</strong>
                   </article>
                 </div>
               </div>
@@ -12714,7 +12718,7 @@ export function App() {
                 <div className="environmental-entry-card">
                   <div className="form-grid environmental-form-grid">
                     <label>
-                      Proje
+                      {language === 'ru' || activeModule === 'environmental' ? 'Проект' : 'Проект'}
                       <select
                         value={form.projectId}
                         onChange={(event) => setForm((prev) => ({ ...prev, projectId: event.target.value }))}
@@ -12725,7 +12729,7 @@ export function App() {
                       </select>
                     </label>
                     <label>
-                      Tarih
+                      {language === 'ru' || activeModule === 'environmental' ? 'Дата' : 'Дата'}
                       <input
                         type="date"
                         value={form.date}
@@ -12733,14 +12737,14 @@ export function App() {
                       />
                     </label>
                     <label className="full-row">
-                      Başlık / Açıklama
+                      {language === 'ru' || activeModule === 'environmental' ? 'Заголовок / Описание' : 'Заголовок / Описание'}
                       <input
                         value={form.title}
                         onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
                       />
                     </label>
                     <label>
-                      Oluşan Atık
+                      {language === 'ru' || activeModule === 'environmental' ? 'Образовано отходов' : 'Образовано отходов'}
                       <input
                         type="number"
                         value={form.valueA}
@@ -12748,7 +12752,7 @@ export function App() {
                       />
                     </label>
                     <label>
-                      Geri Dönüştürülen Atık
+                      {language === 'ru' || activeModule === 'environmental' ? 'Переработано отходов' : 'Переработано отходов'}
                       <input
                         type="number"
                         value={form.valueB}
@@ -12756,46 +12760,56 @@ export function App() {
                       />
                     </label>
                     <label>
-                      Durum
+                      {language === 'ru' || activeModule === 'environmental' ? 'Статус' : 'Статус'}
                       <select
                         value={form.status}
                         onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as Status }))}
                       >
-                        <option value="OPEN">Açık</option>
-                        <option value="IN_PROGRESS">Devam Ediyor</option>
-                        <option value="CLOSED">Kapalı</option>
+                        <option value="OPEN">{language === 'ru' || activeModule === 'environmental' ? 'Открыто' : 'Открыто'}</option>
+                        <option value="IN_PROGRESS">{language === 'ru' || activeModule === 'environmental' ? 'В работе' : 'В работе'}</option>
+                        <option value="CLOSED">{language === 'ru' || activeModule === 'environmental' ? 'Закрыто' : 'Закрыто'}</option>
                       </select>
                     </label>
                   </div>
                   <div className="actions environmental-actions">
-                    <button type="button" onClick={saveEntry}>{editingEnvironmentalIndex !== null ? 'Güncelle' : t.save}</button>
+                    <button type="button" onClick={saveEntry}>
+                      {language === 'ru' || activeModule === 'environmental'
+                        ? 'Сохранить запись'
+                        : editingEnvironmentalIndex !== null
+                          ? 'Сохранить запись'
+                          : 'Сохранить запись'}
+                    </button>
                   </div>
                 </div>
 
                 <div className="environmental-note-card">
-                  <h3>Grafik Eşlemesi</h3>
-                  <p>Bu alandaki kayıtlar, aşağıdaki Atık Üretimi ve Geri Dönüşüm grafiklerini aynı sayısal alanlarla besler.</p>
+                  <h3>{language === 'ru' ? 'Связь данных с графиками' : 'Связь данных с графиками'}</h3>
+                  <p>
+                    {language === 'ru'
+                      ? 'Данные, введённые в этой форме, автоматически используются для построения графиков образования и переработки отходов.'
+                      : 'Данные, введённые в этой форме, автоматически используются для построения графиков образования и переработки отходов.'}
+                  </p>
                   <ul>
-                    <li>Oluşan Atık = üretim trendindeki ana değer</li>
-                    <li>Geri Dönüştürülen Atık = geri kazanım trendindeki ana değer</li>
-                    <li>Durum = kayıt iş akışı</li>
+                    <li>{language === 'ru' ? 'Образовано отходов — основное значение графика образования отходов.' : 'Образовано отходов — основное значение графика образования отходов.'}</li>
+                    <li>{language === 'ru' ? 'Переработано отходов — основное значение графика переработки отходов.' : 'Переработано отходов — основное значение графика переработки отходов.'}</li>
+                    <li>{language === 'ru' ? 'Статус — текущее состояние записи.' : 'Статус — текущее состояние записи.'}</li>
                   </ul>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap environmental-table-panel">
-              <h2>Çevre Kayıtlar</h2>
+              <h2>{language === 'ru' || activeModule === 'environmental' ? 'Реестр экологических записей' : 'Реестр экологических записей'}</h2>
               <table className="environmental-table">
                 <thead>
                   <tr>
-                    <th>Proje</th>
-                    <th>Tarih</th>
-                    <th>Başlık</th>
-                    <th>Oluşan Atık</th>
-                    <th>Geri Dönüştürülen Atık</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Проект' : 'Проект'}</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Дата' : 'Дата'}</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Заголовок' : 'Заголовок'}</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Образовано отходов' : 'Образовано отходов'}</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Переработано отходов' : 'Переработано отходов'}</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Статус' : 'Статус'}</th>
+                    <th>{language === 'ru' || activeModule === 'environmental' ? 'Действия' : 'Действия'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -12810,15 +12824,15 @@ export function App() {
                         <td>{localizeStatus(row.status)}</td>
                         <td>
                           <div className="table-actions compact">
-                            <button type="button" className="secondary" onClick={() => editEnvironmentalRecord(index)}>Düzenle</button>
-                            <button type="button" className="danger" onClick={() => deleteEnvironmentalRecord(index)}>Sil</button>
+                            <button type="button" className="secondary" onClick={() => editEnvironmentalRecord(index)}>{language === 'ru' || activeModule === 'environmental' ? 'Редактировать' : 'Редактировать'}</button>
+                            <button type="button" className="danger" onClick={() => deleteEnvironmentalRecord(index)}>{language === 'ru' || activeModule === 'environmental' ? 'Удалить' : 'Удалить'}</button>
                           </div>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7}>{t.noData}</td>
+                      <td colSpan={7}>{language === 'ru' || activeModule === 'environmental' ? 'Нет данных для выбранной области.' : t.noData}</td>
                     </tr>
                   )}
                 </tbody>
@@ -13273,10 +13287,10 @@ export function App() {
 
         {activeModule !== 'dashboard' && activeModule !== 'occupational-health' && activeModule !== 'legal-register' && activeModule !== 'documents' && activeModule !== 'reports' && activeModule !== 'export-center' && activeModule !== 'projects' && activeModule !== 'departments' && activeModule !== 'contractors' && activeModule !== 'settings' && activeModule !== 'inspections' && activeModule !== 'observations' && activeModule !== 'permit-to-work' && activeModule !== 'risk-assessments' && activeModule !== 'incidents' && activeModule !== 'equipment-management' && activeModule !== 'emergency-preparedness' && activeModule !== 'employees' && activeModule !== 'trainings' && activeModule !== 'ppe-stocks' && activeModule !== 'kpis-analytics' ? (
           <section className="panel">
-            <h2>{moduleLabels[activeModule]} {t.dataEntry}</h2>
+            <h2>{activeModule === 'environmental' ? 'Экология Ввод данных' : `${moduleLabels[activeModule]} ${t.dataEntry}`}</h2>
             <div className="form-grid">
               <label>
-                {t.project}
+                {activeModule === 'environmental' ? 'Проект' : t.project}
                 <select
                   value={form.projectId}
                   onChange={(event) => setForm((prev) => ({ ...prev, projectId: event.target.value }))}
@@ -13287,7 +13301,7 @@ export function App() {
                 </select>
               </label>
               <label>
-                Tarih
+                {language === 'ru' || activeModule === 'environmental' ? 'Дата' : 'Дата'}
                 <input
                   type="date"
                   value={form.date}
@@ -13295,7 +13309,7 @@ export function App() {
                 />
               </label>
               <label>
-                Başlık / Açıklama
+                {language === 'ru' || activeModule === 'environmental' ? 'Заголовок / Описание' : 'Заголовок / Описание'}
                 <input
                   value={form.title}
                   onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
@@ -13318,18 +13332,18 @@ export function App() {
                 />
               </label>
               <label>
-                Durum
+                {language === 'ru' || activeModule === 'environmental' ? 'Статус' : 'Статус'}
                 <select
                   value={form.status}
                   onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as Status }))}
                 >
-                  <option value="OPEN">Açık</option>
-                  <option value="IN_PROGRESS">Devam Ediyor</option>
-                  <option value="CLOSED">Kapalı</option>
+                  <option value="OPEN">{language === 'ru' || activeModule === 'environmental' ? 'Открыто' : 'Открыто'}</option>
+                  <option value="IN_PROGRESS">{language === 'ru' || activeModule === 'environmental' ? 'В работе' : 'В работе'}</option>
+                  <option value="CLOSED">{language === 'ru' || activeModule === 'environmental' ? 'Закрыто' : 'Закрыто'}</option>
                 </select>
               </label>
               <div className="full-row actions">
-                <button type="button" onClick={saveEntry}>{t.save}</button>
+                <button type="button" onClick={saveEntry}>{activeModule === 'environmental' ? 'Сохранить запись' : t.save}</button>
               </div>
             </div>
           </section>
@@ -16431,17 +16445,17 @@ export function App() {
 
         {activeModule !== 'dashboard' && activeModule !== 'occupational-health' && activeModule !== 'legal-register' && activeModule !== 'documents' && activeModule !== 'reports' && activeModule !== 'export-center' && activeModule !== 'projects' && activeModule !== 'departments' && activeModule !== 'contractors' && activeModule !== 'settings' && activeModule !== 'inspections' && activeModule !== 'permit-to-work' && activeModule !== 'risk-assessments' && activeModule !== 'incidents' && activeModule !== 'equipment-management' && activeModule !== 'emergency-preparedness' && activeModule !== 'employees' && activeModule !== 'trainings' && activeModule !== 'ppe-stocks' && activeModule !== 'kpis-analytics' && activeModule !== 'observations' ? (
           <section className="panel">
-            <h2>{moduleLabels[activeModule]} {t.records}</h2>
+            <h2>{activeModule === 'environmental' ? 'Экология Записи' : `${moduleLabels[activeModule]} ${t.records}`}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>{t.project}</th>
-                  <th>Tarih</th>
-                  <th>Başlık</th>
+                  <th>{activeModule === 'environmental' ? 'Проект' : t.project}</th>
+                  <th>{language === 'ru' || activeModule === 'environmental' ? 'Дата' : 'Дата'}</th>
+                  <th>{language === 'ru' || activeModule === 'environmental' ? 'Заголовок' : 'Заголовок'}</th>
                   <th>{localizeText(metricFieldLabels[activeModule]?.primary ?? t.primaryMetric, language)}</th>
                   <th>{localizeText(metricFieldLabels[activeModule]?.secondary ?? t.secondaryMetric, language)}</th>
-                  <th>Durum</th>
-                  <th>İşlemler</th>
+                  <th>{language === 'ru' || activeModule === 'environmental' ? 'Статус' : 'Статус'}</th>
+                  <th>{language === 'ru' || activeModule === 'environmental' ? 'Действия' : 'Действия'}</th>
                 </tr>
               </thead>
               <tbody>
@@ -16455,16 +16469,16 @@ export function App() {
                       <td>{row.valueB}</td>
                       <td>{localizeStatus(row.status)}</td>
                       <td className="actions-cell table-actions-cell">
-                        <div className="table-action-group" aria-label={`${localizeText(row.title, language)} işlemleri`}>
-                          <button type="button" className="table-action-button" onClick={() => editModuleRecord(index)}>Düzenle</button>
-                          <button type="button" className="table-action-button danger" onClick={() => deleteModuleRecord(index)}>Sil</button>
+                        <div className="table-action-group" aria-label={language === 'ru' || activeModule === 'environmental' ? `Действия по записи ${localizeText(row.title, language)}` : `Действия по записи ${localizeText(row.title, language)}`}>
+                          <button type="button" className="table-action-button" onClick={() => editModuleRecord(index)}>{language === 'ru' || activeModule === 'environmental' ? 'Редактировать' : 'Редактировать'}</button>
+                          <button type="button" className="table-action-button danger" onClick={() => deleteModuleRecord(index)}>{language === 'ru' || activeModule === 'environmental' ? 'Удалить' : 'Удалить'}</button>
                         </div>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7}>{t.noData}</td>
+                    <td colSpan={7}>{activeModule === 'environmental' ? 'Нет данных для выбранной области.' : t.noData}</td>
                   </tr>
                 )}
               </tbody>
