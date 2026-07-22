@@ -4667,6 +4667,12 @@ export function App() {
   const [controlledDocumentRevisionStatus, setControlledDocumentRevisionStatus] = useState<ControlledDocumentStatus>('GOZDEN_GECIRMEDE');
   const [controlledDocumentRevisionNote, setControlledDocumentRevisionNote] = useState('');
 
+  const filesToFileList = (files: File[]) => {
+    const transfer = new DataTransfer();
+    files.forEach((file) => transfer.items.add(file));
+    return transfer.files;
+  };
+
   const [reportFilters, setReportFilters] = useState<{
     reportTypeKey: CorporateReportKey;
     projectId: string;
@@ -6076,32 +6082,32 @@ export function App() {
 
   const equipmentInspectionStatusLabel = (status: EquipmentInspectionStatus) => {
     if (status === 'COMPLIANT') {
-      return 'Uygun';
+      return language === 'ru' ? 'Соответствует' : 'Uygun';
     }
     if (status === 'UPCOMING') {
-      return 'Yaklaşan';
+      return language === 'ru' ? 'Скоро истекает' : 'Yaklaşan';
     }
-    return 'Gecikmiş';
+    return language === 'ru' ? 'Просрочено' : 'Gecikmiş';
   };
 
   const equipmentStatusLabel = (status: EquipmentStatus) => {
     if (status === 'ACTIVE') {
-      return 'Aktif';
+      return language === 'ru' ? 'Активно' : 'Aktif';
     }
     if (status === 'UNDER_MAINTENANCE') {
-      return 'Bakımda';
+      return language === 'ru' ? 'На техническом обслуживании' : 'Bakımda';
     }
-    return 'Servis Dışı';
+    return language === 'ru' ? 'Вне эксплуатации' : 'Servis Dışı';
   };
 
   const equipmentRiskLabel = (risk: EquipmentRiskLevel) => {
     if (risk === 'HIGH') {
-      return 'Yüksek';
+      return language === 'ru' ? 'Высокий' : 'Yüksek';
     }
     if (risk === 'MEDIUM') {
-      return 'Orta';
+      return language === 'ru' ? 'Средний' : 'Orta';
     }
-    return 'Düşük';
+    return language === 'ru' ? 'Низкий' : 'Düşük';
   };
 
   const equipmentStatusClassName = (status: EquipmentStatus) => {
@@ -6141,12 +6147,12 @@ export function App() {
   const getEquipmentTrafficLabel = (record: EquipmentRecord) => {
     const certDays = daysUntil(record.certificateExpiryDate);
     if (record.inspectionStatus === 'OVERDUE' || certDays < 0) {
-      return 'Kırmızı';
+      return language === 'ru' ? 'Красный' : 'Kırmızı';
     }
     if (record.inspectionStatus === 'UPCOMING' || certDays <= 30) {
-      return 'Sarı';
+      return language === 'ru' ? 'Жёлтый' : 'Sarı';
     }
-    return 'Yeşil';
+    return language === 'ru' ? 'Зелёный' : 'Yeşil';
   };
 
   const kpiAnalyticsCards = useMemo(() => [
@@ -6171,14 +6177,14 @@ export function App() {
       note: `${ppeSummary.lowStockItems + ppeSummary.outOfStockItems} kritik stok kalemi`
     },
     {
-      label: 'Ekipman Uygunluğu',
+      label: language === 'ru' ? 'Соответствие оборудования' : 'Ekipman Uygunluğu',
       value: String(equipmentSummary.compliant),
-      note: `${equipmentSummary.overdue} gecikmiş muayene`
+      note: language === 'ru' ? `${equipmentSummary.overdue} просроченных проверок` : `${equipmentSummary.overdue} gecikmiş muayene`
     },
     {
-      label: 'İşe Uygunluk',
+      label: language === 'ru' ? 'Годность к работе' : 'İşe Uygunluk',
       value: String(healthRecords.filter((record) => record.fitForWork === 'Yes').length),
-      note: `${healthRecords.filter((record) => daysUntil(record.nextMedicalExamination) <= 30).length} yaklaşan muayene`
+      note: language === 'ru' ? `${healthRecords.filter((record) => daysUntil(record.nextMedicalExamination) <= 30).length} предстоящих проверок` : `${healthRecords.filter((record) => daysUntil(record.nextMedicalExamination) <= 30).length} yaklaşan muayene`
     }
   ], [equipmentSummary, healthRecords, incidentSummary, inspectionSummary, ppeSummary, trainingSummary]);
 
@@ -6515,18 +6521,18 @@ export function App() {
       },
       {
         key: 'equipment',
-        title: 'Ekipman',
-        chartA: { type: 'bar', values: scaleSeries([31, 34, 36, 38, 40, equipmentTotal]), label: 'Ekipman Envanteri' },
-        chartB: { type: 'gauge', values: [88], label: 'Sertifikasyon Uyum Oranı' },
+        title: language === 'ru' ? 'Оборудование' : 'Ekipman',
+        chartA: { type: 'bar', values: scaleSeries([31, 34, 36, 38, 40, equipmentTotal]), label: language === 'ru' ? 'Инвентаризация оборудования' : 'Ekipman Envanteri' },
+        chartB: { type: 'gauge', values: [88], label: language === 'ru' ? 'Уровень соответствия сертификации' : 'Sertifikasyon Uyum Oranı' },
         highlights: [
-          { label: 'Toplam Ekipman', value: String(equipmentTotal) },
-          { label: 'Denetimi Gecikmiş', value: '2' },
-          { label: 'Servis Dışı', value: '3' }
+          { label: language === 'ru' ? 'Всего оборудования' : 'Toplam Ekipman', value: String(equipmentTotal) },
+          { label: language === 'ru' ? 'Просроченные проверки' : 'Denetimi Gecikmiş', value: '2' },
+          { label: language === 'ru' ? 'Вне эксплуатации' : 'Servis Dışı', value: '3' }
         ],
         details: [
-          { label: 'Mobil', value: '18' },
-          { label: 'Ağır', value: '9' },
-          { label: 'Kaldırma', value: '15' }
+          { label: language === 'ru' ? 'Мобильное' : 'Mobil', value: '18' },
+          { label: language === 'ru' ? 'Тяжелое' : 'Ağır', value: '9' },
+          { label: language === 'ru' ? 'Подъемное' : 'Kaldırma', value: '15' }
         ]
       },
       {
@@ -8825,10 +8831,10 @@ export function App() {
 
   const controlledDocumentStatusLabel = (value: ControlledDocumentStatus) => {
     const map: Record<ControlledDocumentStatus, string> = {
-      TASLAK: 'Taslak',
-      GOZDEN_GECIRMEDE: 'Gözden Geçirme Aşamasında',
-      ONAYLANDI: 'Onaylandı',
-      GECERSIZ: 'Geçersiz (Obsolete)'
+      TASLAK: language === 'ru' ? 'Черновик' : 'Taslak',
+      GOZDEN_GECIRMEDE: language === 'ru' ? 'На рассмотрении' : 'Gözden Geçirme Aşamasında',
+      ONAYLANDI: language === 'ru' ? 'Утверждено' : 'Onaylandı',
+      GECERSIZ: language === 'ru' ? 'Недействительно' : 'Geçersiz (Obsolete)'
     };
     return map[value];
   };
@@ -11195,7 +11201,7 @@ export function App() {
                 type="email"
                 value={loginEmail}
                 onChange={(event) => setLoginEmail(event.target.value)}
-                placeholder="name@company.com"
+                placeholder={language === 'ru' ? 'имя@компания.com' : 'name@company.com'}
               />
             </label>
 
@@ -11205,7 +11211,7 @@ export function App() {
                 type="password"
                 value={loginPassword}
                 onChange={(event) => setLoginPassword(event.target.value)}
-                placeholder="********"
+                placeholder={language === 'ru' ? '********' : '********'}
               />
             </label>
           </div>
@@ -11959,35 +11965,51 @@ export function App() {
                     <p className="risk-detail-subtitle">{selectedLegalRecord.title} | {selectedLegalRecord.authority}</p>
                   </div>
                   <div className="legal-action-toolbar">
-                    <span className="legal-action-toolbar-title">Hızlı Rapor İşlemleri</span>
+                    <span className="legal-action-toolbar-title">{language === 'ru' ? 'Быстрые операции с отчетом' : 'Hızlı Rapor İşlemleri'}</span>
                     <div className="risk-detail-badges legal-action-bar">
-                      <button type="button" onClick={() => markLegalReviewed(selectedLegalRecord.id)}>Gözden Geçirildi</button>
-                      <button type="button" onClick={exportSingleLegalPdf}>Tekil PDF</button>
-                      <button type="button" onClick={exportFullLegalPdf}>Tam PDF</button>
-                      <button type="button" onClick={exportLegalExcel}>Excel</button>
-                      <button type="button" onClick={printSingleLegalRecord}>Tekil Yazdır</button>
-                      <button type="button" onClick={printFullLegalRegister}>Tam Yazdır</button>
-                      <button type="button" onClick={printLegalComplianceSummary}>Özet Yazdır</button>
+                      <button type="button" onClick={() => markLegalReviewed(selectedLegalRecord.id)}>{language === 'ru' ? 'Отмечено как проверено' : 'Gözden Geçirildi'}</button>
+                      <button type="button" onClick={exportSingleLegalPdf}>{language === 'ru' ? 'PDF по записи' : 'Tekil PDF'}</button>
+                      <button type="button" onClick={exportFullLegalPdf}>{language === 'ru' ? 'Полный PDF' : 'Tam PDF'}</button>
+                      <button type="button" onClick={exportLegalExcel}>{language === 'ru' ? 'Excel' : 'Excel'}</button>
+                      <button type="button" onClick={printSingleLegalRecord}>{language === 'ru' ? 'Печать записи' : 'Tekil Yazdır'}</button>
+                      <button type="button" onClick={printFullLegalRegister}>{language === 'ru' ? 'Печать полного реестра' : 'Tam Yazdır'}</button>
+                      <button type="button" onClick={printLegalComplianceSummary}>{language === 'ru' ? 'Печать сводки' : 'Özet Yazdır'}</button>
                     </div>
                   </div>
                 </div>
 
                 <div className="legal-document-upload-grid">
                   <label>
-                    Mevzuat Belgesi Yükle (PDF, DOCX, XLSX)
-                    <input type="file" accept=".pdf,.docx,.xlsx" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'MEVZUAT_BELGESI', event.target.files)} />
+                    {language === 'ru' ? 'Загрузить нормативный документ (PDF, DOCX, XLSX)' : 'Mevzuat Belgesi Yükle (PDF, DOCX, XLSX)'}
+                    {language === 'ru' ? (
+                      <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'MEVZUAT_BELGESI', filesToFileList(files))} />
+                    ) : (
+                      <input type="file" accept=".pdf,.docx,.xlsx" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'MEVZUAT_BELGESI', event.target.files)} />
+                    )}
                   </label>
                   <label>
-                    Uyumluluk Kanıtı Yükle
-                    <input type="file" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'UYUMLULUK_KANITI', event.target.files)} />
+                    {language === 'ru' ? 'Загрузить подтверждение соответствия' : 'Uyumluluk Kanıtı Yükle'}
+                    {language === 'ru' ? (
+                      <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'UYUMLULUK_KANITI', filesToFileList(files))} />
+                    ) : (
+                      <input type="file" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'UYUMLULUK_KANITI', event.target.files)} />
+                    )}
                   </label>
                   <label>
-                    Denetim Raporu Yükle
-                    <input type="file" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'DENETIM_RAPORU', event.target.files)} />
+                    {language === 'ru' ? 'Загрузить отчет о проверке' : 'Denetim Raporu Yükle'}
+                    {language === 'ru' ? (
+                      <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'DENETIM_RAPORU', filesToFileList(files))} />
+                    ) : (
+                      <input type="file" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'DENETIM_RAPORU', event.target.files)} />
+                    )}
                   </label>
                   <label>
-                    İzin / Sertifika Yükle
-                    <input type="file" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'IZIN_SERTIFIKA', event.target.files)} />
+                    {language === 'ru' ? 'Загрузить разрешение / сертификат' : 'İzin / Sertifika Yükle'}
+                    {language === 'ru' ? (
+                      <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'IZIN_SERTIFIKA', filesToFileList(files))} />
+                    ) : (
+                      <input type="file" accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onChange={(event) => uploadLegalDocuments(selectedLegalRecord.id, 'IZIN_SERTIFIKA', event.target.files)} />
+                    )}
                   </label>
                 </div>
 
@@ -11997,11 +12019,11 @@ export function App() {
                       <table className="legal-doc-table">
                         <thead>
                           <tr>
-                            <th>Belge</th>
-                            <th>Tür</th>
-                            <th>Yükleyen</th>
-                            <th>Sürüm</th>
-                            <th>İşlemler</th>
+                            <th>{language === 'ru' ? 'Документ' : 'Belge'}</th>
+                            <th>{language === 'ru' ? 'Тип' : 'Tür'}</th>
+                            <th>{language === 'ru' ? 'Загрузил' : 'Yükleyen'}</th>
+                            <th>{language === 'ru' ? 'Версия' : 'Sürüm'}</th>
+                            <th>{language === 'ru' ? 'Действия' : 'İşlemler'}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -12014,19 +12036,23 @@ export function App() {
                                 <td>v{documentRow.versions.length}</td>
                                 <td>
                                   <div className="legal-doc-actions">
-                                    <button type="button" className="legal-inline-btn" onClick={() => setSelectedLegalDocumentId(documentRow.id)}>Önizle</button>
-                                    <button type="button" className="legal-inline-btn" onClick={() => downloadLegalDocument(selectedLegalRecord.id, documentRow)}>İndir</button>
-                                    <button type="button" className="legal-inline-btn" onClick={() => openLegalDocumentFullscreen(documentRow)}>Tam Ekran</button>
+                                    <button type="button" className="legal-inline-btn" onClick={() => setSelectedLegalDocumentId(documentRow.id)}>{language === 'ru' ? 'Просмотреть' : 'Önizle'}</button>
+                                    <button type="button" className="legal-inline-btn" onClick={() => downloadLegalDocument(selectedLegalRecord.id, documentRow)}>{language === 'ru' ? 'Скачать' : 'İndir'}</button>
+                                    <button type="button" className="legal-inline-btn" onClick={() => openLegalDocumentFullscreen(documentRow)}>{language === 'ru' ? 'На весь экран' : 'Tam Ekran'}</button>
                                     <label className="legal-replace-file legal-inline-btn">
-                                      Değiştir
-                                      <input
-                                        type="file"
-                                        accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png"
-                                        onChange={(event) => replaceLegalDocument(selectedLegalRecord.id, documentRow.id, event.target.files)}
-                                      />
+                                      {language === 'ru' ? 'Заменить' : 'Değiştir'}
+                                      {language === 'ru' ? (
+                                        <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" onFilesChange={(files) => replaceLegalDocument(selectedLegalRecord.id, documentRow.id, filesToFileList(files))} />
+                                      ) : (
+                                        <input
+                                          type="file"
+                                          accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png"
+                                          onChange={(event) => replaceLegalDocument(selectedLegalRecord.id, documentRow.id, event.target.files)}
+                                        />
+                                      )}
                                     </label>
                                     <button type="button" className="legal-inline-btn" disabled={!legalCanDeleteDocument} onClick={() => deleteLegalDocument(selectedLegalRecord.id, documentRow.id)}>
-                                      Sil
+                                      {language === 'ru' ? 'Удалить' : 'Sil'}
                                     </button>
                                   </div>
                                 </td>
@@ -12034,7 +12060,7 @@ export function App() {
                             ))
                           ) : (
                             <tr>
-                              <td colSpan={5}>Henüz belge yüklenmedi.</td>
+                              <td colSpan={5}>{language === 'ru' ? 'Документы пока не загружены.' : 'Henüz belge yüklenmedi.'}</td>
                             </tr>
                           )}
                         </tbody>
@@ -12043,18 +12069,18 @@ export function App() {
 
                     <div className="legal-audit-grid">
                       <article>
-                        <h3>Denetim Geçmişi</h3>
+                        <h3>{language === 'ru' ? 'История проверки' : 'Denetim Geçmişi'}</h3>
                         <ul>
-                          <li>Oluşturan Kişi: {selectedLegalRecord.createdBy}</li>
-                          <li>Oluşturulma Tarihi: {selectedLegalRecord.createdAt}</li>
-                          <li>Değiştiren Kişi: {selectedLegalRecord.modifiedBy}</li>
-                          <li>Değiştirilme Tarihi: {selectedLegalRecord.modifiedAt}</li>
-                          <li>Gözden Geçiren Kişi: {selectedLegalRecord.reviewedBy}</li>
-                          <li>Gözden Geçirme Tarihi: {selectedLegalRecord.reviewedAt}</li>
+                          <li>{language === 'ru' ? 'Создал' : 'Oluşturan Kişi'}: {selectedLegalRecord.createdBy}</li>
+                          <li>{language === 'ru' ? 'Дата создания' : 'Oluşturulma Tarihi'}: {selectedLegalRecord.createdAt}</li>
+                          <li>{language === 'ru' ? 'Изменил' : 'Değiştiren Kişi'}: {selectedLegalRecord.modifiedBy}</li>
+                          <li>{language === 'ru' ? 'Дата изменения' : 'Değiştirilme Tarihi'}: {selectedLegalRecord.modifiedAt}</li>
+                          <li>{language === 'ru' ? 'Проверил' : 'Gözden Geçiren Kişi'}: {selectedLegalRecord.reviewedBy}</li>
+                          <li>{language === 'ru' ? 'Дата проверки' : 'Gözden Geçirme Tarihi'}: {selectedLegalRecord.reviewedAt}</li>
                         </ul>
                       </article>
                       <article>
-                        <h3>Audit Trail Olayları</h3>
+                        <h3>{language === 'ru' ? 'События аудита' : 'Audit Trail Olayları'}</h3>
                         <ul>
                           {selectedLegalRecord.auditTrail.map((eventRow) => (
                             <li key={eventRow.id}>{eventRow.eventDate} - {eventRow.actor} - {eventRow.detail}</li>
@@ -12065,21 +12091,21 @@ export function App() {
                   </div>
 
                   <article className="legal-viewer-shell">
-                    <h3>Belge Görüntüleyici</h3>
+                    <h3>{language === 'ru' ? 'Просмотр документа' : 'Belge Görüntüleyici'}</h3>
                     {selectedLegalDocument ? (
                       <>
                         {selectedLegalDocument.fileType === 'application/pdf' ? (
                           <>
                             <div className="legal-viewer-toolbar">
                               <button type="button" onClick={() => setLegalViewerZoom((prev) => Math.max(60, prev - 10))}>-</button>
-                              <span>Yakınlaştırma: {legalViewerZoom}%</span>
+                              <span>{language === 'ru' ? 'Масштаб' : 'Yakınlaştırma'}: {legalViewerZoom}%</span>
                               <button type="button" onClick={() => setLegalViewerZoom((prev) => Math.min(220, prev + 10))}>+</button>
                               <label>
-                                Sayfa
+                                {language === 'ru' ? 'Страница' : 'Sayfa'}
                                 <input type="number" min={1} value={legalViewerPage} onChange={(event) => setLegalViewerPage(Math.max(1, Number(event.target.value) || 1))} />
                               </label>
                               <label>
-                                Ara
+                                {language === 'ru' ? 'Поиск' : 'Ara'}
                                 <input value={legalViewerSearch} onChange={(event) => setLegalViewerSearch(event.target.value)} />
                               </label>
                             </div>
@@ -12093,12 +12119,12 @@ export function App() {
                           <img src={selectedLegalDocument.fileUrl} alt={selectedLegalDocument.fileName} className="legal-preview-image" />
                         ) : (
                           <div className="inline-hint">
-                            Office önizleme bu ortamda sınırlı olabilir. Güvenli indirme veya tam ekranda açma ile görüntüleyebilirsiniz.
+                            {language === 'ru' ? 'Предпросмотр Office-файлов в этой среде может быть ограничен. Используйте скачивание или полноэкранный просмотр.' : 'Office önizleme bu ortamda sınırlı olabilir. Güvenli indirme veya tam ekranda açma ile görüntüleyebilirsiniz.'}
                           </div>
                         )}
 
                         <div className="legal-version-panel">
-                          <h4>Sürüm Geçmişi</h4>
+                          <h4>{language === 'ru' ? 'История версий' : 'Sürüm Geçmişi'}</h4>
                           <ul>
                             {selectedLegalDocument.versions.map((version) => (
                               <li key={`${selectedLegalDocument.id}-v${version.version}`}>
@@ -12109,7 +12135,7 @@ export function App() {
                         </div>
                       </>
                     ) : (
-                      <p>Önizlemek için bir belge seçin.</p>
+                      <p>{language === 'ru' ? 'Выберите документ для просмотра.' : 'Önizlemek için bir belge seçin.'}</p>
                     )}
                   </article>
                 </div>
@@ -12124,24 +12150,25 @@ export function App() {
             <section className="panel document-hero-panel">
               <div className="document-hero">
                 <div>
-                  <h2>Kurumsal Belge Kontrol ve Yönetim</h2>
+                  <h2>{language === 'ru' ? 'Корпоративный контроль и управление документами' : 'Kurumsal Belge Kontrol ve Yönetim'}</h2>
                   <p>
-                    İSG ve EPC projelerinde kullanılan şirket standardı kontrollü belgeler bu alanda tek kayıt mantığıyla
-                    yönetilir. Her belge için revizyon geçmişi tutulur, sadece en güncel onaylı sürüm görünür.
+                    {language === 'ru'
+                      ? 'Стандартные корпоративные контролируемые документы, используемые в проектах HSE и EPC, управляются здесь по принципу единой записи. Для каждого документа хранится история ревизий, при этом отображается только последняя утверждённая версия.'
+                      : 'İSG ve EPC projelerinde kullanılan şirket standardı kontrollü belgeler bu alanda tek kayıt mantığıyla yönetilir. Her belge için revizyon geçmişi tutulur, sadece en güncel onaylı sürüm görünür.'}
                   </p>
                 </div>
                 <div className="document-hero-note">
-                  <strong>Kontrol İlkesi</strong>
-                  <p>Tek kayıt, tek güncel sürüm, tam revizyon izi ve sade kurumsal görünüm.</p>
+                  <strong>{language === 'ru' ? 'Принцип контроля' : 'Kontrol İlkesi'}</strong>
+                  <p>{language === 'ru' ? 'Единая запись, одна актуальная версия, полный ревизионный след и лаконичный корпоративный вид.' : 'Tek kayıt, tek güncel sürüm, tam revizyon izi ve sade kurumsal görünüm.'}</p>
                 </div>
               </div>
             </section>
 
             <section className="panel">
-              <h2>Belge Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Ввод данных документа' : 'Belge Veri Girişi'}</h2>
               <div className="form-grid document-form-grid">
                 <label>
-                  Proje
+                  {language === 'ru' ? 'Проект' : 'Proje'}
                   <select value={controlledDocumentForm.projectId} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
@@ -12149,15 +12176,15 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  Belge Kimliği
+                  {language === 'ru' ? 'Идентификатор документа' : 'Belge Kimliği'}
                   <input value={nextControlledDocumentId} disabled />
                 </label>
                 <label>
-                  Belge Başlığı
+                  {language === 'ru' ? 'Заголовок документа' : 'Belge Başlığı'}
                   <input value={controlledDocumentForm.title} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, title: event.target.value }))} />
                 </label>
                 <label>
-                  Belge Kategorisi
+                  {language === 'ru' ? 'Категория документа' : 'Belge Kategorisi'}
                   <select value={controlledDocumentForm.category} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, category: event.target.value }))}>
                     {controlledDocumentCategoryOptions.map((category) => (
                       <option key={category} value={category}>{category}</option>
@@ -12165,7 +12192,7 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  Belge Türü
+                  {language === 'ru' ? 'Тип документа' : 'Belge Türü'}
                   <select value={controlledDocumentForm.documentType} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, documentType: event.target.value }))}>
                     {controlledDocumentTypeOptions.map((type) => (
                       <option key={type} value={type}>{type}</option>
@@ -12173,19 +12200,19 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  Revizyon Numarası
+                  {language === 'ru' ? 'Номер ревизии' : 'Revizyon Numarası'}
                   <input value="1" disabled />
                 </label>
                 <label>
-                  Yürürlük Tarihi
+                  {language === 'ru' ? 'Дата вступления в силу' : 'Yürürlük Tarihi'}
                   <input type="date" value={controlledDocumentForm.effectiveDate} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, effectiveDate: event.target.value }))} />
                 </label>
                 <label>
-                  Gözden Geçirme Tarihi
+                  {language === 'ru' ? 'Дата пересмотра' : 'Gözden Geçirme Tarihi'}
                   <input type="date" value={controlledDocumentForm.reviewDate} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, reviewDate: event.target.value }))} />
                 </label>
                 <label>
-                  Sorumlu Departman
+                  {language === 'ru' ? 'Ответственный отдел' : 'Sorumlu Departman'}
                   <select value={controlledDocumentForm.department} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, department: event.target.value }))}>
                     {departmentNames.map((department) => (
                       <option key={department} value={department}>{department}</option>
@@ -12193,19 +12220,19 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  Hazırlayan
+                  {language === 'ru' ? 'Подготовил' : 'Hazırlayan'}
                   <input value={controlledDocumentForm.preparedBy} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, preparedBy: event.target.value }))} />
                 </label>
                 <label>
-                  Gözden Geçiren
+                  {language === 'ru' ? 'Проверил' : 'Gözden Geçiren'}
                   <input value={controlledDocumentForm.reviewedBy} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, reviewedBy: event.target.value }))} />
                 </label>
                 <label>
-                  Onaylayan
+                  {language === 'ru' ? 'Утвердил' : 'Onaylayan'}
                   <input value={controlledDocumentForm.approvedBy} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, approvedBy: event.target.value }))} />
                 </label>
                 <label>
-                  Durum
+                  {language === 'ru' ? 'Статус' : 'Durum'}
                   <select value={controlledDocumentForm.status} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, status: event.target.value as ControlledDocumentStatus }))}>
                     {controlledDocumentStatusOptions.map((status) => (
                       <option key={status.value} value={status.value}>{status.label}</option>
@@ -12213,15 +12240,19 @@ export function App() {
                   </select>
                 </label>
                 <label className="full-row">
-                  Şirket belgesini yükleyin
-                  <input type="file" accept=".pdf,.docx,.xlsx" onChange={(event) => setControlledDocumentFileList(event.target.files)} />
+                  {language === 'ru' ? 'Загрузить корпоративный документ' : 'Şirket belgesini yükleyin'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx" onFilesChange={(files) => setControlledDocumentFileList(filesToFileList(files))} />
+                  ) : (
+                    <input type="file" accept=".pdf,.docx,.xlsx" onChange={(event) => setControlledDocumentFileList(event.target.files)} />
+                  )}
                 </label>
                 <label className="full-row">
-                  Notlar
+                  {language === 'ru' ? 'Примечания' : 'Notlar'}
                   <textarea rows={3} value={controlledDocumentForm.notes} onChange={(event) => setControlledDocumentForm((prev) => ({ ...prev, notes: event.target.value }))} />
                 </label>
                 <div className="full-row actions">
-                  <button type="button" onClick={saveControlledDocument}>Belgeyi Kaydet</button>
+                  <button type="button" onClick={saveControlledDocument}>{language === 'ru' ? 'Сохранить документ' : 'Belgeyi Kaydet'}</button>
                 </div>
               </div>
             </section>
@@ -12230,66 +12261,66 @@ export function App() {
               <section className="panel table-wrap document-table-panel">
                 <div className="document-toolbar">
                   <label>
-                    Proje
+                    {language === 'ru' ? 'Проект' : 'Proje'}
                     <select value={controlledDocumentFilters.projectId} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, projectId: event.target.value }))}>
-                      <option value="all">Tüm Projeler</option>
+                      <option value="all">{language === 'ru' ? 'Все проекты' : 'Tüm Projeler'}</option>
                       {projectCatalog.map((project) => (
                         <option key={project.id} value={project.id}>{project.name}</option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    Kategori
+                    {language === 'ru' ? 'Категория' : 'Kategori'}
                     <select value={controlledDocumentFilters.category} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, category: event.target.value }))}>
-                      <option value="all">Tümü</option>
+                      <option value="all">{language === 'ru' ? 'Все' : 'Tümü'}</option>
                       {controlledDocumentCategoryOptions.map((category) => (
                         <option key={category} value={category}>{category}</option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    Durum
+                    {language === 'ru' ? 'Статус' : 'Durum'}
                     <select value={controlledDocumentFilters.status} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, status: event.target.value as 'ALL' | ControlledDocumentStatus }))}>
-                      <option value="ALL">Tümü</option>
+                      <option value="ALL">{language === 'ru' ? 'Все' : 'Tümü'}</option>
                       {controlledDocumentStatusOptions.map((status) => (
                         <option key={status.value} value={status.value}>{status.label}</option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    Revizyon
+                    {language === 'ru' ? 'Ревизия' : 'Revizyon'}
                     <select value={controlledDocumentFilters.revision} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, revision: event.target.value }))}>
                       {controlledDocumentRevisionOptions.map((revision) => (
-                        <option key={revision} value={revision}>{revision === 'all' ? 'Tümü' : `Revizyon ${revision}`}</option>
+                        <option key={revision} value={revision}>{revision === 'all' ? (language === 'ru' ? 'Все' : 'Tümü') : (language === 'ru' ? `Ревизия ${revision}` : `Revizyon ${revision}`)}</option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    Departman
+                    {language === 'ru' ? 'Отдел' : 'Departman'}
                     <select value={controlledDocumentFilters.department} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, department: event.target.value }))}>
-                      <option value="all">Tümü</option>
+                      <option value="all">{language === 'ru' ? 'Все' : 'Tümü'}</option>
                       {departmentNames.map((department) => (
                         <option key={department} value={department}>{department}</option>
                       ))}
                     </select>
                   </label>
                   <label>
-                    Ara
-                    <input placeholder="Belge Kimliği veya Başlık" value={controlledDocumentFilters.keyword} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, keyword: event.target.value }))} />
+                    {language === 'ru' ? 'Поиск' : 'Ara'}
+                    <input placeholder={language === 'ru' ? 'Идентификатор документа или заголовок' : 'Belge Kimliği veya Başlık'} value={controlledDocumentFilters.keyword} onChange={(event) => setControlledDocumentFilters((prev) => ({ ...prev, keyword: event.target.value }))} />
                   </label>
                 </div>
 
                 <table className="document-table">
                   <thead>
                     <tr>
-                      <th>Proje</th>
-                      <th>Belge Kimliği</th>
-                      <th>Belge Başlığı</th>
-                      <th>Kategori</th>
-                      <th>Revizyon</th>
-                      <th>Durum</th>
-                      <th>Yürürlük Tarihi</th>
-                      <th>Gözden Geçirme Tarihi</th>
+                      <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                      <th>{language === 'ru' ? 'Идентификатор документа' : 'Belge Kimliği'}</th>
+                      <th>{language === 'ru' ? 'Заголовок документа' : 'Belge Başlığı'}</th>
+                      <th>{language === 'ru' ? 'Категория' : 'Kategori'}</th>
+                      <th>{language === 'ru' ? 'Ревизия' : 'Revizyon'}</th>
+                      <th>{language === 'ru' ? 'Статус' : 'Durum'}</th>
+                      <th>{language === 'ru' ? 'Дата вступления в силу' : 'Yürürlük Tarihi'}</th>
+                      <th>{language === 'ru' ? 'Дата пересмотра' : 'Gözden Geçirme Tarihi'}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -12312,7 +12343,7 @@ export function App() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={8}>Filtreye uygun kontrollü belge bulunmuyor.</td>
+                        <td colSpan={8}>{language === 'ru' ? 'Контролируемых документов, соответствующих фильтрам, нет.' : 'Filtreye uygun kontrollü belge bulunmuyor.'}</td>
                       </tr>
                     )}
                   </tbody>
@@ -12328,25 +12359,25 @@ export function App() {
                         <p>{selectedControlledDocument.title} | {selectedControlledDocument.category}</p>
                       </div>
                       <div className="document-action-bar">
-                        <button type="button" onClick={() => viewControlledDocument(selectedControlledDocument.id)}>Görüntüle</button>
-                        <button type="button" onClick={() => downloadControlledDocument(selectedControlledDocument.id)}>İndir</button>
-                        <button type="button" onClick={() => deleteControlledDocument(selectedControlledDocument.id)}>Sil</button>
+                        <button type="button" onClick={() => viewControlledDocument(selectedControlledDocument.id)}>{language === 'ru' ? 'Просмотреть' : 'Görüntüle'}</button>
+                        <button type="button" onClick={() => downloadControlledDocument(selectedControlledDocument.id)}>{language === 'ru' ? 'Скачать' : 'İndir'}</button>
+                        <button type="button" onClick={() => deleteControlledDocument(selectedControlledDocument.id)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                       </div>
                     </div>
 
                     <div className="document-detail-meta">
-                      <article><span>Proje</span><strong>{projectCatalog.find((project) => project.id === selectedControlledDocument.projectId)?.name ?? selectedControlledDocument.projectId}</strong></article>
-                      <article><span>Belge Türü</span><strong>{controlledDocumentTypeLabel(selectedControlledDocument.documentType)}</strong></article>
-                      <article><span>Revizyon</span><strong>v{selectedControlledDocument.revisionNumber}</strong></article>
-                      <article><span>Durum</span><strong>{controlledDocumentStatusLabel(selectedControlledDocument.status)}</strong></article>
-                      <article><span>Sorumlu Departman</span><strong>{selectedControlledDocument.department}</strong></article>
-                      <article><span>Onaylayan</span><strong>{selectedControlledDocument.approvedBy}</strong></article>
-                      <article><span>Hazırlayan</span><strong>{selectedControlledDocument.preparedBy}</strong></article>
-                      <article><span>Gözden Geçiren</span><strong>{selectedControlledDocument.reviewedBy}</strong></article>
+                      <article><span>{language === 'ru' ? 'Проект' : 'Proje'}</span><strong>{projectCatalog.find((project) => project.id === selectedControlledDocument.projectId)?.name ?? selectedControlledDocument.projectId}</strong></article>
+                      <article><span>{language === 'ru' ? 'Тип документа' : 'Belge Türü'}</span><strong>{controlledDocumentTypeLabel(selectedControlledDocument.documentType)}</strong></article>
+                      <article><span>{language === 'ru' ? 'Ревизия' : 'Revizyon'}</span><strong>v{selectedControlledDocument.revisionNumber}</strong></article>
+                      <article><span>{language === 'ru' ? 'Статус' : 'Durum'}</span><strong>{controlledDocumentStatusLabel(selectedControlledDocument.status)}</strong></article>
+                      <article><span>{language === 'ru' ? 'Ответственный отдел' : 'Sorumlu Departman'}</span><strong>{selectedControlledDocument.department}</strong></article>
+                      <article><span>{language === 'ru' ? 'Утвердил' : 'Onaylayan'}</span><strong>{selectedControlledDocument.approvedBy}</strong></article>
+                      <article><span>{language === 'ru' ? 'Подготовил' : 'Hazırlayan'}</span><strong>{selectedControlledDocument.preparedBy}</strong></article>
+                      <article><span>{language === 'ru' ? 'Проверил' : 'Gözden Geçiren'}</span><strong>{selectedControlledDocument.reviewedBy}</strong></article>
                     </div>
 
                     <div className="document-preview-shell">
-                      <h4>Güncel Belge</h4>
+                      <h4>{language === 'ru' ? 'Текущий документ' : 'Güncel Belge'}</h4>
                       {selectedControlledDocumentRevision?.fileType === 'application/pdf' ? (
                         <iframe
                           className="document-preview-iframe"
@@ -12356,22 +12387,26 @@ export function App() {
                       ) : selectedControlledDocumentRevision?.fileType.startsWith('image/') ? (
                         <img src={selectedControlledDocumentRevision?.fileUrl} alt={selectedControlledDocumentRevision?.fileName ?? selectedControlledDocument.title} className="legal-preview-image" />
                       ) : (
-                        <div className="inline-hint">Office dosyaları için yerleşik önizleme sınırlı olabilir. İndir veya görüntüle işlemini kullanabilirsiniz.</div>
+                        <div className="inline-hint">{language === 'ru' ? 'Встроенный предпросмотр для Office-файлов может быть ограничен. Используйте скачивание или просмотр.' : 'Office dosyaları için yerleşik önizleme sınırlı olabilir. İndir veya görüntüle işlemini kullanabilirsiniz.'}</div>
                       )}
                       <div className="document-muted-note">
-                        Yalnızca en son onaylı revizyon görüntülenir. Önceki sürümler arşivde tutulur.
+                        {language === 'ru' ? 'Отображается только последняя утверждённая ревизия. Предыдущие версии сохраняются в архиве.' : 'Yalnızca en son onaylı revizyon görüntülenir. Önceki sürümler arşivde tutulur.'}
                       </div>
                     </div>
 
                     <div className="document-revision-upload">
-                      <h4>Yeni Revizyon Yükle</h4>
+                      <h4>{language === 'ru' ? 'Загрузить новую ревизию' : 'Yeni Revizyon Yükle'}</h4>
                       <div className="form-grid document-revision-form">
                         <label className="full-row">
-                          Revizyon Dosyası
-                          <input type="file" accept=".pdf,.docx,.xlsx" onChange={(event) => setControlledDocumentRevisionFileList(event.target.files)} />
+                          {language === 'ru' ? 'Файл ревизии' : 'Revizyon Dosyası'}
+                          {language === 'ru' ? (
+                            <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx" onFilesChange={(files) => setControlledDocumentRevisionFileList(filesToFileList(files))} />
+                          ) : (
+                            <input type="file" accept=".pdf,.docx,.xlsx" onChange={(event) => setControlledDocumentRevisionFileList(event.target.files)} />
+                          )}
                         </label>
                         <label>
-                          Revizyon Durumu
+                          {language === 'ru' ? 'Статус ревизии' : 'Revizyon Durumu'}
                           <select value={controlledDocumentRevisionStatus} onChange={(event) => setControlledDocumentRevisionStatus(event.target.value as ControlledDocumentStatus)}>
                             {controlledDocumentStatusOptions.map((status) => (
                               <option key={status.value} value={status.value}>{status.label}</option>
@@ -12379,11 +12414,11 @@ export function App() {
                           </select>
                         </label>
                         <label className="full-row">
-                          Revizyon Notu
+                          {language === 'ru' ? 'Примечание к ревизии' : 'Revizyon Notu'}
                           <textarea rows={2} value={controlledDocumentRevisionNote} onChange={(event) => setControlledDocumentRevisionNote(event.target.value)} />
                         </label>
                         <div className="full-row actions">
-                          <button type="button" onClick={() => addControlledDocumentRevision(selectedControlledDocument.id)}>Revizyon Ekle</button>
+                          <button type="button" onClick={() => addControlledDocumentRevision(selectedControlledDocument.id)}>{language === 'ru' ? 'Добавить ревизию' : 'Revizyon Ekle'}</button>
                         </div>
                       </div>
                     </div>
@@ -14493,56 +14528,68 @@ export function App() {
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Genel</h3>
+                  <h3>{language === 'ru' ? 'Общие сведения' : 'Genel'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Durum
+                      {language === 'ru' ? 'Статус' : 'Durum'}
                       <select value={trainingForm.status} onChange={(event) => setTrainingForm((prev) => ({ ...prev, status: event.target.value as TrainingStatus }))}>
-                        <option value="TAMAMLANDI">Tamamlandı</option>
-                        <option value="PLANLANDI">Planlandı</option>
-                        <option value="DEVAM_EDIYOR">Devam Ediyor</option>
-                        <option value="SURESI_DOLDU">Süresi Doldu</option>
+                        <option value="TAMAMLANDI">{language === 'ru' ? 'Завершено' : 'Tamamlandı'}</option>
+                        <option value="PLANLANDI">{language === 'ru' ? 'Запланировано' : 'Planlandı'}</option>
+                        <option value="DEVAM_EDIYOR">{language === 'ru' ? 'В процессе' : 'Devam Ediyor'}</option>
+                        <option value="SURESI_DOLDU">{language === 'ru' ? 'Срок истек' : 'Süresi Doldu'}</option>
                       </select>
                     </label>
                     <label>
-                      Ekler
-                      <input type="file" multiple onChange={(event) => {
-                        const files = Array.from(event.target.files ?? []);
-                        setTrainingForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
-                      }} />
+                      {language === 'ru' ? 'Вложения' : 'Ekler'}
+                      {language === 'ru' ? (
+                        <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " multiple onFilesChange={(files) => setTrainingForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }))} />
+                      ) : (
+                        <input type="file" multiple onChange={(event) => {
+                          const files = Array.from(event.target.files ?? []);
+                          setTrainingForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
+                        }} />
+                      )}
                     </label>
                     <label>
-                      Eğitim Katılımcı Listesi
-                      <input type="file" multiple onChange={(event) => {
-                        const files = Array.from(event.target.files ?? []);
-                        setTrainingForm((prev) => ({ ...prev, participantList: files.map((file) => file.name) }));
-                      }} />
+                      {language === 'ru' ? 'Список участников обучения' : 'Eğitim Katılımcı Listesi'}
+                      {language === 'ru' ? (
+                        <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " multiple onFilesChange={(files) => setTrainingForm((prev) => ({ ...prev, participantList: files.map((file) => file.name) }))} />
+                      ) : (
+                        <input type="file" multiple onChange={(event) => {
+                          const files = Array.from(event.target.files ?? []);
+                          setTrainingForm((prev) => ({ ...prev, participantList: files.map((file) => file.name) }));
+                        }} />
+                      )}
                     </label>
                     <label>
-                      Sertifikalar
-                      <input type="file" multiple onChange={(event) => {
-                        const files = Array.from(event.target.files ?? []);
-                        setTrainingForm((prev) => ({ ...prev, certificates: files.map((file) => file.name) }));
-                      }} />
+                      {language === 'ru' ? 'Сертификаты' : 'Sertifikalar'}
+                      {language === 'ru' ? (
+                        <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " multiple onFilesChange={(files) => setTrainingForm((prev) => ({ ...prev, certificates: files.map((file) => file.name) }))} />
+                      ) : (
+                        <input type="file" multiple onChange={(event) => {
+                          const files = Array.from(event.target.files ?? []);
+                          setTrainingForm((prev) => ({ ...prev, certificates: files.map((file) => file.name) }));
+                        }} />
+                      )}
                     </label>
                     <label className="full-row">
-                      Notlar
+                      {language === 'ru' ? 'Примечания' : 'Notlar'}
                       <textarea rows={3} value={trainingForm.notes} onChange={(event) => setTrainingForm((prev) => ({ ...prev, notes: event.target.value }))} />
                     </label>
                   </div>
                 </article>
 
                 <div className="actions">
-                  <button type="button" onClick={saveTrainingEntry}>{editingTrainingId ? 'Güncelle' : 'Kaydet'}</button>
+                  <button type="button" onClick={saveTrainingEntry}>{editingTrainingId ? (language === 'ru' ? 'Обновить' : 'Güncelle') : (language === 'ru' ? 'Сохранить' : 'Kaydet')}</button>
                   {editingTrainingId ? (
-                    <button type="button" className="secondary" onClick={resetTrainingForm}>Vazgeç</button>
+                    <button type="button" className="secondary" onClick={resetTrainingForm}>{language === 'ru' ? 'Отмена' : 'Vazgeç'}</button>
                   ) : null}
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>Eğitim Kayıtları</h2>
+              <h2>{language === 'ru' ? 'Записи обучения' : 'Eğitim Kayıtları'}</h2>
               <table>
                 <thead>
                   <tr>
@@ -14595,26 +14642,26 @@ export function App() {
         {activeModule === 'equipment-management' ? (
           <>
             <section className="panel">
-              <h2>Ekipman Yönetimi KPI</h2>
+              <h2>{language === 'ru' ? 'Панель KPI по оборудованию' : 'Ekipman Yönetimi KPI'}</h2>
               <div className="equipment-kpi-grid">
-                <article className="equipment-kpi-card"><span>Toplam Ekipman</span><strong>{equipmentSummary.total}</strong></article>
-                <article className="equipment-kpi-card"><span>Aktif Ekipman</span><strong>{equipmentSummary.active}</strong></article>
-                <article className="equipment-kpi-card"><span>Yaklaşan Muayene</span><strong>{equipmentSummary.upcoming}</strong></article>
-                <article className="equipment-kpi-card"><span>Gecikmiş Muayene</span><strong>{equipmentSummary.overdue}</strong></article>
-                <article className="equipment-kpi-card"><span>Süresi Dolacak Sertifika</span><strong>{equipmentSummary.expiringCertificates}</strong></article>
-                <article className="equipment-kpi-card"><span>Servis Dışı Ekipman</span><strong>{equipmentSummary.outOfService}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего оборудования' : 'Toplam Ekipman'}</span><strong>{equipmentSummary.total}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Активное оборудование' : 'Aktif Ekipman'}</span><strong>{equipmentSummary.active}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Предстоящая проверка' : 'Yaklaşan Muayene'}</span><strong>{equipmentSummary.upcoming}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Просроченная проверка' : 'Gecikmiş Muayene'}</span><strong>{equipmentSummary.overdue}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Сертификаты с истекающим сроком' : 'Süresi Dolacak Sertifika'}</span><strong>{equipmentSummary.expiringCertificates}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Оборудование вне эксплуатации' : 'Servis Dışı Ekipman'}</span><strong>{equipmentSummary.outOfService}</strong></article>
               </div>
             </section>
 
             <section className="panel">
-              <h2>Ekipman Muayene Uygunluk Grafiği</h2>
+              <h2>{language === 'ru' ? 'График соответствия проверок оборудования' : 'Ekipman Muayene Uygunluk Grafiği'}</h2>
               <div className="equipment-chart-grid">
                 <article className="chart-card">
-                  <strong>Muayene Uygunluk Dağılımı</strong>
+                  <strong>{language === 'ru' ? 'Распределение соответствия проверок' : 'Muayene Uygunluk Dağılımı'}</strong>
                   <DashboardChart type="donut" values={[equipmentSummary.compliant, equipmentSummary.upcoming, equipmentSummary.overdue]} themeName="compliance" />
                 </article>
                 <article className="chart-card">
-                  <strong>Uygunluk ve Kritik Durumlar</strong>
+                  <strong>{language === 'ru' ? 'Соответствие и критические состояния' : 'Uygunluk ve Kritik Durumlar'}</strong>
                   <DashboardChart
                     type="bar"
                     values={[
@@ -14625,36 +14672,44 @@ export function App() {
                       equipmentSummary.outOfService
                     ]}
                     themeName="operations"
-                    xLabels={['Uygun', 'Yaklaşan', 'Gecikmiş', 'Sertifika', 'Servis Dışı']}
+                    xLabels={[
+                      language === 'ru' ? 'Соответствует' : 'Uygun',
+                      language === 'ru' ? 'Скоро истекает' : 'Yaklaşan',
+                      language === 'ru' ? 'Просрочено' : 'Gecikmiş',
+                      language === 'ru' ? 'Сертификаты' : 'Sertifika',
+                      language === 'ru' ? 'Вне эксплуатации' : 'Servis Dışı'
+                    ]}
                   />
                 </article>
               </div>
             </section>
 
             <section className="panel">
-              <h2>Ekipman Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Регистрация оборудования' : 'Ekipman Veri Girişi'}</h2>
               <p className="inline-hint">
-                Bu form ekipman muayene uygunluğu, sertifika geçerliliği, yasal takip ve ekipman durum yönetimini tek ekranda toplar.
+                {language === 'ru'
+                  ? 'Данная форма предназначена для регистрации оборудования, контроля результатов проверок, срока действия сертификатов, соблюдения нормативных требований и управления техническим состоянием оборудования.'
+                  : 'Bu form ekipman muayene uygunluğu, sertifika geçerliliği, yasal takip ve ekipman durum yönetimini tek ekranda toplar.'}
               </p>
 
               <div className="risk-meta-row">
                 <div className="risk-meta-card">
-                  <span>Ekipman ID</span>
+                  <span>{language === 'ru' ? 'Идентификатор оборудования' : 'Ekipman ID'}</span>
                   <strong>{nextEquipmentId}</strong>
                 </div>
                 <div className="risk-meta-card">
-                  <span>Muayene Uygunluk Oranı</span>
+                  <span>{language === 'ru' ? 'Процент соответствия проверкам' : 'Muayene Uygunluk Oranı'}</span>
                   <strong>{equipmentSummary.complianceRate}%</strong>
                 </div>
                 <div className="risk-meta-card">
-                  <span>Gecikmiş Muayene</span>
+                  <span>{language === 'ru' ? 'Просроченные проверки' : 'Gecikmiş Muayene'}</span>
                   <strong>{equipmentSummary.overdue}</strong>
                 </div>
               </div>
 
               <div className="equipment-form-grid">
                 <label>
-                  Proje
+                  {language === 'ru' ? 'Проект' : 'Proje'}
                   <select value={equipmentForm.projectId} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
@@ -14663,154 +14718,188 @@ export function App() {
                 </label>
 
                 <label>
-                  Ekipman ID (Otomatik)
+                  {language === 'ru' ? 'Идентификатор оборудования (автоматически)' : 'Ekipman ID (Otomatik)'}
                   <input value={nextEquipmentId} disabled />
                 </label>
 
                 <label>
-                  Ekipman Adı
+                  {language === 'ru' ? 'Наименование оборудования' : 'Ekipman Adı'}
                   <input value={equipmentForm.equipmentName} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, equipmentName: event.target.value }))} />
                 </label>
 
                 <label>
-                  Ekipman Türü
+                  {language === 'ru' ? 'Тип оборудования' : 'Ekipman Türü'}
                   <input value={equipmentForm.equipmentType} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, equipmentType: event.target.value }))} />
                 </label>
 
                 <label>
-                  Marka / Model
+                  {language === 'ru' ? 'Марка / Модель' : 'Marka / Model'}
                   <input value={equipmentForm.brandModel} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, brandModel: event.target.value }))} />
                 </label>
 
                 <label>
-                  Seri Numarası
+                  {language === 'ru' ? 'Серийный номер' : 'Seri Numarası'}
                   <input value={equipmentForm.serialNumber} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, serialNumber: event.target.value }))} />
                 </label>
 
                 <label>
-                  Konum
+                  {language === 'ru' ? 'Местоположение' : 'Konum'}
                   <input value={equipmentForm.location} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, location: event.target.value }))} />
                 </label>
 
                 <label>
-                  Sorumlu Kişi
+                  {language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}
                   <input value={equipmentForm.responsiblePerson} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))} />
                 </label>
 
                 <label>
-                  Son Muayene Tarihi
+                  {language === 'ru' ? 'Дата последней проверки' : 'Son Muayene Tarihi'}
                   <input type="date" value={equipmentForm.lastInspectionDate} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, lastInspectionDate: event.target.value }))} />
                 </label>
 
                 <label>
-                  Sonraki Muayene Tarihi
+                  {language === 'ru' ? 'Дата следующей проверки' : 'Sonraki Muayene Tarihi'}
                   <input type="date" value={equipmentForm.nextInspectionDate} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, nextInspectionDate: event.target.value }))} />
                 </label>
 
                 <label>
-                  Muayene Durumu
+                  {language === 'ru' ? 'Статус проверки' : 'Muayene Durumu'}
                   <select
                     value={equipmentForm.inspectionStatus}
                     onChange={(event) => setEquipmentForm((prev) => ({ ...prev, inspectionStatus: event.target.value as EquipmentInspectionStatus }))}
                   >
-                    <option value="COMPLIANT">Uygun</option>
-                    <option value="UPCOMING">Yaklaşan</option>
-                    <option value="OVERDUE">Gecikmiş</option>
+                    <option value="COMPLIANT">{language === 'ru' ? 'Соответствует' : 'Uygun'}</option>
+                    <option value="UPCOMING">{language === 'ru' ? 'Скоро истекает' : 'Yaklaşan'}</option>
+                    <option value="OVERDUE">{language === 'ru' ? 'Просрочено' : 'Gecikmiş'}</option>
                   </select>
                 </label>
 
                 <label>
-                  Sertifika Numarası
+                  {language === 'ru' ? 'Номер сертификата' : 'Sertifika Numarası'}
                   <input value={equipmentForm.certificateNumber} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, certificateNumber: event.target.value }))} />
                 </label>
 
                 <label>
-                  Sertifika Bitiş Tarihi
+                  {language === 'ru' ? 'Дата окончания сертификата' : 'Sertifika Bitiş Tarihi'}
                   <input type="date" value={equipmentForm.certificateExpiryDate} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, certificateExpiryDate: event.target.value }))} />
                 </label>
 
                 <label>
-                  Ekipman Durumu
+                  {language === 'ru' ? 'Статус оборудования' : 'Ekipman Durumu'}
                   <select value={equipmentForm.equipmentStatus} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, equipmentStatus: event.target.value as EquipmentStatus }))}>
-                    <option value="ACTIVE">Aktif</option>
-                    <option value="OUT_OF_SERVICE">Servis Dışı</option>
-                    <option value="UNDER_MAINTENANCE">Bakımda</option>
+                    <option value="ACTIVE">{language === 'ru' ? 'Активное' : 'Aktif'}</option>
+                    <option value="OUT_OF_SERVICE">{language === 'ru' ? 'Оборудование вне эксплуатации' : 'Servis Dışı'}</option>
+                    <option value="UNDER_MAINTENANCE">{language === 'ru' ? 'На техническом обслуживании' : 'Bakımda'}</option>
                   </select>
                 </label>
 
                 <label>
-                  Risk Seviyesi
+                  {language === 'ru' ? 'Уровень риска' : 'Risk Seviyesi'}
                   <select value={equipmentForm.riskLevel} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, riskLevel: event.target.value as EquipmentRiskLevel }))}>
-                    <option value="LOW">Düşük</option>
-                    <option value="MEDIUM">Orta</option>
-                    <option value="HIGH">Yüksek</option>
+                    <option value="LOW">{language === 'ru' ? 'Низкий' : 'Düşük'}</option>
+                    <option value="MEDIUM">{language === 'ru' ? 'Средний' : 'Orta'}</option>
+                    <option value="HIGH">{language === 'ru' ? 'Высокий' : 'Yüksek'}</option>
                   </select>
                 </label>
 
                 <label>
-                  Ekler
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setEquipmentForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? 'Вложения' : 'Ekler'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      multiple
+                      onFilesChange={(files) => setEquipmentForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setEquipmentForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label>
-                  Muayene Raporu
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setEquipmentForm((prev) => ({ ...prev, inspectionReports: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? 'Отчёт о проверке' : 'Muayene Raporu'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      multiple
+                      onFilesChange={(files) => setEquipmentForm((prev) => ({ ...prev, inspectionReports: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setEquipmentForm((prev) => ({ ...prev, inspectionReports: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label>
-                  Ekipman Fotoğrafı
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setEquipmentForm((prev) => ({ ...prev, equipmentPhotos: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? 'Фотография оборудования' : 'Ekipman Fotoğrafı'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      accept="image/*"
+                      multiple
+                      onFilesChange={(files) => setEquipmentForm((prev) => ({ ...prev, equipmentPhotos: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setEquipmentForm((prev) => ({ ...prev, equipmentPhotos: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label className="full-row">
-                  Notlar
+                  {language === 'ru' ? 'Примечания' : 'Notlar'}
                   <textarea rows={3} value={equipmentForm.notes} onChange={(event) => setEquipmentForm((prev) => ({ ...prev, notes: event.target.value }))} />
                 </label>
 
                 <div className="full-row actions">
-                  <button type="button" onClick={saveEquipmentEntry}>Kaydet</button>
+                  <button type="button" onClick={saveEquipmentEntry}>{language === 'ru' ? 'Сохранить запись' : 'Kaydet'}</button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>Ekipman Kayıtları</h2>
+              <h2>{language === 'ru' ? 'Реестр оборудования' : 'Ekipman Kayıtları'}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>Ekipman ID</th>
-                    <th>Proje</th>
-                    <th>Ekipman Adı</th>
-                    <th>Tür</th>
-                    <th>Sonraki Muayene</th>
-                    <th>Muayene Durumu</th>
-                    <th>Sertifika Bitişi</th>
-                    <th>Ekipman Durumu</th>
-                    <th>Risk</th>
-                    <th>Trafik</th>
-                    <th>Sorumlu</th>
+                    <th>{language === 'ru' ? 'Идентификатор' : 'Ekipman ID'}</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Наименование оборудования' : 'Ekipman Adı'}</th>
+                    <th>{language === 'ru' ? 'Тип' : 'Tür'}</th>
+                    <th>{language === 'ru' ? 'Следующая проверка' : 'Sonraki Muayene'}</th>
+                    <th>{language === 'ru' ? 'Статус проверки' : 'Muayene Durumu'}</th>
+                    <th>{language === 'ru' ? 'Срок действия сертификата' : 'Sertifika Bitişi'}</th>
+                    <th>{language === 'ru' ? 'Статус оборудования' : 'Ekipman Durumu'}</th>
+                    <th>{language === 'ru' ? 'Уровень риска' : 'Risk'}</th>
+                    <th>{language === 'ru' ? 'История изменений' : 'Trafik'}</th>
+                    <th>{language === 'ru' ? 'Ответственное лицо' : 'Sorumlu'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14847,7 +14936,7 @@ export function App() {
               <section className="panel risk-detail-panel">
                 <div className="risk-detail-head">
                   <div>
-                    <h2>Ekipman Detayı - {selectedEquipmentRecord.equipmentId}</h2>
+                    <h2>{language === 'ru' ? 'Карточка оборудования' : 'Ekipman Detayı'} - {selectedEquipmentRecord.equipmentId}</h2>
                     <p className="risk-detail-subtitle">
                       {selectedEquipmentRecord.equipmentName} - {selectedEquipmentRecord.equipmentType}
                     </p>
@@ -14855,69 +14944,69 @@ export function App() {
                   <div className="risk-detail-badges">
                     <span className={`status-badge ${getEquipmentTrafficClass(selectedEquipmentRecord)}`}>{equipmentInspectionStatusLabel(selectedEquipmentRecord.inspectionStatus)}</span>
                     <span className={`status-badge ${equipmentStatusBadgeClassName(selectedEquipmentRecord)} ${equipmentStatusClassName(selectedEquipmentRecord.equipmentStatus)}`}>{equipmentStatusLabel(selectedEquipmentRecord.equipmentStatus)}</span>
-                    <span className="risk-band-badge risk-band-medium">Risk Seviyesi: {equipmentRiskLabel(selectedEquipmentRecord.riskLevel)}</span>
+                    <span className="risk-band-badge risk-band-medium">{language === 'ru' ? 'Уровень риска' : 'Risk Seviyesi'}: {equipmentRiskLabel(selectedEquipmentRecord.riskLevel)}</span>
                     <span className={`traffic-chip ${getEquipmentTrafficClass(selectedEquipmentRecord)}`}>
-                      Trafik Işığı: {getEquipmentTrafficLabel(selectedEquipmentRecord)}
+                      {language === 'ru' ? 'Светофор статуса' : 'Trafik Işığı'}: {getEquipmentTrafficLabel(selectedEquipmentRecord)}
                     </span>
                   </div>
                 </div>
 
                 <div className="risk-detail-grid">
                   <article>
-                    <h3>Kimlik ve Lokasyon</h3>
-                    <p><strong>Marka / Model:</strong> {selectedEquipmentRecord.brandModel || '-'}</p>
-                    <p><strong>Seri Numarası:</strong> {selectedEquipmentRecord.serialNumber || '-'}</p>
-                    <p><strong>Konum:</strong> {selectedEquipmentRecord.location || '-'}</p>
+                    <h3>{language === 'ru' ? 'Идентификация и местоположение' : 'Kimlik ve Lokasyon'}</h3>
+                    <p><strong>{language === 'ru' ? 'Марка / Модель' : 'Marka / Model'}:</strong> {selectedEquipmentRecord.brandModel || '-'}</p>
+                    <p><strong>{language === 'ru' ? 'Серийный номер' : 'Seri Numarası'}:</strong> {selectedEquipmentRecord.serialNumber || '-'}</p>
+                    <p><strong>{language === 'ru' ? 'Местоположение' : 'Konum'}:</strong> {selectedEquipmentRecord.location || '-'}</p>
                   </article>
                   <article>
-                    <h3>Muayene ve Uyum</h3>
-                    <p><strong>Son Muayene:</strong> {selectedEquipmentRecord.lastInspectionDate}</p>
-                    <p><strong>Sonraki Muayene:</strong> {selectedEquipmentRecord.nextInspectionDate}</p>
-                    <p><strong>Muayene Durumu:</strong> {equipmentInspectionStatusLabel(selectedEquipmentRecord.inspectionStatus)}</p>
+                    <h3>{language === 'ru' ? 'Проверка и соответствие' : 'Muayene ve Uyum'}</h3>
+                    <p><strong>{language === 'ru' ? 'Дата последней проверки' : 'Son Muayene'}:</strong> {selectedEquipmentRecord.lastInspectionDate}</p>
+                    <p><strong>{language === 'ru' ? 'Дата следующей проверки' : 'Sonraki Muayene'}:</strong> {selectedEquipmentRecord.nextInspectionDate}</p>
+                    <p><strong>{language === 'ru' ? 'Статус проверки' : 'Muayene Durumu'}:</strong> {equipmentInspectionStatusLabel(selectedEquipmentRecord.inspectionStatus)}</p>
                   </article>
                   <article>
-                    <h3>Sertifikasyon</h3>
-                    <p><strong>Sertifika No:</strong> {selectedEquipmentRecord.certificateNumber || '-'}</p>
-                    <p><strong>Bitiş Tarihi:</strong> {selectedEquipmentRecord.certificateExpiryDate}</p>
-                    <p><strong>Kalan Gün:</strong> {daysUntil(selectedEquipmentRecord.certificateExpiryDate)}</p>
+                    <h3>{language === 'ru' ? 'Сертификация' : 'Sertifikasyon'}</h3>
+                    <p><strong>{language === 'ru' ? 'Номер сертификата' : 'Sertifika No'}:</strong> {selectedEquipmentRecord.certificateNumber || '-'}</p>
+                    <p><strong>{language === 'ru' ? 'Дата окончания сертификата' : 'Bitiş Tarihi'}:</strong> {selectedEquipmentRecord.certificateExpiryDate}</p>
+                    <p><strong>{language === 'ru' ? 'Осталось дней' : 'Kalan Gün'}:</strong> {daysUntil(selectedEquipmentRecord.certificateExpiryDate)}</p>
                   </article>
                   <article>
-                    <h3>Sorumluluk</h3>
-                    <p><strong>Sorumlu:</strong> {selectedEquipmentRecord.responsiblePerson}</p>
-                    <p><strong>Ekipman Durumu:</strong> <span className={equipmentStatusClassName(selectedEquipmentRecord.equipmentStatus)}>{equipmentStatusLabel(selectedEquipmentRecord.equipmentStatus)}</span></p>
-                    <p><strong>Risk Seviyesi:</strong> {equipmentRiskLabel(selectedEquipmentRecord.riskLevel)}</p>
+                    <h3>{language === 'ru' ? 'Ответственность' : 'Sorumluluk'}</h3>
+                    <p><strong>{language === 'ru' ? 'Ответственное лицо' : 'Sorumlu'}:</strong> {selectedEquipmentRecord.responsiblePerson}</p>
+                    <p><strong>{language === 'ru' ? 'Статус оборудования' : 'Ekipman Durumu'}:</strong> <span className={equipmentStatusClassName(selectedEquipmentRecord.equipmentStatus)}>{equipmentStatusLabel(selectedEquipmentRecord.equipmentStatus)}</span></p>
+                    <p><strong>{language === 'ru' ? 'Уровень риска' : 'Risk Seviyesi'}:</strong> {equipmentRiskLabel(selectedEquipmentRecord.riskLevel)}</p>
                   </article>
                 </div>
 
                 <div className="risk-detail-files">
                   <div>
-                    <h3>Ekler</h3>
+                    <h3>{language === 'ru' ? 'Вложения' : 'Ekler'}</h3>
                     {selectedEquipmentRecord.attachments.length > 0 ? (
                       <ul>{selectedEquipmentRecord.attachments.map((fileName) => <li key={fileName}>{fileName}</li>)}</ul>
                     ) : (
-                      <p>Ek bulunmuyor.</p>
+                      <p>{language === 'ru' ? 'Вложения отсутствуют.' : 'Ek bulunmuyor.'}</p>
                     )}
                   </div>
                   <div>
-                    <h3>Muayene Raporları</h3>
+                    <h3>{language === 'ru' ? 'Отчёты о проверке' : 'Muayene Raporları'}</h3>
                     {selectedEquipmentRecord.inspectionReports.length > 0 ? (
                       <ul>{selectedEquipmentRecord.inspectionReports.map((fileName) => <li key={fileName}>{fileName}</li>)}</ul>
                     ) : (
-                      <p>Rapor bulunmuyor.</p>
+                      <p>{language === 'ru' ? 'Отчёты отсутствуют.' : 'Rapor bulunmuyor.'}</p>
                     )}
                   </div>
                   <div>
-                    <h3>Ekipman Fotoğrafları</h3>
+                    <h3>{language === 'ru' ? 'Фотографии оборудования' : 'Ekipman Fotoğrafları'}</h3>
                     {selectedEquipmentRecord.equipmentPhotos.length > 0 ? (
                       <ul>{selectedEquipmentRecord.equipmentPhotos.map((fileName) => <li key={fileName}>{fileName}</li>)}</ul>
                     ) : (
-                      <p>Fotoğraf bulunmuyor.</p>
+                      <p>{language === 'ru' ? 'Фотографии отсутствуют.' : 'Fotoğraf bulunmuyor.'}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <h3>Notlar</h3>
+                  <h3>{language === 'ru' ? 'Примечания' : 'Notlar'}</h3>
                   <p>{selectedEquipmentRecord.notes || '-'}</p>
                 </div>
               </section>
