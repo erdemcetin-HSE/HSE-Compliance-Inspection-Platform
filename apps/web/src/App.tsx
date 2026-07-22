@@ -1903,7 +1903,19 @@ const replaceByDictionary = (input: string, replacements: Array<[string, string]
     if (!from || from === to || !output.includes(from)) {
       return;
     }
-    output = output.split(from).join(to);
+
+    const escaped = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const boundedPattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${escaped})(?=[^\\p{L}\\p{N}]|$)`, 'gu');
+
+    if (boundedPattern.test(output)) {
+      output = output.replace(boundedPattern, `$1${to}`);
+      return;
+    }
+
+    // Fallback for labels that are rendered as a complete text node.
+    if (output.trim() === from) {
+      output = output.replace(from, to);
+    }
   });
   return output;
 };
@@ -3856,7 +3868,7 @@ export function App() {
   }, [accessLevel]);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || language !== 'en') {
+    if (typeof window === 'undefined' || language === 'tr') {
       return;
     }
 
