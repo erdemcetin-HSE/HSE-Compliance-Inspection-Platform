@@ -10073,7 +10073,11 @@ export function App() {
   const headerTitle = activeModule === 'dashboard' ? localizeText('Dashboard', language) : moduleLabels[activeModule];
   let headerSubtitle = `${moduleLabels[activeModule]} ${t.moduleAnalytics}`;
   if (activeModule === 'dashboard') {
-    headerSubtitle = language === 'en' ? 'Project performance and executive summary.' : 'Proje performansı ve yönetici özeti.';
+    headerSubtitle = language === 'ru'
+      ? 'Производительность проекта и сводка для руководства.'
+      : language === 'en'
+        ? 'Project performance and executive summary.'
+        : 'Proje performansı ve yönetici özeti.';
   } else if (activeModule === 'reports') {
     headerSubtitle = language === 'en' ? 'Corporate report center and automated output generation.' : 'Kurumsal raporlama merkezi ve otomatik çıktı üretimi.';
   } else if (activeModule === 'projects') {
