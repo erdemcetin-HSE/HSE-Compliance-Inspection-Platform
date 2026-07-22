@@ -3458,14 +3458,14 @@ const cityCoordinates: Record<string, { lat: number; lon: number }> = {
 
 const weatherCodeMeta = (code: number, language: Language) => {
   const labels = {
-    clear: language === 'en' ? 'Clear' : 'Açık',
-    mostlyClear: language === 'en' ? 'Mostly Clear' : 'Az Bulutlu',
-    cloudy: language === 'en' ? 'Cloudy' : 'Bulutlu',
-    fog: language === 'en' ? 'Fog' : 'Sisli',
-    drizzle: language === 'en' ? 'Drizzle' : 'Çiseleme',
-    rain: language === 'en' ? 'Rain' : 'Yağmurlu',
-    snow: language === 'en' ? 'Snow' : 'Karlı',
-    storm: language === 'en' ? 'Thunderstorm' : 'Fırtına'
+    clear: language === 'en' ? 'Clear' : language === 'ru' ? 'Ясно' : 'Açık',
+    mostlyClear: language === 'en' ? 'Mostly Clear' : language === 'ru' ? 'Малооблачно' : 'Az Bulutlu',
+    cloudy: language === 'en' ? 'Cloudy' : language === 'ru' ? 'Облачно' : 'Bulutlu',
+    fog: language === 'en' ? 'Fog' : language === 'ru' ? 'Туман' : 'Sisli',
+    drizzle: language === 'en' ? 'Drizzle' : language === 'ru' ? 'Морось' : 'Çiseleme',
+    rain: language === 'en' ? 'Rain' : language === 'ru' ? 'Дождь' : 'Yağmurlu',
+    snow: language === 'en' ? 'Snow' : language === 'ru' ? 'Снег' : 'Karlı',
+    storm: language === 'en' ? 'Thunderstorm' : language === 'ru' ? 'Гроза' : 'Fırtına'
   };
 
   if (code === 0) return { icon: '☀', text: labels.clear };
@@ -4317,8 +4317,8 @@ export function App() {
   }>({
     icon: '☀',
     temperature: '--°C',
-    condition: language === 'en' ? 'Loading...' : 'Yükleniyor...',
-    location: language === 'en' ? 'All Projects' : 'Tüm Projeler',
+    condition: language === 'en' ? 'Loading...' : language === 'ru' ? 'Загрузка...' : 'Yükleniyor...',
+    location: language === 'en' ? 'All Projects' : language === 'ru' ? 'Все проекты' : 'Tüm Projeler',
     updatedAt: '--:--',
     windSpeed: '-- km/s',
     windDirection: '--'
@@ -9839,7 +9839,7 @@ export function App() {
     const refreshWeather = async () => {
       const defaultLocationLabel = selectedProject
         ? (selectedProject.city || selectedProject.address || selectedProject.name)
-        : (language === 'en' ? 'All Projects' : 'Tüm Projeler');
+        : (language === 'en' ? 'All Projects' : language === 'ru' ? 'Все проекты' : 'Tüm Projeler');
 
       let coords = cityCoordinates[weatherCity] ?? cityCoordinates.Istanbul;
       let locationLabel = defaultLocationLabel;
@@ -9853,7 +9853,7 @@ export function App() {
         if (geoQuery) {
           try {
             const geocodeResponse = await fetch(
-              `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(geoQuery)}&count=1&language=${language === 'en' ? 'en' : 'tr'}&format=json`
+              `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(geoQuery)}&count=1&language=${language === 'ru' ? 'ru' : language === 'en' ? 'en' : 'tr'}&format=json`
             );
             if (geocodeResponse.ok) {
               const geocodePayload = (await geocodeResponse.json()) as {
