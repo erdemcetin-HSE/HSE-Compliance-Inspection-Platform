@@ -2326,21 +2326,25 @@ const ptwDosyaTipleri = ['Fotoğraf', 'PDF', 'Risk Assessment', 'Method Statemen
 
 const ptwAttachmentTypeByLabel: Record<string, PtwAttachmentApiType> = {
   'Фото': 'PHOTO',
+  'Фотографии': 'PHOTO',
   Fotoğraf: 'PHOTO',
   PDF: 'PDF',
   'Risk Assessment': 'RISK_ASSESSMENT',
+  'Оценка рисков': 'RISK_ASSESSMENT',
   'Method Statement': 'METHOD_STATEMENT',
+  'Методика работ': 'METHOD_STATEMENT',
   'Toolbox Talk': 'TOOLBOX_TALK',
+  'Инструктаж Toolbox': 'TOOLBOX_TALK',
   Sertifikalar: 'CERTIFICATE',
   Сертификаты: 'CERTIFICATE'
 };
 
 const ptwAttachmentLabelByType: Record<PtwAttachmentApiType, string> = {
-  PHOTO: 'Фото',
+  PHOTO: 'Фотографии',
   PDF: 'PDF',
-  RISK_ASSESSMENT: 'Risk Assessment',
-  METHOD_STATEMENT: 'Method Statement',
-  TOOLBOX_TALK: 'Toolbox Talk',
+  RISK_ASSESSMENT: 'Оценка рисков',
+  METHOD_STATEMENT: 'Методика работ',
+  TOOLBOX_TALK: 'Инструктаж Toolbox',
   CERTIFICATE: 'Сертификаты',
   OTHER: 'Прочее'
 };
@@ -10296,7 +10300,7 @@ export function App() {
   const onDownloadAllAttachments = () => {
     const files = ptwEkler.filter((file) => !!file.fileUrl);
     if (files.length === 0) {
-      setPtwFeedback({ type: 'error', text: language === 'ru' ? 'Скачивать нечего.' : 'İndirilecek ek bulunamadı.' });
+      setPtwFeedback({ type: 'error', text: language === 'ru' ? 'Нет вложений для скачивания.' : 'İndirilecek ek bulunamadı.' });
       return;
     }
     files.forEach((file) => {
@@ -12763,7 +12767,7 @@ export function App() {
                   <label>{ptwCopy.ptwNo}<input value={ptwForm.ptwNo} disabled /></label>
                   <label>{ptwCopy.organization}<input value={ptwForm.organizasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, organizasyon: event.target.value }))} /></label>
                   <label>{ptwCopy.department}<input value={ptwForm.departman} onChange={(event) => setPtwForm((prev) => ({ ...prev, departman: event.target.value }))} /></label>
-                  <label>Proje<input value={ptwForm.proje} onChange={(event) => setPtwForm((prev) => ({ ...prev, proje: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Проект' : 'Proje'}<input value={ptwForm.proje} onChange={(event) => setPtwForm((prev) => ({ ...prev, proje: event.target.value }))} /></label>
                   <label>{ptwCopy.location}<input value={ptwForm.lokasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, lokasyon: event.target.value }))} /></label>
                   <label>{ptwCopy.ptwType}<input value={language === 'ru' ? (ptwTypeRuLabel[ptwForm.ptwTuru] ?? ptwForm.ptwTuru) : ptwForm.ptwTuru} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwTuru: event.target.value }))} /></label>
                   <label>{ptwCopy.issueDate}<input type="date" value={ptwForm.duzenlenmeTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, duzenlenmeTarihi: event.target.value }))} /></label>
@@ -12932,7 +12936,7 @@ export function App() {
                     ))}
                   </tbody>
                 </table>
-                <div className="actions"><button type="button" onClick={addPtwControl}>Kontrol Satırı Ekle</button></div>
+                <div className="actions"><button type="button" onClick={addPtwControl}>{language === 'ru' ? 'Добавить строку проверки' : 'Kontrol Satırı Ekle'}</button></div>
                 <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('on-kontroller')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
@@ -12966,7 +12970,7 @@ export function App() {
                     ))}
                   </tbody>
                 </table>
-                <div className="actions"><button type="button" onClick={addPtwPrecaution}>Tedbir Ekle</button></div>
+                <div className="actions"><button type="button" onClick={addPtwPrecaution}>{language === 'ru' ? 'Добавить меру' : 'Tedbir Ekle'}</button></div>
                 <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('tedbirler')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
@@ -12983,12 +12987,12 @@ export function App() {
               <section className="panel">
                 <h2>{ptwCopy.tabApprovals}</h2>
                 <div className="form-grid">
-                  <label>PTW Hazırlayan<input value={ptwForm.ptwHazirlayan} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwHazirlayan: event.target.value }))} /></label>
-                  <label>HSE Onayı<input value={ptwForm.hseOnayi} onChange={(event) => setPtwForm((prev) => ({ ...prev, hseOnayi: event.target.value }))} /></label>
-                  <label>Proje Müdürü<input value={ptwForm.projeMuduru} onChange={(event) => setPtwForm((prev) => ({ ...prev, projeMuduru: event.target.value }))} /></label>
-                  <label>İşveren Temsilcisi<input value={ptwForm.isverenTemsilcisi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isverenTemsilcisi: event.target.value }))} /></label>
-                  <label>Dijital İmza<input value={ptwForm.dijitalImza} onChange={(event) => setPtwForm((prev) => ({ ...prev, dijitalImza: event.target.value }))} /></label>
-                  <label>Tarih<input type="date" value={ptwForm.onayTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, onayTarihi: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Подготовил PTW' : 'PTW Hazırlayan'}<input value={ptwForm.ptwHazirlayan} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwHazirlayan: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Согласование HSE' : 'HSE Onayı'}<input value={ptwForm.hseOnayi} onChange={(event) => setPtwForm((prev) => ({ ...prev, hseOnayi: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Руководитель проекта' : 'Proje Müdürü'}<input value={ptwForm.projeMuduru} onChange={(event) => setPtwForm((prev) => ({ ...prev, projeMuduru: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Представитель заказчика' : 'İşveren Temsilcisi'}<input value={ptwForm.isverenTemsilcisi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isverenTemsilcisi: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Цифровая подпись' : 'Dijital İmza'}<input value={ptwForm.dijitalImza} onChange={(event) => setPtwForm((prev) => ({ ...prev, dijitalImza: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Дата' : 'Tarih'}<input type="date" value={ptwForm.onayTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, onayTarihi: event.target.value }))} /></label>
                 </div>
                 <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('onaylar')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
@@ -13000,12 +13004,12 @@ export function App() {
                 <table>
                   <thead>
                     <tr>
-                      <th>Tarih</th>
-                      <th>Saat</th>
-                      <th>Çalışma Başladı</th>
-                      <th>Çalışma Bitti</th>
-                      <th>Açıklama</th>
-                      <th>Sorumlu</th>
+                      <th>{language === 'ru' ? 'Дата' : 'Tarih'}</th>
+                      <th>{language === 'ru' ? 'Время' : 'Saat'}</th>
+                      <th>{language === 'ru' ? 'Работа начата' : 'Çalışma Başladı'}</th>
+                      <th>{language === 'ru' ? 'Работа завершена' : 'Çalışma Bitti'}</th>
+                      <th>{language === 'ru' ? 'Описание' : 'Açıklama'}</th>
+                      <th>{language === 'ru' ? 'Ответственный' : 'Sorumlu'}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -13021,7 +13025,7 @@ export function App() {
                     ))}
                   </tbody>
                 </table>
-                <div className="actions"><button type="button" onClick={addPtwDailyLog}>Günlük Kayıt Ekle</button></div>
+                <div className="actions"><button type="button" onClick={addPtwDailyLog}>{language === 'ru' ? 'Добавить ежедневную запись' : 'Günlük Kayıt Ekle'}</button></div>
                 <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('gunluk-takip')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
@@ -13032,10 +13036,10 @@ export function App() {
                 <table>
                   <thead>
                     <tr>
-                      <th>Eklenen Personel</th>
-                      <th>Ayrılan Personel</th>
-                      <th>Tarih</th>
-                      <th>Onaylayan</th>
+                      <th>{language === 'ru' ? 'Добавленный сотрудник' : 'Eklenen Personel'}</th>
+                      <th>{language === 'ru' ? 'Выбывший сотрудник' : 'Ayrılan Personel'}</th>
+                      <th>{language === 'ru' ? 'Дата' : 'Tarih'}</th>
+                      <th>{language === 'ru' ? 'Согласовал' : 'Onaylayan'}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -13049,7 +13053,7 @@ export function App() {
                     ))}
                   </tbody>
                 </table>
-                <div className="actions"><button type="button" onClick={addPtwTeamChange}>Ekip Değişikliği Ekle</button></div>
+                <div className="actions"><button type="button" onClick={addPtwTeamChange}>{language === 'ru' ? 'Добавить изменение состава' : 'Ekip Değişikliği Ekle'}</button></div>
                 <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('ekip-degisiklik')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
@@ -13058,13 +13062,13 @@ export function App() {
               <section className="panel">
                 <h2>{ptwCopy.tabClose}</h2>
                 <div className="form-grid">
-                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.isTamamlandi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isTamamlandi: event.target.checked }))} />İş Tamamlandı</label>
-                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.alanGuvenli} onChange={(event) => setPtwForm((prev) => ({ ...prev, alanGuvenli: event.target.checked }))} />Alan Güvenli</label>
-                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.malzemelerToplandi} onChange={(event) => setPtwForm((prev) => ({ ...prev, malzemelerToplandi: event.target.checked }))} />Malzemeler Toplandı</label>
-                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.ptwKapatildi} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwKapatildi: event.target.checked }))} />PTW Kapatıldı</label>
-                  <label>Kapatan<input value={ptwForm.kapatan} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapatan: event.target.value }))} /></label>
-                  <label>Tarih<input type="date" value={ptwForm.kapanisTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapanisTarihi: event.target.value }))} /></label>
-                  <label className="full-row">Açıklama<textarea rows={4} value={ptwForm.kapanisAciklama} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapanisAciklama: event.target.value }))} /></label>
+                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.isTamamlandi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isTamamlandi: event.target.checked }))} />{language === 'ru' ? 'Работа завершена' : 'İş Tamamlandı'}</label>
+                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.alanGuvenli} onChange={(event) => setPtwForm((prev) => ({ ...prev, alanGuvenli: event.target.checked }))} />{language === 'ru' ? 'Зона безопасна' : 'Alan Güvenli'}</label>
+                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.malzemelerToplandi} onChange={(event) => setPtwForm((prev) => ({ ...prev, malzemelerToplandi: event.target.checked }))} />{language === 'ru' ? 'Материалы собраны' : 'Malzemeler Toplandı'}</label>
+                  <label className="checkbox-item"><input type="checkbox" checked={ptwForm.ptwKapatildi} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwKapatildi: event.target.checked }))} />{language === 'ru' ? 'Наряд-допуск закрыт' : 'PTW Kapatıldı'}</label>
+                  <label>{language === 'ru' ? 'Закрыл' : 'Kapatan'}<input value={ptwForm.kapatan} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapatan: event.target.value }))} /></label>
+                  <label>{language === 'ru' ? 'Дата' : 'Tarih'}<input type="date" value={ptwForm.kapanisTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapanisTarihi: event.target.value }))} /></label>
+                  <label className="full-row">{language === 'ru' ? 'Описание' : 'Açıklama'}<textarea rows={4} value={ptwForm.kapanisAciklama} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapanisAciklama: event.target.value }))} /></label>
                 </div>
                 <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('kapanis')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
@@ -13074,9 +13078,11 @@ export function App() {
               <section className="panel table-wrap">
                 <h2>{ptwCopy.tabAttachments}</h2>
                 <div className="ptw-attachment-grid">
-                  {ptwDosyaTipleri.map((tip) => (
+                  {ptwDosyaTipleri.map((tip) => {
+                    const displayTip = language === 'ru' ? (tip === 'Fotoğraf' ? 'Фотографии' : tip === 'Sertifikalar' ? 'Сертификаты' : tip === 'Risk Assessment' ? 'Оценка рисков' : tip === 'Method Statement' ? 'Методика работ' : tip === 'Toolbox Talk' ? 'Инструктаж Toolbox' : tip) : tip;
+                    return (
                     <label key={tip}>
-                      {tip}
+                      {displayTip}
                       <input
                         type="file"
                         multiple
@@ -13090,13 +13096,13 @@ export function App() {
                         }}
                       />
                     </label>
-                  ))}
+                  );})}
                 </div>
                 <table>
                   <thead>
                     <tr>
-                      <th>Ek Türü</th>
-                      <th>Dosya Adı</th>
+                      <th>{language === 'ru' ? 'Тип вложения' : 'Ek Türü'}</th>
+                      <th>{language === 'ru' ? 'Имя файла' : 'Dosya Adı'}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -13123,7 +13129,7 @@ export function App() {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={2}>Henüz dosya eklenmedi.</td>
+                        <td colSpan={2}>{language === 'ru' ? 'Файлы пока не добавлены.' : 'Henüz dosya eklenmedi.'}</td>
                       </tr>
                     )}
                   </tbody>
@@ -13143,7 +13149,7 @@ export function App() {
                 </label>
               </div>
               {language === 'ru' ? (
-                <p className="message">{ptwStatusFlow.map((status) => ptwStatusFlowRuLabel[status]).join(' -> ')} | {language === 'ru' ? 'Текущий статус' : 'Mevcut Durum'}: {ptwStatusRuLabel[ptwForm.durum]}</p>
+                <p className="message">{ptwStatusFlow.map((status) => ptwStatusFlowRuLabel[status]).join(' -> ')} | Текущий статус: {ptwStatusRuLabel[ptwForm.durum]}</p>
               ) : null}
               <div className="report-action-buttons">
                 <button type="button" onClick={() => void onExportPtwPdf()}>{ptwCopy.summaryReport}</button>
