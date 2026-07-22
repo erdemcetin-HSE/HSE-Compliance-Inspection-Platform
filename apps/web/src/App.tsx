@@ -2112,6 +2112,25 @@ const ppeLifecycleOptions: Array<{ value: PpeTransactionLifecycle; label: string
 
 const ptwDurumlar: PtwStatus[] = ['Taslak', 'Onay Bekliyor', 'Aktif', 'Askıya Alındı', 'Tamamlandı', 'İptal'];
 
+const ptwStatusRuLabel: Record<PtwStatus, string> = {
+  Taslak: 'Черновик',
+  'Onay Bekliyor': 'Ожидает согласования',
+  Aktif: 'Активен',
+  'Askıya Alındı': 'Приостановлен',
+  Tamamlandı: 'Завершен',
+  'İptal': 'Отменен'
+};
+
+const ptwTypeRuLabel: Record<string, string> = {
+  'Yüksekte Çalışma': 'Работы на высоте',
+  'Kapalı Alan Çalışması': 'Работы в замкнутом пространстве',
+  'Sıcak Çalışma': 'Огневые работы',
+  'Kazı Çalışması': 'Земляные работы',
+  'Elektrik Çalışması': 'Электромонтажные работы',
+  'Kaldırma Operasyonu': 'Подъемные операции',
+  'Bakım-Onarım': 'Техническое обслуживание и ремонт'
+};
+
 const ptwTehlikeSecenekleri = [
   'Yüksekte Çalışma',
   'Düşme Riski',
@@ -12119,7 +12138,7 @@ export function App() {
                   <label>{ptwCopy.department}<input value={ptwForm.departman} onChange={(event) => setPtwForm((prev) => ({ ...prev, departman: event.target.value }))} /></label>
                   <label>Proje<input value={ptwForm.proje} onChange={(event) => setPtwForm((prev) => ({ ...prev, proje: event.target.value }))} /></label>
                   <label>{ptwCopy.location}<input value={ptwForm.lokasyon} onChange={(event) => setPtwForm((prev) => ({ ...prev, lokasyon: event.target.value }))} /></label>
-                  <label>{ptwCopy.ptwType}<input value={ptwForm.ptwTuru} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwTuru: event.target.value }))} /></label>
+                  <label>{ptwCopy.ptwType}<input value={language === 'ru' ? (ptwTypeRuLabel[ptwForm.ptwTuru] ?? ptwForm.ptwTuru) : ptwForm.ptwTuru} onChange={(event) => setPtwForm((prev) => ({ ...prev, ptwTuru: event.target.value }))} /></label>
                   <label>{ptwCopy.issueDate}<input type="date" value={ptwForm.duzenlenmeTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, duzenlenmeTarihi: event.target.value }))} /></label>
                   <label>{ptwCopy.validFrom}<input type="date" value={ptwForm.gecerlilikBaslangici} onChange={(event) => setPtwForm((prev) => ({ ...prev, gecerlilikBaslangici: event.target.value }))} /></label>
                   <label>{ptwCopy.validTo}<input type="date" value={ptwForm.gecerlilikBitisi} onChange={(event) => setPtwForm((prev) => ({ ...prev, gecerlilikBitisi: event.target.value }))} /></label>
@@ -12127,7 +12146,7 @@ export function App() {
                     {ptwCopy.status}
                     <select value={ptwForm.durum} onChange={(event) => setPtwForm((prev) => ({ ...prev, durum: event.target.value as PtwStatus }))}>
                       {ptwDurumlar.map((durum) => (
-                        <option key={durum} value={durum}>{durum}</option>
+                        <option key={durum} value={durum}>{language === 'ru' ? ptwStatusRuLabel[durum] : durum}</option>
                       ))}
                     </select>
                   </label>
