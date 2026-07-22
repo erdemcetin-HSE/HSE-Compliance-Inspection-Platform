@@ -1545,6 +1545,8 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Approved contractors': 'Onaylı alt yükleniciler'
   },
   ru: {
+    Dashboard: 'Панель управления',
+    Project: 'Проект',
     'HSE Compliance Platform': 'Платформа соответствия HSE',
     'Designed and developed by Erdem Cetin': 'Разработано и спроектировано Erdem Cetin',
     'Design and Development: Erdem Cetin © 2026 All Rights Reserved.': 'Дизайн и разработка: Erdem Cetin © 2026 Все права защищены.',
@@ -1612,6 +1614,20 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Finding Status': 'Статус замечаний',
     'Incident Trend (Last 7 Periods)': 'Тренд инцидентов (последние 7 периодов)',
     'Incident Category Distribution': 'Распределение категорий инцидентов',
+    'PTW Volume Trend': 'Тренд объема нарядов-допусков',
+    'PTW Status Distribution': 'Распределение статусов нарядов-допусков',
+    'PTW Violation': 'Нарушение наряда-допуска',
+    'PTW Active': 'Активные наряды-допуски',
+    'PTW Closed': 'Закрытые наряды-допуски',
+    'Hot Work': 'Огневые работы',
+    'Confined Space': 'Работы в замкнутом пространстве',
+    'Work at Height': 'Работы на высоте',
+    'Near Miss': 'Почти произошедший инцидент',
+    'Safe Man-Hours - Daily': 'Безопасные человеко-часы - день',
+    'Safe Man-Hours - Weekly': 'Безопасные человеко-часы - неделя',
+    'Safe Man-Hours - Monthly': 'Безопасные человеко-часы - месяц',
+    'Safe Man-Hours - Total': 'Безопасные человеко-часы - всего',
+    'Daily x weekly x monthly annualized capacity': 'Годовой эквивалент на основе дневной, недельной и месячной мощности',
     'Permit to Work Volume Trend': 'Тренд объема нарядов-допусков',
     'Permit to Work Status Distribution': 'Распределение статусов нарядов-допусков',
     'Permit to Work Violation': 'Нарушение наряда-допуска',
@@ -1904,18 +1920,15 @@ const replaceByDictionary = (input: string, replacements: Array<[string, string]
       return;
     }
 
-    const escaped = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const boundedPattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${escaped})(?=[^\\p{L}\\p{N}]|$)`, 'gu');
-
-    if (boundedPattern.test(output)) {
+    // Avoid breaking words like "Temizlik" while still replacing standalone tokens like "Tem".
+    if (/^[\p{L}\p{N}]+$/u.test(from)) {
+      const escaped = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const boundedPattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${escaped})(?=[^\\p{L}\\p{N}]|$)`, 'gu');
       output = output.replace(boundedPattern, `$1${to}`);
       return;
     }
 
-    // Fallback for labels that are rendered as a complete text node.
-    if (output.trim() === from) {
-      output = output.replace(from, to);
-    }
+    output = output.split(from).join(to);
   });
   return output;
 };
