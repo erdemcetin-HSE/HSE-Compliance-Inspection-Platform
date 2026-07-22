@@ -827,9 +827,83 @@ type PtwTeamChange = {
   onaylayan: string;
 };
 
+type PtwAttachmentApiType =
+  | 'PHOTO'
+  | 'PDF'
+  | 'RISK_ASSESSMENT'
+  | 'METHOD_STATEMENT'
+  | 'TOOLBOX_TALK'
+  | 'CERTIFICATE'
+  | 'OTHER';
+
 type PtwAttachment = {
+  id?: string;
+  type: PtwAttachmentApiType;
   tip: string;
   dosyaAdi: string;
+  fileType: string;
+  fileUrl: string;
+  previewUrl?: string;
+};
+
+type PtwApiRecord = {
+  id: string;
+  permitNo: string;
+  organization: string;
+  department: string;
+  project: string;
+  location: string;
+  permitType: string;
+  issueDate: string;
+  validityStart: string;
+  validityEnd: string;
+  status: PtwStatus;
+  requesterName: string;
+  issuerName: string;
+  jobResponsibleName: string;
+  siteResponsibleName: string;
+  hseResponsibleName: string;
+  authorizedApprover: string;
+  jobTitle: string;
+  jobDescription: string;
+  workArea: string;
+  plannedWork: string;
+  workingConditions: string;
+  workStartDate: string;
+  workStartTime: string;
+  workEndDate: string;
+  workEndTime: string;
+  hazards: string[];
+  safetySystems: string[];
+  equipmentUsed: string[];
+  teamMembers: PtwTeamMember[];
+  preWorkChecks: PtwControlItem[];
+  precautions: PtwPrecautionItem[];
+  specialConditions?: string;
+  preparedBy?: string;
+  hseApprovalBy?: string;
+  projectManagerBy?: string;
+  employerRepBy?: string;
+  digitalSignature?: string;
+  approvalDate?: string;
+  dailyLogs: PtwDailyLog[];
+  teamChanges: PtwTeamChange[];
+  workCompleted: boolean;
+  areaSafe: boolean;
+  materialsCollected: boolean;
+  ptwClosed: boolean;
+  closedBy?: string;
+  closedAt?: string;
+  closureRemarks?: string;
+  attachments: Array<{
+    id?: string;
+    type: PtwAttachmentApiType;
+    fileName: string;
+    fileType: string;
+    fileUrl: string;
+  }>;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type PtwForm = {
@@ -1961,6 +2035,42 @@ const buildTurkishReplacementMap = (language: Exclude<Language, 'tr'>): Map<stri
       ['Çift Lanyard', 'Двойной строп'],
       ['Ankraj Noktası', 'Анкерная точка'],
       ['Kurtarma Ekipmanı', 'Спасательное оборудование'],
+      ['Malzemeler', 'Материалы'],
+      ['El Aletleri', 'Ручные инструменты'],
+      ['Makineler', 'Машины'],
+      ['Platformlar', 'Платформы'],
+      ['İskele', 'Леса'],
+      ['Merdiven', 'Лестница'],
+      ['Vinç', 'Кран'],
+      ['Mobil Platform', 'Мобильная платформа'],
+      ['Kontrol', 'Проверка'],
+      ['Açıklama', 'Описание'],
+      ['Kontrol Satırı Ekle', 'Добавить строку проверки'],
+      ['Tedbir', 'Мера'],
+      ['Sorumlu', 'Ответственный'],
+      ['Termin', 'Срок'],
+      ['Tedbir Ekle', 'Добавить меру'],
+      ['PTW Hazırlayan', 'Подготовил PTW'],
+      ['HSE Onayı', 'Согласование HSE'],
+      ['Proje Müdürü', 'Руководитель проекта'],
+      ['İşveren Temsilcisi', 'Представитель заказчика'],
+      ['Dijital İmza', 'Цифровая подпись'],
+      ['Tarih', 'Дата'],
+      ['Çalışma Başladı', 'Работа начата'],
+      ['Çalışma Bitti', 'Работа завершена'],
+      ['Günlük Kayıt Ekle', 'Добавить ежедневную запись'],
+      ['Eklenen Personel', 'Добавленный сотрудник'],
+      ['Ayrılan Personel', 'Выбывший сотрудник'],
+      ['Onaylayan', 'Согласовал'],
+      ['Ekip Değişikliği Ekle', 'Добавить изменение состава'],
+      ['İş Tamamlandı', 'Работа завершена'],
+      ['Alan Güvenli', 'Зона безопасна'],
+      ['Malzemeler Toplandı', 'Материалы собраны'],
+      ['PTW Kapatıldı', 'Наряд-допуск закрыт'],
+      ['Kapatan', 'Закрыл'],
+      ['Ek Türü', 'Тип вложения'],
+      ['Dosya Adı', 'Имя файла'],
+      ['Henüz dosya eklenmedi.', 'Файлы пока не добавлены.'],
       ['Risk Score', 'Оценка риска'],
       ['PPE Stock Health', 'Состояние запасов СИЗ'],
       ['Safe Man-Hours - Daily', 'Безопасные человеко-часы - день'],
@@ -2213,6 +2323,38 @@ const ptwEkipmanSecenekleri = [
 ];
 
 const ptwDosyaTipleri = ['Fotoğraf', 'PDF', 'Risk Assessment', 'Method Statement', 'Toolbox Talk', 'Sertifikalar'];
+
+const ptwAttachmentTypeByLabel: Record<string, PtwAttachmentApiType> = {
+  'Фото': 'PHOTO',
+  Fotoğraf: 'PHOTO',
+  PDF: 'PDF',
+  'Risk Assessment': 'RISK_ASSESSMENT',
+  'Method Statement': 'METHOD_STATEMENT',
+  'Toolbox Talk': 'TOOLBOX_TALK',
+  Sertifikalar: 'CERTIFICATE',
+  Сертификаты: 'CERTIFICATE'
+};
+
+const ptwAttachmentLabelByType: Record<PtwAttachmentApiType, string> = {
+  PHOTO: 'Фото',
+  PDF: 'PDF',
+  RISK_ASSESSMENT: 'Risk Assessment',
+  METHOD_STATEMENT: 'Method Statement',
+  TOOLBOX_TALK: 'Toolbox Talk',
+  CERTIFICATE: 'Сертификаты',
+  OTHER: 'Прочее'
+};
+
+const ptwStatusFlow: PtwStatus[] = ['Taslak', 'Onay Bekliyor', 'Aktif', 'Tamamlandı'];
+
+const ptwStatusFlowRuLabel: Record<PtwStatus, string> = {
+  Taslak: 'Черновик',
+  'Onay Bekliyor': 'На согласовании',
+  Aktif: 'Активен',
+  'Askıya Alındı': 'Приостановлен',
+  Tamamlandı: 'Закрыт',
+  'İptal': 'Отменен'
+};
 
 const legalCategoryOptions = [
   'İş Sağlığı ve Güvenliği',
@@ -4834,6 +4976,11 @@ export function App() {
     { eklenenPersonel: '', ayrilanPersonel: '', tarih: new Date().toISOString().slice(0, 10), onaylayan: '' }
   ]);
   const [ptwEkler, setPtwEkler] = useState<PtwAttachment[]>([]);
+  const [ptwRecordId, setPtwRecordId] = useState<string | null>(null);
+  const [ptwSaving, setPtwSaving] = useState(false);
+  const [ptwFeedback, setPtwFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [ptwLastSavedAt, setPtwLastSavedAt] = useState<string | null>(null);
+  const [ptwEmailTo, setPtwEmailTo] = useState('');
   const [liveWeather, setLiveWeather] = useState<{
     icon: string;
     temperature: string;
@@ -9760,8 +9907,445 @@ export function App() {
     if (!files || files.length === 0) {
       return;
     }
-    const mapped = Array.from(files).map((file) => ({ tip, dosyaAdi: file.name }));
+    const mapped = Array.from(files).map((file) => ({
+      type: ptwAttachmentTypeByLabel[tip] ?? 'OTHER',
+      tip,
+      dosyaAdi: file.name,
+      fileType: file.type || 'application/octet-stream',
+      fileUrl: '',
+      previewUrl: URL.createObjectURL(file)
+    }));
     setPtwEkler((prev) => [...prev, ...mapped]);
+  };
+
+  const toIso = (dateValue: string, fallback = '00:00') => {
+    const trimmed = (dateValue || '').trim();
+    if (!trimmed) {
+      return new Date().toISOString();
+    }
+    const hasTime = trimmed.includes('T');
+    return hasTime ? trimmed : `${trimmed}T${fallback}:00.000Z`;
+  };
+
+  const toDateOnly = (isoLike: string | undefined | null) => {
+    if (!isoLike) {
+      return '';
+    }
+    const value = String(isoLike);
+    if (value.length >= 10) {
+      return value.slice(0, 10);
+    }
+    return value;
+  };
+
+  const mapPtwApiToForm = (row: PtwApiRecord) => {
+    setPtwRecordId(row.id);
+    setPtwForm((prev) => ({
+      ...prev,
+      ptwNo: row.permitNo,
+      organizasyon: row.organization,
+      departman: row.department,
+      proje: row.project,
+      lokasyon: row.location,
+      ptwTuru: row.permitType,
+      duzenlenmeTarihi: toDateOnly(row.issueDate),
+      gecerlilikBaslangici: toDateOnly(row.validityStart),
+      gecerlilikBitisi: toDateOnly(row.validityEnd),
+      durum: row.status,
+      isiTalepEden: row.requesterName,
+      isiVeren: row.issuerName,
+      isSorumlusu: row.jobResponsibleName,
+      sahaSorumlusu: row.siteResponsibleName,
+      hseSorumlusu: row.hseResponsibleName,
+      yetkiliOnaylayan: row.authorizedApprover,
+      isinAdi: row.jobTitle,
+      isinAciklamasi: row.jobDescription,
+      calismaAlani: row.workArea,
+      yapilacakIs: row.plannedWork,
+      calismaKosullari: row.workingConditions,
+      baslangicTarihi: toDateOnly(row.workStartDate),
+      baslangicSaati: row.workStartTime,
+      bitisTarihi: toDateOnly(row.workEndDate),
+      bitisSaati: row.workEndTime,
+      ozelSartlar: row.specialConditions ?? '',
+      ptwHazirlayan: row.preparedBy ?? '',
+      hseOnayi: row.hseApprovalBy ?? '',
+      projeMuduru: row.projectManagerBy ?? '',
+      isverenTemsilcisi: row.employerRepBy ?? '',
+      dijitalImza: row.digitalSignature ?? '',
+      onayTarihi: toDateOnly(row.approvalDate),
+      isTamamlandi: row.workCompleted,
+      alanGuvenli: row.areaSafe,
+      malzemelerToplandi: row.materialsCollected,
+      ptwKapatildi: row.ptwClosed,
+      kapatan: row.closedBy ?? '',
+      kapanisTarihi: toDateOnly(row.closedAt) || prev.kapanisTarihi,
+      kapanisAciklama: row.closureRemarks ?? ''
+    }));
+    setPtwTehlikeler(row.hazards ?? []);
+    setPtwGuvenlikSecimleri(row.safetySystems ?? []);
+    setPtwEkipmanSecimleri(row.equipmentUsed ?? []);
+    setPtwEkipListesi(row.teamMembers?.length ? row.teamMembers : [{ adSoyad: '', gorevi: '', firma: '', egitimDurumu: '', imza: '' }]);
+    setPtwKontroller(row.preWorkChecks?.length ? row.preWorkChecks : [{ kontrol: '', durum: 'Uygun', aciklama: '' }]);
+    setPtwTedbirler(row.precautions?.length ? row.precautions : [{ tedbir: '', sorumlu: '', termin: new Date().toISOString().slice(0, 10), durum: 'Açık' }]);
+    setPtwGunlukKayitlar(row.dailyLogs?.length ? row.dailyLogs.map((log) => ({ ...log, tarih: toDateOnly(log.tarih) })) : [{ tarih: new Date().toISOString().slice(0, 10), saat: '08:00', calismaBasladi: '', calismaBitti: '', aciklama: '', sorumlu: '' }]);
+    setPtwEkipDegisiklikleri(row.teamChanges?.length ? row.teamChanges.map((change) => ({ ...change, tarih: toDateOnly(change.tarih) })) : [{ eklenenPersonel: '', ayrilanPersonel: '', tarih: new Date().toISOString().slice(0, 10), onaylayan: '' }]);
+    setPtwEkler(
+      (row.attachments ?? []).map((file) => ({
+        id: file.id,
+        type: file.type,
+        tip: ptwAttachmentLabelByType[file.type] ?? 'Прочее',
+        dosyaAdi: file.fileName,
+        fileType: file.fileType,
+        fileUrl: `${apiBaseUrl}${file.fileUrl}`
+      }))
+    );
+    setPtwLastSavedAt(new Date().toISOString());
+  };
+
+  const buildPtwPayload = () => ({
+    permitNo: ptwForm.ptwNo,
+    organization: ptwForm.organizasyon,
+    department: ptwForm.departman,
+    project: ptwForm.proje,
+    location: ptwForm.lokasyon,
+    permitType: ptwForm.ptwTuru,
+    issueDate: toIso(ptwForm.duzenlenmeTarihi),
+    validityStart: toIso(ptwForm.gecerlilikBaslangici),
+    validityEnd: toIso(ptwForm.gecerlilikBitisi),
+    status: ptwForm.durum,
+    requesterName: ptwForm.isiTalepEden,
+    issuerName: ptwForm.isiVeren,
+    jobResponsibleName: ptwForm.isSorumlusu || ptwForm.isiTalepEden,
+    siteResponsibleName: ptwForm.sahaSorumlusu || ptwForm.isiVeren,
+    hseResponsibleName: ptwForm.hseSorumlusu,
+    authorizedApprover: ptwForm.yetkiliOnaylayan,
+    jobTitle: ptwForm.isinAdi,
+    jobDescription: ptwForm.isinAciklamasi,
+    workArea: ptwForm.calismaAlani,
+    plannedWork: ptwForm.yapilacakIs,
+    workingConditions: ptwForm.calismaKosullari,
+    workStartDate: toIso(ptwForm.baslangicTarihi),
+    workStartTime: ptwForm.baslangicSaati,
+    workEndDate: toIso(ptwForm.bitisTarihi),
+    workEndTime: ptwForm.bitisSaati,
+    hazards: ptwTehlikeler,
+    safetySystems: ptwGuvenlikSecimleri,
+    equipmentUsed: ptwEkipmanSecimleri,
+    teamMembers: ptwEkipListesi.filter((row) => row.adSoyad.trim() || row.gorevi.trim() || row.firma.trim() || row.egitimDurumu.trim() || row.imza.trim()),
+    preWorkChecks: ptwKontroller.filter((row) => row.kontrol.trim() || row.aciklama.trim()),
+    precautions: ptwTedbirler.filter((row) => row.tedbir.trim() || row.sorumlu.trim()),
+    specialConditions: ptwForm.ozelSartlar,
+    preparedBy: ptwForm.ptwHazirlayan,
+    hseApprovalBy: ptwForm.hseOnayi,
+    projectManagerBy: ptwForm.projeMuduru,
+    employerRepBy: ptwForm.isverenTemsilcisi,
+    digitalSignature: ptwForm.dijitalImza,
+    approvalDate: ptwForm.onayTarihi ? toIso(ptwForm.onayTarihi) : undefined,
+    dailyLogs: ptwGunlukKayitlar.filter((row) => row.sorumlu.trim() || row.aciklama.trim()).map((row) => ({ ...row, tarih: toIso(row.tarih) })),
+    teamChanges: ptwEkipDegisiklikleri.filter((row) => row.onaylayan.trim() || row.eklenenPersonel.trim() || row.ayrilanPersonel.trim()).map((row) => ({ ...row, tarih: toIso(row.tarih) })),
+    workCompleted: ptwForm.isTamamlandi,
+    areaSafe: ptwForm.alanGuvenli,
+    materialsCollected: ptwForm.malzemelerToplandi,
+    ptwClosed: ptwForm.ptwKapatildi,
+    closedBy: ptwForm.kapatan || undefined,
+    closedAt: ptwForm.kapanisTarihi ? toIso(ptwForm.kapanisTarihi) : undefined,
+    closureRemarks: ptwForm.kapanisAciklama || undefined,
+    attachments: ptwEkler.filter((file) => file.fileUrl).map((file) => ({
+      type: file.type,
+      fileName: file.dosyaAdi,
+      fileType: file.fileType,
+      fileUrl: file.fileUrl.replace(apiBaseUrl, '')
+    }))
+  });
+
+  const validatePtwByTab = (tab: PtwTabKey): string[] => {
+    const errors: string[] = [];
+    if (tab === 'kayit') {
+      if (!ptwForm.organizasyon.trim()) errors.push(language === 'ru' ? 'Организация обязательна.' : 'Organizasyon zorunludur.');
+      if (!ptwForm.departman.trim()) errors.push(language === 'ru' ? 'Подразделение обязательно.' : 'Departman zorunludur.');
+      if (!ptwForm.proje.trim()) errors.push(language === 'ru' ? 'Проект обязателен.' : 'Proje zorunludur.');
+      if (!ptwForm.lokasyon.trim()) errors.push(language === 'ru' ? 'Место выполнения работ обязательно.' : 'Lokasyon zorunludur.');
+      if (!ptwForm.ptwTuru.trim()) errors.push(language === 'ru' ? 'Тип наряда-допуска обязателен.' : 'PTW türü zorunludur.');
+    }
+    if (tab === 'sorumlular') {
+      if (!ptwForm.isiTalepEden.trim()) errors.push(language === 'ru' ? 'Инициатор работ обязателен.' : 'İşi talep eden zorunludur.');
+      if (!ptwForm.isiVeren.trim()) errors.push(language === 'ru' ? 'Выдающий наряд обязателен.' : 'İşi veren zorunludur.');
+      if (!ptwForm.hseSorumlusu.trim()) errors.push(language === 'ru' ? 'Ответственный HSE обязателен.' : 'HSE sorumlusu zorunludur.');
+      if (!ptwForm.yetkiliOnaylayan.trim()) errors.push(language === 'ru' ? 'Уполномоченный утверждающий обязателен.' : 'Yetkili onaylayan zorunludur.');
+    }
+    if (tab === 'is-bilgileri') {
+      if (!ptwForm.isinAdi.trim()) errors.push(language === 'ru' ? 'Наименование работы обязательно.' : 'İşin adı zorunludur.');
+      if (!ptwForm.isinAciklamasi.trim()) errors.push(language === 'ru' ? 'Описание работы обязательно.' : 'İşin açıklaması zorunludur.');
+      if (!ptwForm.calismaAlani.trim()) errors.push(language === 'ru' ? 'Зона выполнения работ обязательна.' : 'Çalışma alanı zorunludur.');
+      if (!ptwForm.yapilacakIs.trim()) errors.push(language === 'ru' ? 'Планируемая работа обязательна.' : 'Yapılacak iş zorunludur.');
+    }
+    return errors;
+  };
+
+  const syncPtwFromApi = async (id: string) => {
+    const row = await apiRequest<PtwApiRecord>(`/api/ptw/${id}`);
+    mapPtwApiToForm(row);
+  };
+
+  const savePtwCurrentTab = async (tab: PtwTabKey, forceStatus?: PtwStatus): Promise<string | null> => {
+    setPtwFeedback(null);
+    const validationErrors = validatePtwByTab(tab);
+    if (validationErrors.length > 0) {
+      setPtwFeedback({ type: 'error', text: validationErrors[0] });
+      return null;
+    }
+    try {
+      setPtwSaving(true);
+      const payload = buildPtwPayload();
+      if (forceStatus) {
+        payload.status = forceStatus;
+      }
+      const result = ptwRecordId
+        ? await apiRequest<PtwApiRecord>(`/api/ptw/${ptwRecordId}`, {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+          })
+        : await apiRequest<PtwApiRecord>('/api/ptw', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+      mapPtwApiToForm(result);
+      await syncPtwFromApi(result.id);
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Сохранено успешно.' : 'Başarıyla kaydedildi.' });
+      setPtwLastSavedAt(new Date().toISOString());
+      return result.id;
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      return null;
+    } finally {
+      setPtwSaving(false);
+    }
+  };
+
+  const onSavePtwDraft = async () => {
+    await savePtwCurrentTab(activePtwTab, 'Taslak');
+  };
+
+  const onSubmitPtwApproval = async () => {
+    const savedId = await savePtwCurrentTab(activePtwTab);
+    const id = savedId ?? ptwRecordId;
+    if (!id) {
+      return;
+    }
+    try {
+      setPtwSaving(true);
+      const row = await apiRequest<PtwApiRecord>(`/api/ptw/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: 'Onay Bekliyor' })
+      });
+      mapPtwApiToForm(row);
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Отправлено на согласование.' : 'Onaya gönderildi.' });
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    } finally {
+      setPtwSaving(false);
+    }
+  };
+
+  const onClosePtw = async () => {
+    const validationErrors = validatePtwByTab('kapanis');
+    if (validationErrors.length > 0) {
+      setPtwFeedback({ type: 'error', text: validationErrors[0] });
+      return;
+    }
+    const savedId = ptwRecordId ?? (await savePtwCurrentTab('kapanis'));
+    if (!savedId) {
+      return;
+    }
+    try {
+      setPtwSaving(true);
+      const row = await apiRequest<PtwApiRecord>(`/api/ptw/${savedId}/close`, {
+        method: 'POST',
+        body: JSON.stringify({
+          closedBy: ptwForm.kapatan || ptwForm.yetkiliOnaylayan || 'system',
+          closureRemarks: ptwForm.kapanisAciklama,
+          closedAt: toIso(ptwForm.kapanisTarihi),
+          workCompleted: ptwForm.isTamamlandi,
+          areaSafe: ptwForm.alanGuvenli,
+          materialsCollected: ptwForm.malzemelerToplandi,
+          ptwClosed: ptwForm.ptwKapatildi
+        })
+      });
+      mapPtwApiToForm(row);
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Наряд-допуск закрыт.' : 'PTW kapatıldı.' });
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    } finally {
+      setPtwSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthorizedViewer) {
+      return;
+    }
+
+    const loadLatestPtw = async () => {
+      try {
+        const rows = await apiRequest<PtwApiRecord[]>('/api/ptw');
+        if (rows.length > 0) {
+          mapPtwApiToForm(rows[0]);
+        }
+      } catch {
+        // Keep local form if PTW API is unavailable.
+      }
+    };
+
+    void loadLatestPtw();
+  }, [isAuthorizedViewer]);
+
+  const downloadFileFromResponse = async (url: string, fileName: string) => {
+    const response = await fetch(`${apiBaseUrl}${url}`);
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(blobUrl);
+  };
+
+  const ensurePtwIdOrFail = () => {
+    if (!ptwRecordId) {
+      setPtwFeedback({ type: 'error', text: language === 'ru' ? 'Сначала сохраните форму.' : 'Önce formu kaydedin.' });
+      return null;
+    }
+    return ptwRecordId;
+  };
+
+  const onExportPtwPdf = async () => {
+    const id = ensurePtwIdOrFail();
+    if (!id) return;
+    try {
+      await downloadFileFromResponse(`/api/ptw/${id}/export/pdf`, `${ptwForm.ptwNo}.pdf`);
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    }
+  };
+
+  const onExportPtwDocx = async () => {
+    const id = ensurePtwIdOrFail();
+    if (!id) return;
+    try {
+      await downloadFileFromResponse(`/api/ptw/${id}/export/docx`, `${ptwForm.ptwNo}.docx`);
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    }
+  };
+
+  const onExportPtwActionCsv = async () => {
+    const id = ensurePtwIdOrFail();
+    if (!id) return;
+    try {
+      await downloadFileFromResponse(`/api/ptw/${id}/export/action-csv`, `${ptwForm.ptwNo}-actions.csv`);
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    }
+  };
+
+  const onExportPtwFullCsv = async () => {
+    const id = ensurePtwIdOrFail();
+    if (!id) return;
+    try {
+      await downloadFileFromResponse(`/api/ptw/${id}/export/full-csv`, `${ptwForm.ptwNo}-full.csv`);
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    }
+  };
+
+  const onPrintPtw = () => {
+    const id = ensurePtwIdOrFail();
+    if (!id) return;
+    window.open(`${apiBaseUrl}/api/ptw/${id}/print`, '_blank');
+  };
+
+  const onEmailPtwSummary = async () => {
+    const id = ensurePtwIdOrFail();
+    if (!id) return;
+    const to = ptwEmailTo.trim();
+    if (!to) {
+      setPtwFeedback({ type: 'error', text: language === 'ru' ? 'Введите email получателя.' : 'Alıcı e-posta adresi girin.' });
+      return;
+    }
+    try {
+      await apiRequest<{ accepted: boolean }>(`/api/ptw/email-summary`, {
+        method: 'POST',
+        body: JSON.stringify({
+          ptwId: id,
+          to,
+          subject: `${ptwForm.ptwNo} - ${language === 'ru' ? 'Сводный отчет PTW' : 'PTW Özet Raporu'}`
+        })
+      });
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Отчёт отправлен по электронной почте.' : 'Rapor e-posta ile gönderildi.' });
+    } catch (error) {
+      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+    }
+  };
+
+  const onDownloadAllAttachments = () => {
+    const files = ptwEkler.filter((file) => !!file.fileUrl);
+    if (files.length === 0) {
+      setPtwFeedback({ type: 'error', text: language === 'ru' ? 'Скачивать нечего.' : 'İndirilecek ek bulunamadı.' });
+      return;
+    }
+    files.forEach((file) => {
+      const link = document.createElement('a');
+      link.href = file.fileUrl;
+      link.download = file.dosyaAdi;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    });
+    setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Вложения загружаются.' : 'Ekler indiriliyor.' });
+  };
+
+  const deletePtwAttachment = (index: number) => {
+    setPtwEkler((prev) => prev.filter((_, fileIndex) => fileIndex !== index));
+  };
+
+  const uploadPtwFiles = async (tip: string, files: FileList | null) => {
+    if (!files || files.length === 0) {
+      return;
+    }
+    const uploaded: PtwAttachment[] = [];
+    for (const file of Array.from(files)) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', ptwAttachmentTypeByLabel[tip] ?? 'OTHER');
+      const response = await fetch(`${apiBaseUrl}/api/uploads/ptw-attachment`, {
+        method: 'POST',
+        body: formData
+      });
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+      const payload = (await response.json()) as {
+        type: PtwAttachmentApiType;
+        fileName: string;
+        fileType: string;
+        fileUrl: string;
+      };
+      uploaded.push({
+        type: payload.type,
+        tip: ptwAttachmentLabelByType[payload.type] ?? tip,
+        dosyaAdi: payload.fileName,
+        fileType: payload.fileType,
+        fileUrl: `${apiBaseUrl}${payload.fileUrl}`
+      });
+    }
+    setPtwEkler((prev) => [...prev, ...uploaded]);
   };
 
   const resetPtw = () => {
@@ -12194,6 +12778,9 @@ export function App() {
                     </select>
                   </label>
                 </div>
+                <div className="actions">
+                  <button type="button" onClick={() => void savePtwCurrentTab('kayit')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button>
+                </div>
               </section>
             ) : null}
 
@@ -12206,6 +12793,9 @@ export function App() {
 
                   <label>{localizeText('HSE Sorumlusu', language)}<input value={ptwForm.hseSorumlusu} onChange={(event) => setPtwForm((prev) => ({ ...prev, hseSorumlusu: event.target.value }))} /></label>
                   <label>{localizeText('Yetkili Onaylayan', language)}<input value={ptwForm.yetkiliOnaylayan} onChange={(event) => setPtwForm((prev) => ({ ...prev, yetkiliOnaylayan: event.target.value }))} /></label>
+                </div>
+                <div className="actions">
+                  <button type="button" onClick={() => void savePtwCurrentTab('sorumlular')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button>
                 </div>
               </section>
             ) : null}
@@ -12236,6 +12826,7 @@ export function App() {
                   </tbody>
                 </table>
                 <div className="actions"><button type="button" onClick={addPtwTeamMember}>{localizeText('Yeni Personel Ekle', language)}</button></div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('ekip')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12253,6 +12844,7 @@ export function App() {
                   <label>{localizeText('Bitiş Tarihi', language)}<input type="date" value={ptwForm.bitisTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, bitisTarihi: event.target.value }))} /></label>
                   <label>{localizeText('Bitiş Saati', language)}<input type="time" value={ptwForm.bitisSaati} onChange={(event) => setPtwForm((prev) => ({ ...prev, bitisSaati: event.target.value }))} /></label>
                 </div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('is-bilgileri')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12271,6 +12863,7 @@ export function App() {
                     </label>
                   ))}
                 </div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('riskler')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12289,6 +12882,7 @@ export function App() {
                     </label>
                   ))}
                 </div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('guvenlik-sistemleri')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12307,6 +12901,7 @@ export function App() {
                     </label>
                   ))}
                 </div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('ekipman')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12338,6 +12933,7 @@ export function App() {
                   </tbody>
                 </table>
                 <div className="actions"><button type="button" onClick={addPtwControl}>Kontrol Satırı Ekle</button></div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('on-kontroller')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12371,6 +12967,7 @@ export function App() {
                   </tbody>
                 </table>
                 <div className="actions"><button type="button" onClick={addPtwPrecaution}>Tedbir Ekle</button></div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('tedbirler')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12378,6 +12975,7 @@ export function App() {
               <section className="panel">
                 <h2>{ptwCopy.tabSpecial}</h2>
                 <textarea rows={8} value={ptwForm.ozelSartlar} onChange={(event) => setPtwForm((prev) => ({ ...prev, ozelSartlar: event.target.value }))} />
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('ozel-sartlar')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12392,6 +12990,7 @@ export function App() {
                   <label>Dijital İmza<input value={ptwForm.dijitalImza} onChange={(event) => setPtwForm((prev) => ({ ...prev, dijitalImza: event.target.value }))} /></label>
                   <label>Tarih<input type="date" value={ptwForm.onayTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, onayTarihi: event.target.value }))} /></label>
                 </div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('onaylar')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12423,6 +13022,7 @@ export function App() {
                   </tbody>
                 </table>
                 <div className="actions"><button type="button" onClick={addPtwDailyLog}>Günlük Kayıt Ekle</button></div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('gunluk-takip')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12450,6 +13050,7 @@ export function App() {
                   </tbody>
                 </table>
                 <div className="actions"><button type="button" onClick={addPtwTeamChange}>Ekip Değişikliği Ekle</button></div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('ekip-degisiklik')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12465,6 +13066,7 @@ export function App() {
                   <label>Tarih<input type="date" value={ptwForm.kapanisTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapanisTarihi: event.target.value }))} /></label>
                   <label className="full-row">Açıklama<textarea rows={4} value={ptwForm.kapanisAciklama} onChange={(event) => setPtwForm((prev) => ({ ...prev, kapanisAciklama: event.target.value }))} /></label>
                 </div>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('kapanis')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
@@ -12475,7 +13077,18 @@ export function App() {
                   {ptwDosyaTipleri.map((tip) => (
                     <label key={tip}>
                       {tip}
-                      <input type="file" multiple onChange={(event) => addPtwAttachments(tip, event.target.files)} />
+                      <input
+                        type="file"
+                        multiple
+                        onChange={async (event) => {
+                          try {
+                            await uploadPtwFiles(tip, event.target.files);
+                            setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Вложение загружено.' : 'Ek başarıyla yüklendi.' });
+                          } catch (error) {
+                            setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+                          }
+                        }}
+                      />
                     </label>
                   ))}
                 </div>
@@ -12491,7 +13104,21 @@ export function App() {
                       ptwEkler.map((row, index) => (
                         <tr key={`ptw-attachment-${index}`}>
                           <td>{row.tip}</td>
-                          <td>{row.dosyaAdi}</td>
+                          <td>
+                            <div className="table-actions compact">
+                              <span>{row.dosyaAdi}</span>
+                              <button type="button" className="secondary" onClick={() => window.open(row.fileUrl, '_blank')}>{language === 'ru' ? 'Просмотр' : 'Görüntüle'}</button>
+                              <button type="button" className="secondary" onClick={() => {
+                                const link = document.createElement('a');
+                                link.href = row.fileUrl;
+                                link.download = row.dosyaAdi;
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+                              }}>{language === 'ru' ? 'Скачать' : 'İndir'}</button>
+                              <button type="button" className="danger" onClick={() => deletePtwAttachment(index)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
+                            </div>
+                          </td>
                         </tr>
                       ))
                     ) : (
@@ -12501,24 +13128,36 @@ export function App() {
                     )}
                   </tbody>
                 </table>
+                <div className="actions"><button type="button" onClick={() => void savePtwCurrentTab('dosya-ekleri')} disabled={ptwSaving}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button></div>
               </section>
             ) : null}
 
             <section className="panel">
               <h2>{ptwCopy.reportActions}</h2>
+              {ptwFeedback ? <p className="message" style={{ color: ptwFeedback.type === 'error' ? '#b91c1c' : '#166534' }}>{ptwFeedback.text}</p> : null}
+              {ptwLastSavedAt ? <p className="message">{language === 'ru' ? `Последнее сохранение: ${new Date(ptwLastSavedAt).toLocaleString('ru-RU')}` : `Son kayıt: ${new Date(ptwLastSavedAt).toLocaleString('tr-TR')}`}</p> : null}
+              <div className="form-grid" style={{ marginBottom: 12 }}>
+                <label>
+                  {language === 'ru' ? 'Email для отчета' : 'Rapor E-posta Adresi'}
+                  <input value={ptwEmailTo} onChange={(event) => setPtwEmailTo(event.target.value)} placeholder="name@company.com" />
+                </label>
+              </div>
+              {language === 'ru' ? (
+                <p className="message">{ptwStatusFlow.map((status) => ptwStatusFlowRuLabel[status]).join(' -> ')} | {language === 'ru' ? 'Текущий статус' : 'Mevcut Durum'}: {ptwStatusRuLabel[ptwForm.durum]}</p>
+              ) : null}
               <div className="report-action-buttons">
-                <button type="button">{ptwCopy.summaryReport}</button>
-                <button type="button">{ptwCopy.exportDocx}</button>
-                <button type="button">{ptwCopy.exportPdf}</button>
-                <button type="button">{ptwCopy.exportActionCsv}</button>
-                <button type="button">{ptwCopy.exportFullCsv}</button>
-                <button type="button">{ptwCopy.sendMail}</button>
-                <button type="button">{ptwCopy.printPdf}</button>
-                <button type="button">{ptwCopy.downloadAttachments}</button>
+                <button type="button" onClick={() => void onExportPtwPdf()}>{ptwCopy.summaryReport}</button>
+                <button type="button" onClick={() => void onExportPtwDocx()}>{ptwCopy.exportDocx}</button>
+                <button type="button" onClick={() => void onExportPtwPdf()}>{ptwCopy.exportPdf}</button>
+                <button type="button" onClick={() => void onExportPtwActionCsv()}>{ptwCopy.exportActionCsv}</button>
+                <button type="button" onClick={() => void onExportPtwFullCsv()}>{ptwCopy.exportFullCsv}</button>
+                <button type="button" onClick={() => void onEmailPtwSummary()}>{ptwCopy.sendMail}</button>
+                <button type="button" onClick={onPrintPtw}>{ptwCopy.printPdf}</button>
+                <button type="button" onClick={onDownloadAllAttachments}>{ptwCopy.downloadAttachments}</button>
                 <button type="button" onClick={resetPtw}>{ptwCopy.reset}</button>
-                <button type="button">{ptwCopy.saveDraft}</button>
-                <button type="button">{ptwCopy.submitApproval}</button>
-                <button type="button">{ptwCopy.closePtw}</button>
+                <button type="button" onClick={() => void onSavePtwDraft()} disabled={ptwSaving}>{ptwCopy.saveDraft}</button>
+                <button type="button" onClick={() => void onSubmitPtwApproval()} disabled={ptwSaving}>{ptwCopy.submitApproval}</button>
+                <button type="button" onClick={() => void onClosePtw()} disabled={ptwSaving}>{ptwCopy.closePtw}</button>
               </div>
             </section>
           </>
