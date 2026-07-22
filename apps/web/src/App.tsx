@@ -4056,6 +4056,51 @@ export function App() {
     nameSignature: language === 'ru' ? 'ФИО / Подпись' : 'Ad Soyad / İmza'
   };
 
+  const riskCopy = {
+    formTitle: language === 'ru' ? 'Форма оценки профессиональных рисков' : 'Risk Değerlendirmeleri Veri Girişi',
+    introLine1: language === 'ru'
+      ? 'Оценка риска — показатель уровня риска, автоматически рассчитываемый как произведение вероятности и тяжести последствий.'
+      : 'Risk Skoru: Tehlikenin ciddiyetini gösteren puandır ve Olasılık x Şiddet ile otomatik hesaplanır.',
+    introLine2: language === 'ru'
+      ? 'Остаточный риск — уровень риска после внедрения мероприятий по управлению рисками, автоматически рассчитываемый как произведение остаточной вероятности и остаточной тяжести последствий.'
+      : 'Kalan Risk Puanı: Kontroller uygulandıktan sonra kalan risk seviyesidir ve Kalan Olasılık x Kalan Şiddet ile hesaplanır.',
+    riskId: language === 'ru' ? '№ оценки риска' : 'Risk Kimliği',
+    initialRiskScore: language === 'ru' ? 'Уровень риска' : 'Başlangıç Risk Puanı',
+    residualRiskScore: language === 'ru' ? 'Остаточный риск' : 'Kalan Risk Puanı',
+    project: language === 'ru' ? 'Проект' : 'Proje',
+    departmentActivity: language === 'ru' ? 'Подразделение / Вид деятельности' : 'Departman / Faaliyet',
+    departmentActivityPlaceholder: language === 'ru' ? 'Пример: Электромонтаж / оконцевание кабеля' : 'Orn: Elektrik / Kablo sonlandırma',
+    assessmentDate: language === 'ru' ? 'Дата оценки' : 'Değerlendirme Tarihi',
+    targetDate: language === 'ru' ? 'Плановая дата устранения' : 'Hedef Tamamlanma Tarihi',
+    hazard: language === 'ru' ? 'Опасность' : 'Tehlike',
+    hazardPlaceholder: language === 'ru' ? 'Кратко и четко опишите опасность' : 'Tehlikeyi kısa ve net yazın',
+    potentialConsequence: language === 'ru' ? 'Возможные последствия' : 'Olası Sonuç',
+    existingControls: language === 'ru' ? 'Существующие меры контроля' : 'Mevcut Kontroller',
+    recommendedControls: language === 'ru' ? 'Рекомендуемые мероприятия' : 'Önerilen Kontrol Önlemleri',
+    likelihood: language === 'ru' ? 'Вероятность (1-5)' : 'Olasılık (1-5)',
+    severity: language === 'ru' ? 'Тяжесть последствий (1-5)' : 'Şiddet (1-5)',
+    residualLikelihood: language === 'ru' ? 'Остаточная вероятность (1-5)' : 'Kalan Olasılık (1-5)',
+    residualSeverity: language === 'ru' ? 'Остаточная тяжесть (1-5)' : 'Kalan Şiddet (1-5)',
+    responsiblePerson: language === 'ru' ? 'Ответственный' : 'Sorumlu Kişi',
+    status: language === 'ru' ? 'Статус' : 'Durum',
+    attachments: language === 'ru' ? 'Вложения' : 'Ekler',
+    photos: language === 'ru' ? 'Фотографии' : 'Fotoğraflar',
+    notes: language === 'ru' ? 'Примечания' : 'Notlar',
+    save: language === 'ru' ? 'Сохранить оценку риска' : 'Kaydet',
+    tableTitle: language === 'ru' ? 'Реестр оценок рисков' : 'Risk Değerlendirmeleri Kayıtlar',
+    activity: language === 'ru' ? 'Вид деятельности' : 'Faaliyet',
+    detailTitle: language === 'ru' ? 'Карточка оценки риска' : 'Risk Detayı',
+    initialLevel: language === 'ru' ? 'Начальный уровень' : 'Başlangıç Seviye',
+    residualLevel: language === 'ru' ? 'Остаточный уровень' : 'Kalan Seviye',
+    due: language === 'ru' ? 'Срок' : 'Termin',
+    hazardAndConsequence: language === 'ru' ? 'Опасность и последствия' : 'Tehlike ve Sonuç',
+    controlPlan: language === 'ru' ? 'План мероприятий' : 'Kontrol Planı',
+    scores: language === 'ru' ? 'Показатели риска' : 'Puanlar',
+    responsibilityAndDue: language === 'ru' ? 'Ответственность и срок' : 'Sorumluluk ve Termin',
+    noAttachment: language === 'ru' ? 'Вложения отсутствуют.' : 'Ek bulunmuyor.',
+    noPhoto: language === 'ru' ? 'Фотографии отсутствуют.' : 'Fotoğraf bulunmuyor.'
+  };
+
   const locationTypesLocalized =
     language === 'ru'
       ? [
@@ -10214,6 +10259,12 @@ export function App() {
       : language === 'en'
         ? 'Project performance and executive summary.'
         : 'Proje performansı ve yönetici özeti.';
+  } else if (activeModule === 'risk-assessments') {
+    headerSubtitle = language === 'ru'
+      ? 'Ввод данных и аналитика оценки рисков'
+      : language === 'en'
+        ? 'Risk assessment data entry and analytics.'
+        : 'Risk değerlendirme veri girişi ve analitiği.';
   } else if (activeModule === 'reports') {
     headerSubtitle = language === 'en' ? 'Corporate report center and automated output generation.' : 'Kurumsal raporlama merkezi ve otomatik çıktı üretimi.';
   } else if (activeModule === 'projects') {
@@ -14179,29 +14230,30 @@ export function App() {
         {activeModule === 'risk-assessments' ? (
           <>
             <section className="panel">
-              <h2>Risk Değerlendirmeleri Veri Girişi</h2>
+              <h2>{riskCopy.formTitle}</h2>
               <p className="inline-hint">
-                Risk Skoru: Tehlikenin ciddiyetini gösteren puandır ve Olasılık x Şiddet ile otomatik hesaplanır.
-                Kalan Risk Puanı: Kontroller uygulandıktan sonra kalan risk seviyesidir ve Kalan Olasılık x Kalan Şiddet ile hesaplanır.
+                {riskCopy.introLine1}
+                {' '}
+                {riskCopy.introLine2}
               </p>
               <div className="risk-meta-row">
                 <div className="risk-meta-card">
-                  <span>Risk Kimliği</span>
+                  <span>{riskCopy.riskId}</span>
                   <strong>{nextRiskId}</strong>
                 </div>
                 <div className="risk-meta-card">
-                  <span>Başlangıç Risk Puanı</span>
+                  <span>{riskCopy.initialRiskScore}</span>
                   <strong>{riskForm.likelihood * riskForm.severity}</strong>
                 </div>
                 <div className="risk-meta-card">
-                  <span>Kalan Risk Puanı</span>
+                  <span>{riskCopy.residualRiskScore}</span>
                   <strong>{riskForm.residualLikelihood * riskForm.residualSeverity}</strong>
                 </div>
               </div>
 
               <div className="risk-form-grid">
                 <label>
-                  Proje
+                  {riskCopy.project}
                   <select
                     value={riskForm.projectId}
                     onChange={(event) => setRiskForm((prev) => ({ ...prev, projectId: event.target.value }))}
@@ -14213,16 +14265,16 @@ export function App() {
                 </label>
 
                 <label>
-                  Departman / Faaliyet
+                  {riskCopy.departmentActivity}
                   <input
                     value={riskForm.departmentActivity}
                     onChange={(event) => setRiskForm((prev) => ({ ...prev, departmentActivity: event.target.value }))}
-                    placeholder="Orn: Elektrik / Kablo sonlandırma"
+                    placeholder={riskCopy.departmentActivityPlaceholder}
                   />
                 </label>
 
                 <label>
-                  Değerlendirme Tarihi
+                  {riskCopy.assessmentDate}
                   <input
                     type="date"
                     value={riskForm.assessmentDate}
@@ -14231,7 +14283,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Hedef Tamamlanma Tarihi
+                  {riskCopy.targetDate}
                   <input
                     type="date"
                     value={riskForm.targetCompletionDate}
@@ -14240,17 +14292,17 @@ export function App() {
                 </label>
 
                 <label className="full-row">
-                  Tehlike
+                  {riskCopy.hazard}
                   <textarea
                     rows={2}
                     value={riskForm.hazard}
                     onChange={(event) => setRiskForm((prev) => ({ ...prev, hazard: event.target.value }))}
-                    placeholder="Tehlikeyi kısa ve net yazın"
+                    placeholder={riskCopy.hazardPlaceholder}
                   />
                 </label>
 
                 <label className="full-row">
-                  Olası Sonuç
+                  {riskCopy.potentialConsequence}
                   <textarea
                     rows={2}
                     value={riskForm.potentialConsequence}
@@ -14259,7 +14311,7 @@ export function App() {
                 </label>
 
                 <label className="full-row">
-                  Mevcut Kontroller
+                  {riskCopy.existingControls}
                   <textarea
                     rows={2}
                     value={riskForm.existingControls}
@@ -14268,7 +14320,7 @@ export function App() {
                 </label>
 
                 <label className="full-row">
-                  Önerilen Kontrol Önlemleri
+                  {riskCopy.recommendedControls}
                   <textarea
                     rows={2}
                     value={riskForm.recommendedControls}
@@ -14277,7 +14329,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Olasılık (1-5)
+                  {riskCopy.likelihood}
                   <input
                     type="number"
                     min={1}
@@ -14288,7 +14340,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Şiddet (1-5)
+                  {riskCopy.severity}
                   <input
                     type="number"
                     min={1}
@@ -14299,7 +14351,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Kalan Olasılık (1-5)
+                  {riskCopy.residualLikelihood}
                   <input
                     type="number"
                     min={1}
@@ -14310,7 +14362,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Kalan Şiddet (1-5)
+                  {riskCopy.residualSeverity}
                   <input
                     type="number"
                     min={1}
@@ -14321,7 +14373,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Sorumlu Kişi
+                  {riskCopy.responsiblePerson}
                   <input
                     value={riskForm.responsiblePerson}
                     onChange={(event) => setRiskForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))}
@@ -14329,7 +14381,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Durum
+                  {riskCopy.status}
                   <select
                     value={riskForm.status}
                     onChange={(event) => setRiskForm((prev) => ({ ...prev, status: event.target.value as Status }))}
@@ -14341,7 +14393,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Ekler
+                  {riskCopy.attachments}
                   <input
                     type="file"
                     multiple
@@ -14353,7 +14405,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Fotoğraflar
+                  {riskCopy.photos}
                   <input
                     type="file"
                     multiple
@@ -14366,7 +14418,7 @@ export function App() {
                 </label>
 
                 <label className="full-row">
-                  Notlar
+                  {riskCopy.notes}
                   <textarea
                     rows={3}
                     value={riskForm.notes}
@@ -14375,24 +14427,24 @@ export function App() {
                 </label>
 
                 <div className="full-row actions">
-                  <button type="button" onClick={saveRiskEntry}>{t.save}</button>
+                  <button type="button" onClick={saveRiskEntry}>{riskCopy.save}</button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>Risk Değerlendirmeleri Kayıtlar</h2>
+              <h2>{riskCopy.tableTitle}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>Risk Kimliği</th>
-                    <th>Proje</th>
-                    <th>Faaliyet</th>
-                    <th>Tehlike</th>
-                    <th>Başlangıç Risk Puanı</th>
-                    <th>Kalan Risk Puanı</th>
-                    <th>Durum</th>
-                    <th>Sorumlu Kişi</th>
+                    <th>{riskCopy.riskId}</th>
+                    <th>{riskCopy.project}</th>
+                    <th>{riskCopy.activity}</th>
+                    <th>{riskCopy.hazard}</th>
+                    <th>{riskCopy.initialRiskScore}</th>
+                    <th>{riskCopy.residualRiskScore}</th>
+                    <th>{riskCopy.status}</th>
+                    <th>{riskCopy.responsiblePerson}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14422,7 +14474,7 @@ export function App() {
               <section className="panel risk-detail-panel">
                 <div className="risk-detail-head">
                   <div>
-                    <h2>Risk Detayı - {selectedRiskRecord.riskId}</h2>
+                    <h2>{riskCopy.detailTitle} - {selectedRiskRecord.riskId}</h2>
                     <p className="risk-detail-subtitle">
                       {projectCatalog.find((project) => project.id === selectedRiskRecord.projectId)?.name ?? selectedRiskRecord.projectId} - {selectedRiskRecord.departmentActivity}
                     </p>
@@ -14430,59 +14482,59 @@ export function App() {
                   <div className="risk-detail-badges">
                     <span className={`status-badge ${getStatusBadgeClass(selectedRiskRecord.status)}`}>{localizeStatus(selectedRiskRecord.status)}</span>
                     <span className={`risk-band-badge ${getRiskBand(selectedRiskRecord.initialRiskScore).className}`}>
-                      Başlangıç Seviye: {getRiskBand(selectedRiskRecord.initialRiskScore).label} ({getRiskBand(selectedRiskRecord.initialRiskScore).range})
+                      {riskCopy.initialLevel}: {getRiskBand(selectedRiskRecord.initialRiskScore).label} ({getRiskBand(selectedRiskRecord.initialRiskScore).range})
                     </span>
                     <span className={`risk-band-badge ${getRiskBand(selectedRiskRecord.residualRiskScore).className}`}>
-                      Kalan Seviye: {getRiskBand(selectedRiskRecord.residualRiskScore).label} ({getRiskBand(selectedRiskRecord.residualRiskScore).range})
+                      {riskCopy.residualLevel}: {getRiskBand(selectedRiskRecord.residualRiskScore).label} ({getRiskBand(selectedRiskRecord.residualRiskScore).range})
                     </span>
                   </div>
                 </div>
 
                 <div className="risk-score-strip">
                   <article>
-                    <span>Başlangıç Risk Puanı</span>
+                    <span>{riskCopy.initialRiskScore}</span>
                     <strong>{selectedRiskRecord.initialRiskScore}</strong>
                     <small>{selectedRiskRecord.likelihood} x {selectedRiskRecord.severity}</small>
                   </article>
                   <article>
-                    <span>Kalan Risk Puanı</span>
+                    <span>{riskCopy.residualRiskScore}</span>
                     <strong>{selectedRiskRecord.residualRiskScore}</strong>
                     <small>{selectedRiskRecord.residualLikelihood} x {selectedRiskRecord.residualSeverity}</small>
                   </article>
                   <article>
-                    <span>Sorumlu Kişi</span>
+                    <span>{riskCopy.responsiblePerson}</span>
                     <strong>{selectedRiskRecord.responsiblePerson}</strong>
-                    <small>Termin: {selectedRiskRecord.targetCompletionDate}</small>
+                    <small>{riskCopy.due}: {selectedRiskRecord.targetCompletionDate}</small>
                   </article>
                 </div>
 
                 <div className="risk-detail-grid">
                   <article>
-                    <h3>Tehlike ve Sonuç</h3>
-                    <p><strong>Tehlike:</strong> {selectedRiskRecord.hazard}</p>
-                    <p><strong>Olası Sonuç:</strong> {selectedRiskRecord.potentialConsequence || '-'}</p>
+                    <h3>{riskCopy.hazardAndConsequence}</h3>
+                    <p><strong>{riskCopy.hazard}:</strong> {selectedRiskRecord.hazard}</p>
+                    <p><strong>{riskCopy.potentialConsequence}:</strong> {selectedRiskRecord.potentialConsequence || '-'}</p>
                   </article>
                   <article>
-                    <h3>Kontrol Planı</h3>
-                    <p><strong>Mevcut Kontroller:</strong> {selectedRiskRecord.existingControls || '-'}</p>
-                    <p><strong>Önerilen Kontroller:</strong> {selectedRiskRecord.recommendedControls || '-'}</p>
+                    <h3>{riskCopy.controlPlan}</h3>
+                    <p><strong>{riskCopy.existingControls}:</strong> {selectedRiskRecord.existingControls || '-'}</p>
+                    <p><strong>{riskCopy.recommendedControls}:</strong> {selectedRiskRecord.recommendedControls || '-'}</p>
                   </article>
                   <article>
-                    <h3>Puanlar</h3>
-                    <p><strong>Başlangıç:</strong> {selectedRiskRecord.likelihood} x {selectedRiskRecord.severity} = {selectedRiskRecord.initialRiskScore}</p>
-                    <p><strong>Kalan:</strong> {selectedRiskRecord.residualLikelihood} x {selectedRiskRecord.residualSeverity} = {selectedRiskRecord.residualRiskScore}</p>
+                    <h3>{riskCopy.scores}</h3>
+                    <p><strong>{riskCopy.initialRiskScore}:</strong> {selectedRiskRecord.likelihood} x {selectedRiskRecord.severity} = {selectedRiskRecord.initialRiskScore}</p>
+                    <p><strong>{riskCopy.residualRiskScore}:</strong> {selectedRiskRecord.residualLikelihood} x {selectedRiskRecord.residualSeverity} = {selectedRiskRecord.residualRiskScore}</p>
                   </article>
                   <article>
-                    <h3>Sorumluluk ve Termin</h3>
-                    <p><strong>Sorumlu:</strong> {selectedRiskRecord.responsiblePerson}</p>
-                    <p><strong>Termin:</strong> {selectedRiskRecord.targetCompletionDate}</p>
-                    <p><strong>Durum:</strong> {localizeStatus(selectedRiskRecord.status)}</p>
+                    <h3>{riskCopy.responsibilityAndDue}</h3>
+                    <p><strong>{riskCopy.responsiblePerson}:</strong> {selectedRiskRecord.responsiblePerson}</p>
+                    <p><strong>{riskCopy.due}:</strong> {selectedRiskRecord.targetCompletionDate}</p>
+                    <p><strong>{riskCopy.status}:</strong> {localizeStatus(selectedRiskRecord.status)}</p>
                   </article>
                 </div>
 
                 <div className="risk-detail-files">
                   <div>
-                    <h3>Ekler</h3>
+                    <h3>{riskCopy.attachments}</h3>
                     {selectedRiskRecord.attachments.length > 0 ? (
                       <ul>
                         {selectedRiskRecord.attachments.map((fileName) => (
@@ -14490,11 +14542,11 @@ export function App() {
                         ))}
                       </ul>
                     ) : (
-                      <p>Ek bulunmuyor.</p>
+                      <p>{riskCopy.noAttachment}</p>
                     )}
                   </div>
                   <div>
-                    <h3>Fotoğraflar</h3>
+                    <h3>{riskCopy.photos}</h3>
                     {selectedRiskRecord.photos.length > 0 ? (
                       <ul>
                         {selectedRiskRecord.photos.map((fileName) => (
@@ -14502,13 +14554,13 @@ export function App() {
                         ))}
                       </ul>
                     ) : (
-                      <p>Fotoğraf bulunmuyor.</p>
+                      <p>{riskCopy.noPhoto}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <h3>Notlar</h3>
+                  <h3>{riskCopy.notes}</h3>
                   <p>{selectedRiskRecord.notes || '-'}</p>
                 </div>
               </section>
