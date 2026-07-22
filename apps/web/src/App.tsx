@@ -5954,31 +5954,31 @@ export function App() {
 
   const emergencyTypeLabel = (value: EmergencyType) => {
     const map: Record<EmergencyType, string> = {
-      YANGIN: 'Yangın',
-      TAHLIYE: 'Tahliye',
-      ILK_YARDIM: 'İlk Yardım',
-      KIMYASAL_SIZINTI: 'Kimyasal Sızıntı',
-      KURTARMA: 'Kurtarma',
-      DEPREM: 'Deprem',
-      DIGER: 'Diğer'
+      YANGIN: language === 'ru' ? 'Пожар' : 'Yangın',
+      TAHLIYE: language === 'ru' ? 'Эвакуация' : 'Tahliye',
+      ILK_YARDIM: language === 'ru' ? 'Первая помощь' : 'İlk Yardım',
+      KIMYASAL_SIZINTI: language === 'ru' ? 'Химический разлив' : 'Kimyasal Sızıntı',
+      KURTARMA: language === 'ru' ? 'Спасательные работы' : 'Kurtarma',
+      DEPREM: language === 'ru' ? 'Землетрясение' : 'Deprem',
+      DIGER: language === 'ru' ? 'Другое' : 'Diğer'
     };
     return map[value];
   };
 
   const emergencyResultLabel = (value: EmergencyDrillResult) => {
     const map: Record<EmergencyDrillResult, string> = {
-      BASARILI: 'Başarılı',
-      KISMEN_BASARILI: 'Kısmen Başarılı',
-      BASARISIZ: 'Başarısız'
+      BASARILI: language === 'ru' ? 'Успешно' : 'Başarılı',
+      KISMEN_BASARILI: language === 'ru' ? 'Частично успешно' : 'Kısmen Başarılı',
+      BASARISIZ: language === 'ru' ? 'Неуспешно' : 'Başarısız'
     };
     return map[value];
   };
 
   const emergencyStatusLabel = (value: EmergencyDrillStatus) => {
     const map: Record<EmergencyDrillStatus, string> = {
-      PLANLANDI: 'Planlandı',
-      TAMAMLANDI: 'Tamamlandı',
-      IPTAL_EDILDI: 'İptal Edildi'
+      PLANLANDI: language === 'ru' ? 'Запланировано' : 'Planlandı',
+      TAMAMLANDI: language === 'ru' ? 'Завершено' : 'Tamamlandı',
+      IPTAL_EDILDI: language === 'ru' ? 'Отменено' : 'İptal Edildi'
     };
     return map[value];
   };
@@ -13393,21 +13393,21 @@ export function App() {
         {activeModule === 'emergency-preparedness' ? (
           <>
             <section className="panel">
-              <h2>Acil Durum Hazırlık KPI</h2>
+              <h2>{language === 'ru' ? 'Показатели готовности к ЧС' : 'Acil Durum Hazırlık KPI'}</h2>
               <div className="equipment-kpi-grid">
-                <article className="equipment-kpi-card"><span>Toplam Acil Durum Tatbikatı</span><strong>{emergencySummary.totalDrills}</strong></article>
-                <article className="equipment-kpi-card"><span>Toplam Katılımcı</span><strong>{emergencySummary.totalParticipants}</strong></article>
-                <article className="equipment-kpi-card"><span>Açık İşlemler</span><strong>{emergencySummary.openActions}</strong></article>
-                <article className="equipment-kpi-card"><span>Kapalı İşlemler</span><strong>{emergencySummary.closedActions}</strong></article>
-                <article className="equipment-kpi-card"><span>Yaklaşan Tatbikatlar</span><strong>{emergencySummary.upcomingDrills}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего учений по ЧС' : 'Toplam Acil Durum Tatbikatı'}</span><strong>{emergencySummary.totalDrills}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего участников' : 'Toplam Katılımcı'}</span><strong>{emergencySummary.totalParticipants}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Открытые действия' : 'Açık İşlemler'}</span><strong>{emergencySummary.openActions}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Закрытые действия' : 'Kapalı İşlemler'}</span><strong>{emergencySummary.closedActions}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Ближайшие учения' : 'Yaklaşan Tatbikatlar'}</span><strong>{emergencySummary.upcomingDrills}</strong></article>
               </div>
             </section>
 
             <section className="panel">
-              <h2>Acil Durum Tatbikatı Performans Görselleştirmesi</h2>
+              <h2>{language === 'ru' ? 'Визуализация эффективности учений по ЧС' : 'Acil Durum Tatbikatı Performans Görselleştirmesi'}</h2>
               <div className="equipment-chart-grid">
                 <article className="chart-card">
-                  <strong>Tatbikat ve Eylem Performansı</strong>
+                  <strong>{language === 'ru' ? 'Эффективность учений и мероприятий' : 'Tatbikat ve Eylem Performansı'}</strong>
                   <DashboardChart
                     type="bar"
                     values={[
@@ -13417,11 +13417,11 @@ export function App() {
                       emergencySummary.closedActions
                     ]}
                     themeName="safety"
-                    xLabels={['Tamamlanan Tatbikat', 'Yaklaşan Tatbikat', 'Açık DÖF', 'Kapatılan DÖF']}
+                    xLabels={language === 'ru' ? ['Завершенные учения', 'Ближайшие учения', 'Открытые корректирующие действия', 'Закрытые корректирующие действия'] : ['Tamamlanan Tatbikat', 'Yaklaşan Tatbikat', 'Açık DÖF', 'Kapatılan DÖF']}
                   />
                 </article>
                 <article className="chart-card">
-                  <strong>Tatbikat Sonuç Dağılımı</strong>
+                  <strong>{language === 'ru' ? 'Распределение результатов учений' : 'Tatbikat Sonuç Dağılımı'}</strong>
                   <DashboardChart
                     type="donut"
                     values={[
@@ -13436,29 +13436,31 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>Acil Durum Hazırlık Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Ввод данных по готовности к ЧС' : 'Acil Durum Hazırlık Veri Girişi'}</h2>
               <p className="inline-hint">
-                Bu ekran acil durum tatbikat planı, müdahale hazırlığı ve düzeltici eylem takibini tek kayıtta yönetmek için tasarlanmıştır.
+                {language === 'ru'
+                  ? 'Этот экран предназначен для ведения единой записи по планированию учений, уровню готовности к реагированию и контролю корректирующих мероприятий.'
+                  : 'Bu ekran acil durum tatbikat planı, müdahale hazırlığı ve düzeltici eylem takibini tek kayıtta yönetmek için tasarlanmıştır.'}
               </p>
 
               <div className="risk-meta-row">
                 <div className="risk-meta-card">
-                  <span>Tatbikat Kimliği</span>
+                  <span>{language === 'ru' ? 'Идентификатор учения' : 'Tatbikat Kimliği'}</span>
                   <strong>{nextEmergencyDrillId}</strong>
                 </div>
                 <div className="risk-meta-card">
-                  <span>Açık İşlem</span>
+                  <span>{language === 'ru' ? 'Открыто действий' : 'Açık İşlem'}</span>
                   <strong>{emergencySummary.openActions}</strong>
                 </div>
                 <div className="risk-meta-card">
-                  <span>Yaklaşan Tatbikat</span>
+                  <span>{language === 'ru' ? 'Ближайшие учения' : 'Yaklaşan Tatbikat'}</span>
                   <strong>{emergencySummary.upcomingDrills}</strong>
                 </div>
               </div>
 
               <div className="equipment-form-grid">
                 <label>
-                  Proje
+                  {language === 'ru' ? 'Проект' : 'Proje'}
                   <select value={emergencyDrillForm.projectId} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
@@ -13467,35 +13469,35 @@ export function App() {
                 </label>
 
                 <label>
-                  Acil Durum Tatbikatı Kimliği (Otomatik)
+                  {language === 'ru' ? 'Идентификатор учения по ЧС (авто)' : 'Acil Durum Tatbikatı Kimliği (Otomatik)'}
                   <input value={nextEmergencyDrillId} disabled />
                 </label>
 
                 <label>
-                  Acil Durum Türü
+                  {language === 'ru' ? 'Тип ЧС' : 'Acil Durum Türü'}
                   <select value={emergencyDrillForm.emergencyType} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, emergencyType: event.target.value as EmergencyType }))}>
-                    <option value="YANGIN">Yangın</option>
-                    <option value="TAHLIYE">Tahliye</option>
-                    <option value="ILK_YARDIM">İlk Yardım</option>
-                    <option value="KIMYASAL_SIZINTI">Kimyasal Sızıntı</option>
-                    <option value="KURTARMA">Kurtarma</option>
-                    <option value="DEPREM">Deprem</option>
-                    <option value="DIGER">Diğer</option>
+                    <option value="YANGIN">{language === 'ru' ? 'Пожар' : 'Yangın'}</option>
+                    <option value="TAHLIYE">{language === 'ru' ? 'Эвакуация' : 'Tahliye'}</option>
+                    <option value="ILK_YARDIM">{language === 'ru' ? 'Первая помощь' : 'İlk Yardım'}</option>
+                    <option value="KIMYASAL_SIZINTI">{language === 'ru' ? 'Химический разлив' : 'Kimyasal Sızıntı'}</option>
+                    <option value="KURTARMA">{language === 'ru' ? 'Спасательные работы' : 'Kurtarma'}</option>
+                    <option value="DEPREM">{language === 'ru' ? 'Землетрясение' : 'Deprem'}</option>
+                    <option value="DIGER">{language === 'ru' ? 'Другое' : 'Diğer'}</option>
                   </select>
                 </label>
 
                 <label>
-                  Tatbikat Adı
+                  {language === 'ru' ? 'Наименование учения' : 'Tatbikat Adı'}
                   <input value={emergencyDrillForm.drillName} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, drillName: event.target.value }))} />
                 </label>
 
                 <label>
-                  Tatbikat Tarihi
+                  {language === 'ru' ? 'Дата учения' : 'Tatbikat Tarihi'}
                   <input type="date" value={emergencyDrillForm.drillDate} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, drillDate: event.target.value }))} />
                 </label>
 
                 <label>
-                  Katılımcı Sayısı
+                  {language === 'ru' ? 'Количество участников' : 'Katılımcı Sayısı'}
                   <input
                     type="number"
                     min={0}
@@ -13505,16 +13507,16 @@ export function App() {
                 </label>
 
                 <label>
-                  Tatbikat Sonucu
+                  {language === 'ru' ? 'Результат учения' : 'Tatbikat Sonucu'}
                   <select value={emergencyDrillForm.drillResult} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, drillResult: event.target.value as EmergencyDrillResult }))}>
-                    <option value="BASARILI">Başarılı</option>
-                    <option value="KISMEN_BASARILI">Kısmen Başarılı</option>
-                    <option value="BASARISIZ">Başarısız</option>
+                    <option value="BASARILI">{language === 'ru' ? 'Успешно' : 'Başarılı'}</option>
+                    <option value="KISMEN_BASARILI">{language === 'ru' ? 'Частично успешно' : 'Kısmen Başarılı'}</option>
+                    <option value="BASARISIZ">{language === 'ru' ? 'Неуспешно' : 'Başarısız'}</option>
                   </select>
                 </label>
 
                 <label>
-                  Açık İşlemler
+                  {language === 'ru' ? 'Открытые действия' : 'Açık İşlemler'}
                   <input
                     type="number"
                     min={0}
@@ -13524,7 +13526,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Kapalı İşlemler
+                  {language === 'ru' ? 'Закрытые действия' : 'Kapalı İşlemler'}
                   <input
                     type="number"
                     min={0}
@@ -13534,83 +13536,117 @@ export function App() {
                 </label>
 
                 <label>
-                  Sorumlu Kişi
+                  {language === 'ru' ? 'Ответственный' : 'Sorumlu Kişi'}
                   <input value={emergencyDrillForm.responsiblePerson} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))} />
                 </label>
 
                 <label>
-                  Bir Sonraki Planlanan Tatbikat Tarihi
+                  {language === 'ru' ? 'Дата следующего планового учения' : 'Bir Sonraki Planlanan Tatbikat Tarihi'}
                   <input type="date" value={emergencyDrillForm.nextPlannedDrillDate} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, nextPlannedDrillDate: event.target.value }))} />
                 </label>
 
                 <label>
-                  Durum
+                  {language === 'ru' ? 'Статус' : 'Durum'}
                   <select value={emergencyDrillForm.status} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, status: event.target.value as EmergencyDrillStatus }))}>
-                    <option value="PLANLANDI">Planlandı</option>
-                    <option value="TAMAMLANDI">Tamamlandı</option>
-                    <option value="IPTAL_EDILDI">İptal Edildi</option>
+                    <option value="PLANLANDI">{language === 'ru' ? 'Запланировано' : 'Planlandı'}</option>
+                    <option value="TAMAMLANDI">{language === 'ru' ? 'Завершено' : 'Tamamlandı'}</option>
+                    <option value="IPTAL_EDILDI">{language === 'ru' ? 'Отменено' : 'İptal Edildi'}</option>
                   </select>
                 </label>
 
                 <label>
-                  Ekler
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setEmergencyDrillForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? 'Вложения' : 'Ekler'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      multiple
+                      onFilesChange={(files) => setEmergencyDrillForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setEmergencyDrillForm((prev) => ({ ...prev, attachments: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label>
-                  Tatbikat Raporu
-                  <input
-                    type="file"
-                    multiple
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setEmergencyDrillForm((prev) => ({ ...prev, drillReports: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? 'Отчеты по учению' : 'Tatbikat Raporu'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      multiple
+                      onFilesChange={(files) => setEmergencyDrillForm((prev) => ({ ...prev, drillReports: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setEmergencyDrillForm((prev) => ({ ...prev, drillReports: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label>
-                  Fotoğraflar
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={(event) => {
-                      const files = Array.from(event.target.files ?? []);
-                      setEmergencyDrillForm((prev) => ({ ...prev, photos: files.map((file) => file.name) }));
-                    }}
-                  />
+                  {language === 'ru' ? 'Фотографии' : 'Fotoğraflar'}
+                  {language === 'ru' ? (
+                    <CustomFileUpload
+                      buttonLabel="Выбрать файлы"
+                      emptyLabel="Файлы не выбраны"
+                      singleLabel="Выбран файл: "
+                      multipleLabel="Выбрано файлов: "
+                      accept="image/*"
+                      multiple
+                      onFilesChange={(files) => setEmergencyDrillForm((prev) => ({ ...prev, photos: files.map((file) => file.name) }))}
+                    />
+                  ) : (
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(event) => {
+                        const files = Array.from(event.target.files ?? []);
+                        setEmergencyDrillForm((prev) => ({ ...prev, photos: files.map((file) => file.name) }));
+                      }}
+                    />
+                  )}
                 </label>
 
                 <label className="full-row">
-                  Notlar
+                  {language === 'ru' ? 'Примечания' : 'Notlar'}
                   <textarea rows={3} value={emergencyDrillForm.notes} onChange={(event) => setEmergencyDrillForm((prev) => ({ ...prev, notes: event.target.value }))} />
                 </label>
 
                 <div className="full-row actions">
-                  <button type="button" onClick={saveEmergencyDrillEntry}>Kaydet</button>
+                  <button type="button" onClick={saveEmergencyDrillEntry}>{language === 'ru' ? 'Сохранить' : 'Kaydet'}</button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>Acil Durum Tatbikat Kayıtları</h2>
+              <h2>{language === 'ru' ? 'Реестр учений по ЧС' : 'Acil Durum Tatbikat Kayıtları'}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>Tatbikat Tarihi</th>
-                    <th>Proje</th>
-                    <th>Acil Durum Türü</th>
-                    <th>Katılımcılar</th>
-                    <th>Açık İşlemler</th>
-                    <th>Durum</th>
+                    <th>{language === 'ru' ? 'Дата учения' : 'Tatbikat Tarihi'}</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Тип ЧС' : 'Acil Durum Türü'}</th>
+                    <th>{language === 'ru' ? 'Участники' : 'Katılımcılar'}</th>
+                    <th>{language === 'ru' ? 'Открытые действия' : 'Açık İşlemler'}</th>
+                    <th>{language === 'ru' ? 'Статус' : 'Durum'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -13627,7 +13663,7 @@ export function App() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={6}>{t.noData}</td>
+                      <td colSpan={6}>{language === 'ru' ? 'Нет данных для выбранной области.' : t.noData}</td>
                     </tr>
                   )}
                 </tbody>
@@ -13638,67 +13674,67 @@ export function App() {
               <section className="panel risk-detail-panel">
                 <div className="risk-detail-head">
                   <div>
-                    <h2>Acil Durum Tatbikat Detayı - {selectedEmergencyDrillRecord.drillId}</h2>
+                    <h2>{language === 'ru' ? 'Карточка учения по ЧС' : 'Acil Durum Tatbikat Detayı'} - {selectedEmergencyDrillRecord.drillId}</h2>
                     <p className="risk-detail-subtitle">
                       {selectedEmergencyDrillRecord.drillName} - {emergencyTypeLabel(selectedEmergencyDrillRecord.emergencyType)}
                     </p>
                   </div>
                   <div className="risk-detail-badges">
                     <span className={`status-badge ${emergencyStatusClass(selectedEmergencyDrillRecord.status)}`}>{emergencyStatusLabel(selectedEmergencyDrillRecord.status)}</span>
-                    <span className="risk-band-badge risk-band-medium">Sonuç: {emergencyResultLabel(selectedEmergencyDrillRecord.drillResult)}</span>
+                    <span className="risk-band-badge risk-band-medium">{language === 'ru' ? 'Результат' : 'Sonuç'}: {emergencyResultLabel(selectedEmergencyDrillRecord.drillResult)}</span>
                   </div>
                 </div>
 
                 <div className="risk-detail-grid">
                   <article>
-                    <h3>Tatbikat Bilgisi</h3>
-                    <p><strong>Tatbikat Tarihi:</strong> {selectedEmergencyDrillRecord.drillDate}</p>
-                    <p><strong>Katılımcı:</strong> {selectedEmergencyDrillRecord.participantCount}</p>
-                    <p><strong>Sorumlu:</strong> {selectedEmergencyDrillRecord.responsiblePerson}</p>
+                    <h3>{language === 'ru' ? 'Информация об учении' : 'Tatbikat Bilgisi'}</h3>
+                    <p><strong>{language === 'ru' ? 'Дата учения' : 'Tatbikat Tarihi'}:</strong> {selectedEmergencyDrillRecord.drillDate}</p>
+                    <p><strong>{language === 'ru' ? 'Участники' : 'Katılımcı'}:</strong> {selectedEmergencyDrillRecord.participantCount}</p>
+                    <p><strong>{language === 'ru' ? 'Ответственный' : 'Sorumlu'}:</strong> {selectedEmergencyDrillRecord.responsiblePerson}</p>
                   </article>
                   <article>
-                    <h3>Eylem Takibi</h3>
-                    <p><strong>Açık İşlem:</strong> {selectedEmergencyDrillRecord.openActions}</p>
-                    <p><strong>Kapalı İşlem:</strong> {selectedEmergencyDrillRecord.closedActions}</p>
-                    <p><strong>Sonraki Tatbikat:</strong> {selectedEmergencyDrillRecord.nextPlannedDrillDate}</p>
+                    <h3>{language === 'ru' ? 'Контроль мероприятий' : 'Eylem Takibi'}</h3>
+                    <p><strong>{language === 'ru' ? 'Открыто действий' : 'Açık İşlem'}:</strong> {selectedEmergencyDrillRecord.openActions}</p>
+                    <p><strong>{language === 'ru' ? 'Закрыто действий' : 'Kapalı İşlem'}:</strong> {selectedEmergencyDrillRecord.closedActions}</p>
+                    <p><strong>{language === 'ru' ? 'Следующее учение' : 'Sonraki Tatbikat'}:</strong> {selectedEmergencyDrillRecord.nextPlannedDrillDate}</p>
                   </article>
                   <article>
-                    <h3>Hazırlık Değerlendirmesi</h3>
-                    <p><strong>Tatbikat Sonucu:</strong> {emergencyResultLabel(selectedEmergencyDrillRecord.drillResult)}</p>
-                    <p><strong>Durum:</strong> {emergencyStatusLabel(selectedEmergencyDrillRecord.status)}</p>
-                    <p><strong>Kalan Gün:</strong> {daysUntil(selectedEmergencyDrillRecord.nextPlannedDrillDate)}</p>
+                    <h3>{language === 'ru' ? 'Оценка готовности' : 'Hazırlık Değerlendirmesi'}</h3>
+                    <p><strong>{language === 'ru' ? 'Результат учения' : 'Tatbikat Sonucu'}:</strong> {emergencyResultLabel(selectedEmergencyDrillRecord.drillResult)}</p>
+                    <p><strong>{language === 'ru' ? 'Статус' : 'Durum'}:</strong> {emergencyStatusLabel(selectedEmergencyDrillRecord.status)}</p>
+                    <p><strong>{language === 'ru' ? 'Осталось дней' : 'Kalan Gün'}:</strong> {daysUntil(selectedEmergencyDrillRecord.nextPlannedDrillDate)}</p>
                   </article>
                 </div>
 
                 <div className="risk-detail-files">
                   <div>
-                    <h3>Ekler</h3>
+                    <h3>{language === 'ru' ? 'Вложения' : 'Ekler'}</h3>
                     {selectedEmergencyDrillRecord.attachments.length > 0 ? (
                       <ul>{selectedEmergencyDrillRecord.attachments.map((fileName) => <li key={fileName}>{fileName}</li>)}</ul>
                     ) : (
-                      <p>Ek bulunmuyor.</p>
+                      <p>{language === 'ru' ? 'Вложения отсутствуют.' : 'Ek bulunmuyor.'}</p>
                     )}
                   </div>
                   <div>
-                    <h3>Tatbikat Raporları</h3>
+                    <h3>{language === 'ru' ? 'Отчеты по учению' : 'Tatbikat Raporları'}</h3>
                     {selectedEmergencyDrillRecord.drillReports.length > 0 ? (
                       <ul>{selectedEmergencyDrillRecord.drillReports.map((fileName) => <li key={fileName}>{fileName}</li>)}</ul>
                     ) : (
-                      <p>Rapor bulunmuyor.</p>
+                      <p>{language === 'ru' ? 'Отчеты отсутствуют.' : 'Rapor bulunmuyor.'}</p>
                     )}
                   </div>
                   <div>
-                    <h3>Fotoğraflar</h3>
+                    <h3>{language === 'ru' ? 'Фотографии' : 'Fotoğraflar'}</h3>
                     {selectedEmergencyDrillRecord.photos.length > 0 ? (
                       <ul>{selectedEmergencyDrillRecord.photos.map((fileName) => <li key={fileName}>{fileName}</li>)}</ul>
                     ) : (
-                      <p>Fotoğraf bulunmuyor.</p>
+                      <p>{language === 'ru' ? 'Фотографии отсутствуют.' : 'Fotoğraf bulunmuyor.'}</p>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <h3>Notlar</h3>
+                  <h3>{language === 'ru' ? 'Примечания' : 'Notlar'}</h3>
                   <p>{selectedEmergencyDrillRecord.notes || '-'}</p>
                 </div>
               </section>
