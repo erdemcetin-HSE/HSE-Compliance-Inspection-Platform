@@ -962,6 +962,26 @@ type PtwApiRecord = {
   updatedAt: string;
 };
 
+type PtwLocalRecord = {
+  id: string;
+  payload: Record<string, unknown>;
+  savedAt: string;
+};
+
+const isPtwLocalRecord = (value: unknown): value is PtwLocalRecord => {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.id === 'string'
+    && !!candidate.id
+    && typeof candidate.savedAt === 'string'
+    && typeof candidate.payload === 'object'
+    && candidate.payload !== null
+  );
+};
+
 type PtwForm = {
   ptwNo: string;
   organizasyon: string;
@@ -1029,6 +1049,7 @@ const CONTRACTORS_STORAGE_KEY = 'hse-contractor-records-v1';
 const PPE_TRANSACTIONS_STORAGE_KEY = 'hse-ppe-transactions-v1';
 const HEALTH_RECORDS_STORAGE_KEY = 'hse-health-records-v1';
 const OBSERVATION_RECORDS_STORAGE_KEY = 'hse-observation-records-v1';
+const PTW_LOCAL_RECORDS_STORAGE_KEY = 'hse-ptw-local-records-v1';
 
 const observationCategoryOptions = [
   'Güvensiz Davranış',
@@ -10126,6 +10147,74 @@ export function App() {
     }))
   });
 
+  const loadLocalPtwRecords = (): PtwLocalRecord[] => {
+    if (typeof window === 'undefined') {
+      return [];
+    }
+    try {
+      const raw = window.localStorage.getItem(PTW_LOCAL_RECORDS_STORAGE_KEY);
+      if (!raw) {
+        return [];
+      }
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
+      return parsed.filter(isPtwLocalRecord);
+    } catch {
+      return [];
+    }
+  };
+
+  const saveLocalPtwRecords = (rows: PtwLocalRecord[]) => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      window.localStorage.setItem(PTW_LOCAL_RECORDS_STORAGE_KEY, JSON.stringify(rows));
+    } catch {
+      // Ignore local storage write failures.
+    }
+  };
+
+  const savePtwToLocalFallback = (payload: Record<string, unknown>): string => {
+    const id = ptwRecordId ?? `ptw-local-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const rows = loadLocalPtwRecords();
+    const savedAt = new Date().toISOString();
+    const nextRows = [{ id, payload, savedAt }, ...rows.filter((row) => row.id !== id)];
+    saveLocalPtwRecords(nextRows);
+    setPtwRecordId(id);
+    setPtwLastSavedAt(savedAt);
+    return id;
+  };
+
+  const extractErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
+
+  const isPtwNetworkError = (message: string) => {
+    const normalized = message.toLowerCase();
+    return (
+      normalized.includes('failed to fetch')
+      || normalized.includes('networkerror')
+      || normalized.includes('load failed')
+      || normalized.includes('err_timed_out')
+      || normalized.includes('err_internet_disconnected')
+    );
+  };
+
+  const ptwUserFacingError = (rawMessage: string) => {
+    if (rawMessage.includes('GUEST_MODE_WRITE_BLOCKED')) {
+      return language === 'ru'
+        ? 'Гостевой режим не позволяет запись на сервер; используйте локальное сохранение.'
+        : 'Misafir modunda sunucuya yazma kapalıdır; yerel kayıt kullanılacaktır.';
+    }
+    if (isPtwNetworkError(rawMessage)) {
+      return language === 'ru'
+        ? 'Сетевое соединение недоступно. Запись сохранена локально или действие повторите при восстановлении сети.'
+        : 'Ağ bağlantısı kullanılamıyor. Kayıt yerel olarak saklandı veya ağ düzelince işlemi tekrar deneyin.';
+    }
+    return rawMessage;
+  };
+
   const validatePtwByTab = (tab: PtwTabKey): string[] => {
     const errors: string[] = [];
     if (tab === 'kayit') {
@@ -10183,7 +10272,25 @@ export function App() {
       setPtwLastSavedAt(new Date().toISOString());
       return result.id;
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW save failed:', errorText, error);
+      // If backend write is blocked/unavailable, keep PTW workflow functional with local persistence.
+      if (
+        errorText.includes('GUEST_MODE_WRITE_BLOCKED')
+        || isPtwNetworkError(errorText)
+      ) {
+        const payload = buildPtwPayload() as Record<string, unknown>;
+        if (forceStatus) {
+          payload.status = forceStatus;
+        }
+        const localId = savePtwToLocalFallback(payload);
+        setPtwFeedback({
+          type: 'success',
+          text: language === 'ru' ? 'Сохранено локально. Экспортные действия доступны.' : 'Kayıt yerel olarak kaydedildi. Rapor işlemleri kullanılabilir.'
+        });
+        return localId;
+      }
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
       return null;
     } finally {
       setPtwSaving(false);
@@ -10209,7 +10316,9 @@ export function App() {
       mapPtwApiToForm(row);
       setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Отправлено на согласование.' : 'Onaya gönderildi.' });
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW approval submit failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     } finally {
       setPtwSaving(false);
     }
@@ -10242,7 +10351,9 @@ export function App() {
       mapPtwApiToForm(row);
       setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Наряд-допуск закрыт.' : 'PTW kapatıldı.' });
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW close failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     } finally {
       setPtwSaving(false);
     }
@@ -10259,7 +10370,8 @@ export function App() {
         if (rows.length > 0) {
           mapPtwApiToForm(rows[0]);
         }
-      } catch {
+      } catch (error) {
+        console.error('PTW initial load failed:', extractErrorMessage(error), error);
         // Keep local form if PTW API is unavailable.
       }
     };
@@ -10291,49 +10403,119 @@ export function App() {
     return ptwRecordId;
   };
 
+  const isLocalPtwId = (id: string) => id.startsWith('ptw-local-');
+
+  const exportLocalPtwSnapshot = (extension: 'txt' | 'csv') => {
+    const id = ensurePtwIdOrFail();
+    if (!id) {
+      return;
+    }
+    const payload = buildPtwPayload();
+    const stamp = new Date().toISOString();
+    const lines = [
+      `PTW ID,${id}`,
+      `PTW No,${ptwForm.ptwNo}`,
+      `Saved At,${stamp}`,
+      `Status,${ptwForm.durum}`,
+      `Organization,${ptwForm.organizasyon}`,
+      `Department,${ptwForm.departman}`,
+      `Project,${ptwForm.proje}`,
+      `Location,${ptwForm.lokasyon}`,
+      `Requester,${ptwForm.isiTalepEden}`,
+      `Issuer,${ptwForm.isiVeren}`,
+      `Responsible,${ptwForm.hseSorumlusu}`,
+      `Attachments,${ptwEkler.length}`
+    ];
+    const content = extension === 'csv'
+      ? lines.join('\n')
+      : `${JSON.stringify(payload, null, 2)}\n`;
+    const blob = new Blob([content], { type: extension === 'csv' ? 'text/csv;charset=utf-8' : 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${ptwForm.ptwNo}.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
   const onExportPtwPdf = async () => {
     const id = ensurePtwIdOrFail();
     if (!id) return;
+    if (isLocalPtwId(id)) {
+      exportLocalPtwSnapshot('txt');
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальная сводка PTW выгружена.' : 'Yerel PTW özeti dışa aktarıldı.' });
+      return;
+    }
     try {
       await downloadFileFromResponse(`/api/ptw/${id}/export/pdf`, `${ptwForm.ptwNo}.pdf`);
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW PDF export failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     }
   };
 
   const onExportPtwDocx = async () => {
     const id = ensurePtwIdOrFail();
     if (!id) return;
+    if (isLocalPtwId(id)) {
+      exportLocalPtwSnapshot('txt');
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальная форма PTW выгружена.' : 'Yerel PTW formu dışa aktarıldı.' });
+      return;
+    }
     try {
       await downloadFileFromResponse(`/api/ptw/${id}/export/docx`, `${ptwForm.ptwNo}.docx`);
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW DOCX export failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     }
   };
 
   const onExportPtwActionCsv = async () => {
     const id = ensurePtwIdOrFail();
     if (!id) return;
+    if (isLocalPtwId(id)) {
+      exportLocalPtwSnapshot('csv');
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальные действия PTW выгружены в CSV.' : 'Yerel PTW aksiyonları CSV olarak dışa aktarıldı.' });
+      return;
+    }
     try {
       await downloadFileFromResponse(`/api/ptw/${id}/export/action-csv`, `${ptwForm.ptwNo}-actions.csv`);
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW action CSV export failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     }
   };
 
   const onExportPtwFullCsv = async () => {
     const id = ensurePtwIdOrFail();
     if (!id) return;
+    if (isLocalPtwId(id)) {
+      exportLocalPtwSnapshot('csv');
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Полный локальный CSV PTW выгружен.' : 'Yerel tam PTW CSV dışa aktarıldı.' });
+      return;
+    }
     try {
       await downloadFileFromResponse(`/api/ptw/${id}/export/full-csv`, `${ptwForm.ptwNo}-full.csv`);
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW full CSV export failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     }
   };
 
   const onPrintPtw = () => {
     const id = ensurePtwIdOrFail();
     if (!id) return;
+    if (isLocalPtwId(id)) {
+      exportLocalPtwSnapshot('txt');
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальная версия PTW подготовлена для печати.' : 'Yerel PTW çıktısı hazırlandı.' });
+      return;
+    }
     window.open(`${apiBaseUrl}/api/ptw/${id}/print`, '_blank');
   };
 
@@ -10343,6 +10525,15 @@ export function App() {
     const to = ptwEmailTo.trim();
     if (!to) {
       setPtwFeedback({ type: 'error', text: language === 'ru' ? 'Введите email получателя.' : 'Alıcı e-posta adresi girin.' });
+      return;
+    }
+    if (isLocalPtwId(id)) {
+      setPtwFeedback({
+        type: 'success',
+        text: language === 'ru'
+          ? 'Локальная запись сохранена; e-mail отправка требует серверного PTW ID.'
+          : 'Yerel kayıt hazır; e-posta gönderimi için sunucuya kayıtlı PTW ID gerekir.'
+      });
       return;
     }
     try {
@@ -10356,7 +10547,9 @@ export function App() {
       });
       setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Отчёт отправлен по электронной почте.' : 'Rapor e-posta ile gönderildi.' });
     } catch (error) {
-      setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+      const errorText = extractErrorMessage(error);
+      console.error('PTW email summary failed:', errorText, error);
+      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
     }
   };
 
@@ -10465,6 +10658,8 @@ export function App() {
       { eklenenPersonel: '', ayrilanPersonel: '', tarih: new Date().toISOString().slice(0, 10), onaylayan: '' }
     ]);
     setPtwEkler([]);
+    setPtwRecordId(null);
+    setPtwLastSavedAt(null);
     setActivePtwTab('kayit');
   };
 
@@ -13207,7 +13402,9 @@ export function App() {
                             await uploadPtwFiles(tip, event.target.files);
                             setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Вложение загружено.' : 'Ek başarıyla yüklendi.' });
                           } catch (error) {
-                            setPtwFeedback({ type: 'error', text: error instanceof Error ? error.message : String(error) });
+                            const errorText = extractErrorMessage(error);
+                            console.error('PTW attachment upload failed:', errorText, error);
+                            setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
                           }
                         }}
                       />
