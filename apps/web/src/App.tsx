@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { countryList, getCitiesForCountry } from './data/locations';
+import jsPDF from 'jspdf';
+import { Document as DocxDocument, Packer, Paragraph, TextRun, HeadingLevel, Table as DocxTable, TableRow, TableCell, WidthType, AlignmentType, BorderStyle } from 'docx';
 
 declare global {
   interface Window {
@@ -10405,35 +10407,382 @@ export function App() {
 
   const isLocalPtwId = (id: string) => id.startsWith('ptw-local-');
 
-  const exportLocalPtwSnapshot = (extension: 'txt' | 'csv') => {
-    const id = ensurePtwIdOrFail();
-    if (!id) {
-      return;
+  const generatePtwPdf = () => {
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const lm = 15;
+    const rm = 195;
+    const pageW = rm - lm;
+    let y = 20;
+
+    const addPage = () => { doc.addPage(); y = 20; };
+    const checkY = (needed = 10) => { if (y + needed > 280) { addPage(); } };
+
+    // Header
+    doc.setFillColor(30, 64, 130);
+    doc.rect(0, 0, 210, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('HSE COMPLIANCE PLATFORM — PERMIT TO WORK', 15, 10);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Generated: ${new Date().toLocaleString()}`, rm, 10, { align: 'right' });
+
+    y = 24;
+    doc.setTextColor(0, 0, 0);
+
+    // Title
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`PERMIT TO WORK — ${ptwForm.ptwNo}`, lm, y);
+    y += 7;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Status: ${ptwForm.durum}  |  Type: ${ptwForm.ptwTuru}  |  Issued: ${ptwForm.duzenlenmeTarihi}`, lm, y);
+    doc.setTextColor(0, 0, 0);
+    y += 5;
+    doc.setDrawColor(30, 64, 130);
+    doc.setLineWidth(0.5);
+    doc.line(lm, y, rm, y);
+    y += 6;
+
+    const sectionHeader = (title: string) => {
+      checkY(12);
+      doc.setFillColor(240, 244, 252);
+      doc.rect(lm, y - 4, pageW, 7, 'F');
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(30, 64, 130);
+      doc.text(title, lm + 2, y + 0.5);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      y += 7;
+    };
+
+    const fieldRow = (label: string, value: string) => {
+      checkY(7);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.text(label + ':', lm + 2, y);
+      doc.setFont('helvetica', 'normal');
+      const wrapped = doc.splitTextToSize(value || '—', pageW - 55);
+      doc.text(wrapped, lm + 52, y);
+      y += 5 * wrapped.length + 1;
+    };
+
+    const twoCol = (pairs: Array<[string, string]>) => {
+      for (let i = 0; i < pairs.length; i += 2) {
+        checkY(6);
+        const [l1, v1] = pairs[i];
+        const [l2, v2] = pairs[i + 1] ?? ['', ''];
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.text(l1 + ':', lm + 2, y);
+        doc.setFont('helvetica', 'normal');
+        doc.text(v1 || '—', lm + 42, y);
+        if (l2) {
+          doc.setFont('helvetica', 'bold');
+          doc.text(l2 + ':', lm + pageW / 2 + 2, y);
+          doc.setFont('helvetica', 'normal');
+          doc.text(v2 || '—', lm + pageW / 2 + 42, y);
+        }
+        y += 6;
+      }
+    };
+
+    // Section 1 — General Info
+    sectionHeader('1. GENERAL INFORMATION');
+    twoCol([
+      ['Organization', ptwForm.organizasyon],
+      ['Department', ptwForm.departman],
+      ['Project', ptwForm.proje],
+      ['Location', ptwForm.lokasyon],
+      ['PTW Type', ptwForm.ptwTuru],
+      ['Status', ptwForm.durum],
+      ['Issue Date', ptwForm.duzenlenmeTarihi],
+      ['Valid From', ptwForm.gecerlilikBaslangici],
+      ['Valid To', ptwForm.gecerlilikBitisi],
+      ['', ''],
+    ]);
+    y += 2;
+
+    // Section 2 — Responsible Persons
+    sectionHeader('2. RESPONSIBLE PERSONS');
+    twoCol([
+      ['Requester', ptwForm.isiTalepEden],
+      ['Issuer', ptwForm.isiVeren],
+      ['Job Responsible', ptwForm.isSorumlusu],
+      ['Site Responsible', ptwForm.sahaSorumlusu],
+      ['HSE Responsible', ptwForm.hseSorumlusu],
+      ['Authorized Approver', ptwForm.yetkiliOnaylayan],
+    ]);
+    y += 2;
+
+    // Section 3 — Work Information
+    sectionHeader('3. WORK INFORMATION');
+    twoCol([
+      ['Work Title', ptwForm.isinAdi],
+      ['Work Area', ptwForm.calismaAlani],
+      ['Start Date', ptwForm.baslangicTarihi],
+      ['Start Time', ptwForm.baslangicSaati],
+      ['End Date', ptwForm.bitisTarihi],
+      ['End Time', ptwForm.bitisSaati],
+    ]);
+    fieldRow('Work Description', ptwForm.isinAciklamasi);
+    fieldRow('Planned Work', ptwForm.yapilacakIs);
+    fieldRow('Working Conditions', ptwForm.calismaKosullari);
+    y += 2;
+
+    // Section 4 — Hazards
+    if (ptwTehlikeler.length > 0) {
+      sectionHeader('4. IDENTIFIED HAZARDS');
+      ptwTehlikeler.forEach((h) => {
+        checkY(5);
+        doc.text(`• ${h}`, lm + 4, y);
+        y += 5;
+      });
+      y += 2;
     }
-    const payload = buildPtwPayload();
-    const stamp = new Date().toISOString();
-    const lines = [
-      `PTW ID,${id}`,
-      `PTW No,${ptwForm.ptwNo}`,
-      `Saved At,${stamp}`,
-      `Status,${ptwForm.durum}`,
-      `Organization,${ptwForm.organizasyon}`,
-      `Department,${ptwForm.departman}`,
-      `Project,${ptwForm.proje}`,
-      `Location,${ptwForm.lokasyon}`,
-      `Requester,${ptwForm.isiTalepEden}`,
-      `Issuer,${ptwForm.isiVeren}`,
-      `Responsible,${ptwForm.hseSorumlusu}`,
-      `Attachments,${ptwEkler.length}`
+
+    // Section 5 — Safety Systems
+    if (ptwGuvenlikSecimleri.length > 0) {
+      sectionHeader('5. SAFETY SYSTEMS');
+      ptwGuvenlikSecimleri.forEach((s) => {
+        checkY(5);
+        doc.text(`• ${s}`, lm + 4, y);
+        y += 5;
+      });
+      y += 2;
+    }
+
+    // Section 6 — Pre-work Checks
+    if (ptwKontroller.some((c) => c.kontrol.trim())) {
+      sectionHeader('6. PRE-WORK CHECKS');
+      checkY(8);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.text('Check Item', lm + 2, y);
+      doc.text('Status', lm + 110, y);
+      doc.text('Notes', lm + 135, y);
+      doc.setFont('helvetica', 'normal');
+      y += 4;
+      doc.setLineWidth(0.2);
+      doc.line(lm, y, rm, y);
+      y += 3;
+      ptwKontroller.filter((c) => c.kontrol.trim()).forEach((c) => {
+        checkY(6);
+        const wrapped = doc.splitTextToSize(c.kontrol, 100);
+        doc.text(wrapped, lm + 2, y);
+        doc.text(c.durum, lm + 110, y);
+        const noteWrapped = doc.splitTextToSize(c.aciklama || '—', 50);
+        doc.text(noteWrapped, lm + 135, y);
+        y += 5 * Math.max(wrapped.length, 1) + 1;
+      });
+      y += 2;
+    }
+
+    // Section 7 — Approvals
+    sectionHeader('7. APPROVALS & SIGNATURES');
+    twoCol([
+      ['Prepared By', ptwForm.ptwHazirlayan],
+      ['HSE Approval', ptwForm.hseOnayi],
+      ['Project Manager', ptwForm.projeMuduru],
+      ['Employer Rep.', ptwForm.isverenTemsilcisi],
+      ['Digital Signature', ptwForm.dijitalImza],
+      ['Approval Date', ptwForm.onayTarihi],
+    ]);
+    y += 2;
+
+    // Special Conditions
+    if (ptwForm.ozelSartlar.trim()) {
+      sectionHeader('8. SPECIAL CONDITIONS');
+      fieldRow('Conditions', ptwForm.ozelSartlar);
+      y += 2;
+    }
+
+    // Footer on each page
+    const totalPages = doc.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+      doc.setFontSize(7.5);
+      doc.setTextColor(120, 120, 120);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`${ptwForm.ptwNo}  |  HSE Compliance Platform  |  Page ${p} of ${totalPages}`, 105, 292, { align: 'center' });
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineWidth(0.3);
+      doc.line(15, 288, 195, 288);
+    }
+
+    doc.save(`${ptwForm.ptwNo}.pdf`);
+  };
+
+  const generatePtwDocx = async () => {
+    const makeRow = (label: string, value: string): TableRow =>
+      new TableRow({
+        children: [
+          new TableCell({
+            width: { size: 35, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: label, bold: true, size: 20 })] })],
+          }),
+          new TableCell({
+            width: { size: 65, type: WidthType.PERCENTAGE },
+            children: [new Paragraph({ children: [new TextRun({ text: value || '—', size: 20 })] })],
+          }),
+        ],
+      });
+
+    const section = (title: string, rows: Array<[string, string]>) => [
+      new Paragraph({
+        heading: HeadingLevel.HEADING_2,
+        children: [new TextRun({ text: title, color: '1e4082', bold: true, size: 24 })],
+        spacing: { before: 240, after: 120 },
+      }),
+      new DocxTable({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: rows.map(([l, v]) => makeRow(l, v)),
+      }),
     ];
-    const content = extension === 'csv'
-      ? lines.join('\n')
-      : `${JSON.stringify(payload, null, 2)}\n`;
-    const blob = new Blob([content], { type: extension === 'csv' ? 'text/csv;charset=utf-8' : 'text/plain;charset=utf-8' });
+
+    const bulletList = (title: string, items: string[]) =>
+      items.length === 0
+        ? []
+        : [
+            new Paragraph({
+              heading: HeadingLevel.HEADING_2,
+              children: [new TextRun({ text: title, color: '1e4082', bold: true, size: 24 })],
+              spacing: { before: 240, after: 120 },
+            }),
+            ...items.map(
+              (item) =>
+                new Paragraph({
+                  bullet: { level: 0 },
+                  children: [new TextRun({ text: item, size: 20 })],
+                })
+            ),
+          ];
+
+    const doc = new DocxDocument({
+      sections: [
+        {
+          children: [
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [
+                new TextRun({ text: 'PERMIT TO WORK', bold: true, size: 32, color: '1e4082' }),
+                new TextRun({ text: `\n${ptwForm.ptwNo}`, bold: true, size: 28, break: 1 }),
+              ],
+              spacing: { after: 240 },
+              border: {
+                bottom: { style: BorderStyle.SINGLE, size: 8, color: '1e4082' },
+              },
+            }),
+
+            ...section('1. GENERAL INFORMATION', [
+              ['Organization', ptwForm.organizasyon],
+              ['Department', ptwForm.departman],
+              ['Project', ptwForm.proje],
+              ['Location', ptwForm.lokasyon],
+              ['PTW Type', ptwForm.ptwTuru],
+              ['Status', ptwForm.durum],
+              ['Issue Date', ptwForm.duzenlenmeTarihi],
+              ['Valid From', ptwForm.gecerlilikBaslangici],
+              ['Valid To', ptwForm.gecerlilikBitisi],
+            ]),
+
+            ...section('2. RESPONSIBLE PERSONS', [
+              ['Requester', ptwForm.isiTalepEden],
+              ['Issuer', ptwForm.isiVeren],
+              ['Job Responsible', ptwForm.isSorumlusu],
+              ['Site Responsible', ptwForm.sahaSorumlusu],
+              ['HSE Responsible', ptwForm.hseSorumlusu],
+              ['Authorized Approver', ptwForm.yetkiliOnaylayan],
+            ]),
+
+            ...section('3. WORK INFORMATION', [
+              ['Work Title', ptwForm.isinAdi],
+              ['Work Area', ptwForm.calismaAlani],
+              ['Start Date/Time', `${ptwForm.baslangicTarihi} ${ptwForm.baslangicSaati}`],
+              ['End Date/Time', `${ptwForm.bitisTarihi} ${ptwForm.bitisSaati}`],
+              ['Work Description', ptwForm.isinAciklamasi],
+              ['Planned Work', ptwForm.yapilacakIs],
+              ['Working Conditions', ptwForm.calismaKosullari],
+            ]),
+
+            ...bulletList('4. IDENTIFIED HAZARDS', ptwTehlikeler),
+            ...bulletList('5. SAFETY SYSTEMS', ptwGuvenlikSecimleri),
+
+            ...(ptwKontroller.some((c) => c.kontrol.trim())
+              ? [
+                  new Paragraph({
+                    heading: HeadingLevel.HEADING_2,
+                    children: [new TextRun({ text: '6. PRE-WORK CHECKS', color: '1e4082', bold: true, size: 24 })],
+                    spacing: { before: 240, after: 120 },
+                  }),
+                  new DocxTable({
+                    width: { size: 100, type: WidthType.PERCENTAGE },
+                    rows: [
+                      new TableRow({
+                        tableHeader: true,
+                        children: [
+                          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Check Item', bold: true, size: 20 })] })] }),
+                          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Status', bold: true, size: 20 })] })] }),
+                          new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Notes', bold: true, size: 20 })] })] }),
+                        ],
+                      }),
+                      ...ptwKontroller.filter((c) => c.kontrol.trim()).map(
+                        (c) =>
+                          new TableRow({
+                            children: [
+                              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: c.kontrol, size: 20 })] })] }),
+                              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: c.durum, size: 20 })] })] }),
+                              new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: c.aciklama || '—', size: 20 })] })] }),
+                            ],
+                          })
+                      ),
+                    ],
+                  }),
+                ]
+              : []),
+
+            ...section('7. APPROVALS & SIGNATURES', [
+              ['Prepared By', ptwForm.ptwHazirlayan],
+              ['HSE Approval', ptwForm.hseOnayi],
+              ['Project Manager', ptwForm.projeMuduru],
+              ['Employer Rep.', ptwForm.isverenTemsilcisi],
+              ['Digital Signature', ptwForm.dijitalImza],
+              ['Approval Date', ptwForm.onayTarihi],
+            ]),
+
+            ...(ptwForm.ozelSartlar.trim()
+              ? [
+                  new Paragraph({
+                    heading: HeadingLevel.HEADING_2,
+                    children: [new TextRun({ text: '8. SPECIAL CONDITIONS', color: '1e4082', bold: true, size: 24 })],
+                    spacing: { before: 240, after: 120 },
+                  }),
+                  new Paragraph({ children: [new TextRun({ text: ptwForm.ozelSartlar, size: 20 })] }),
+                ]
+              : []),
+
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 480 },
+              children: [
+                new TextRun({ text: `${ptwForm.ptwNo}  |  HSE Compliance Platform  |  Generated: ${new Date().toLocaleString()}`, size: 16, color: '888888' }),
+              ],
+            }),
+          ],
+        },
+      ],
+    });
+
+    const blob = await Packer.toBlob(doc);
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${ptwForm.ptwNo}.${extension}`;
+    link.download = `${ptwForm.ptwNo}.docx`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -10444,16 +10793,17 @@ export function App() {
     const id = ensurePtwIdOrFail();
     if (!id) return;
     if (isLocalPtwId(id)) {
-      exportLocalPtwSnapshot('txt');
-      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальная сводка PTW выгружена.' : 'Yerel PTW özeti dışa aktarıldı.' });
+      generatePtwPdf();
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'PDF сформирован.' : 'PDF oluşturuldu.' });
       return;
     }
     try {
       await downloadFileFromResponse(`/api/ptw/${id}/export/pdf`, `${ptwForm.ptwNo}.pdf`);
     } catch (error) {
       const errorText = extractErrorMessage(error);
-      console.error('PTW PDF export failed:', errorText, error);
-      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
+      console.error('PTW PDF export failed — falling back to client PDF:', errorText);
+      generatePtwPdf();
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'PDF сформирован локально.' : 'PDF yerel olarak oluşturuldu.' });
     }
   };
 
@@ -10461,25 +10811,65 @@ export function App() {
     const id = ensurePtwIdOrFail();
     if (!id) return;
     if (isLocalPtwId(id)) {
-      exportLocalPtwSnapshot('txt');
-      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальная форма PTW выгружена.' : 'Yerel PTW formu dışa aktarıldı.' });
+      await generatePtwDocx();
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Документ Word сформирован.' : 'Word belgesi oluşturuldu.' });
       return;
     }
     try {
       await downloadFileFromResponse(`/api/ptw/${id}/export/docx`, `${ptwForm.ptwNo}.docx`);
     } catch (error) {
       const errorText = extractErrorMessage(error);
-      console.error('PTW DOCX export failed:', errorText, error);
-      setPtwFeedback({ type: 'error', text: ptwUserFacingError(errorText) });
+      console.error('PTW DOCX export failed — falling back to client DOCX:', errorText);
+      await generatePtwDocx();
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Документ Word сформирован локально.' : 'Word belgesi yerel olarak oluşturuldu.' });
     }
+  };
+
+  const exportLocalCsv = (fullExport: boolean) => {
+    const rows: string[][] = [
+      ['PTW No', ptwForm.ptwNo],
+      ['Status', ptwForm.durum],
+      ['Organization', ptwForm.organizasyon],
+      ['Department', ptwForm.departman],
+      ['Project', ptwForm.proje],
+      ['Location', ptwForm.lokasyon],
+      ['Requester', ptwForm.isiTalepEden],
+      ['Issuer', ptwForm.isiVeren],
+      ['HSE Responsible', ptwForm.hseSorumlusu],
+    ];
+    if (fullExport) {
+      rows.push(
+        ['Job Title', ptwForm.isinAdi],
+        ['Work Area', ptwForm.calismaAlani],
+        ['Work Description', ptwForm.isinAciklamasi],
+        ['Start Date', ptwForm.baslangicTarihi],
+        ['End Date', ptwForm.bitisTarihi],
+        ['Hazards', ptwTehlikeler.join('; ')],
+        ['Safety Systems', ptwGuvenlikSecimleri.join('; ')],
+        ['Special Conditions', ptwForm.ozelSartlar],
+      );
+    }
+    ptwTedbirler.filter((r) => r.tedbir.trim()).forEach((r, i) => {
+      rows.push([`Action ${i + 1}`, `${r.tedbir} | Responsible: ${r.sorumlu} | Due: ${r.termin} | Status: ${r.durum}`]);
+    });
+    const csvContent = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fullExport ? `${ptwForm.ptwNo}-full.csv` : `${ptwForm.ptwNo}-actions.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   };
 
   const onExportPtwActionCsv = async () => {
     const id = ensurePtwIdOrFail();
     if (!id) return;
     if (isLocalPtwId(id)) {
-      exportLocalPtwSnapshot('csv');
-      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальные действия PTW выгружены в CSV.' : 'Yerel PTW aksiyonları CSV olarak dışa aktarıldı.' });
+      exportLocalCsv(false);
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'CSV действий выгружен.' : 'Aksiyon CSV dışa aktarıldı.' });
       return;
     }
     try {
@@ -10495,8 +10885,8 @@ export function App() {
     const id = ensurePtwIdOrFail();
     if (!id) return;
     if (isLocalPtwId(id)) {
-      exportLocalPtwSnapshot('csv');
-      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Полный локальный CSV PTW выгружен.' : 'Yerel tam PTW CSV dışa aktarıldı.' });
+      exportLocalCsv(true);
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Полный CSV выгружен.' : 'Tam CSV dışa aktarıldı.' });
       return;
     }
     try {
@@ -10512,8 +10902,8 @@ export function App() {
     const id = ensurePtwIdOrFail();
     if (!id) return;
     if (isLocalPtwId(id)) {
-      exportLocalPtwSnapshot('txt');
-      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'Локальная версия PTW подготовлена для печати.' : 'Yerel PTW çıktısı hazırlandı.' });
+      generatePtwPdf();
+      setPtwFeedback({ type: 'success', text: language === 'ru' ? 'PDF для печати сформирован.' : 'Yazdırmak için PDF oluşturuldu.' });
       return;
     }
     window.open(`${apiBaseUrl}/api/ptw/${id}/print`, '_blank');
