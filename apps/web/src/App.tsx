@@ -2665,6 +2665,189 @@ const inspectionChecklistSections: InspectionSection[] = [
   }
 ];
 
+const inspectionChecklistSectionsRu: InspectionSection[] = [
+  {
+    id: 'housekeeping',
+    title: 'Порядок и чистота',
+    description: 'Оценивает чистоту, хранение, контроль отходов и общий порядок.',
+    questions: [
+      'Рабочие зоны чистые и свободны от беспорядка и мусора?',
+      'Материалы хранятся безопасно, не блокируя доступ и не создавая риск падения?',
+      'Разливы оперативно убираются или берутся под контроль?',
+      'Инструменты и оборудование после использования возвращаются в предназначенное место?',
+      'Контейнеры для отходов подходят по назначению и не переполнены?'
+    ]
+  },
+  {
+    id: 'walking-surfaces',
+    title: 'Пешеходные пути и доступ',
+    description: 'Оценивает безопасное перемещение, проходы, двери, ступени и маршруты доступа.',
+    questions: [
+      'Пешеходные пути свободны от препятствий и риска споткнуться?',
+      'Покрытие пола сухое, ровное и безопасное для передвижения?',
+      'Доступ к дверям, выходам, щитам и критическому оборудованию свободен?',
+      'Лестницы, пандусы и перила находятся в безопасном состоянии?',
+      'Освещение достаточно для безопасной работы и перемещения?'
+    ]
+  },
+  {
+    id: 'fire-safety',
+    title: 'Пожарная безопасность',
+    description: 'Оценивает эвакуационные пути, огнетушители, противопожарные двери и контроль источников возгорания.',
+    questions: [
+      'Пожарные выходы открыты, не заперты и доступны для использования?',
+      'Огнетушители видимы, доступны и имеют действующий срок?',
+      'Противопожарные двери закрываются и не фиксируются в открытом положении?',
+      'Горючие материалы под контролем и удалены от источников возгорания?',
+      'Соблюдаются запрет курения и правила горячих работ?'
+    ]
+  },
+  {
+    id: 'emergency-readiness',
+    title: 'Готовность к ЧС',
+    description: 'Оценивает доступность аварийной информации, маршрутов, связи и готовность к реагированию.',
+    questions: [
+      'Контактные номера экстренных служб размещены на видном месте?',
+      'Маршруты эвакуации и точки сбора четко обозначены?',
+      'Сотрудники знают порядок подачи тревоги и сообщения о ЧС?',
+      'Доступ к аварийному оборудованию свободен и не загроможден?',
+      'В необходимых зонах проводятся учения или инструктаж по ЧС?'
+    ]
+  },
+  {
+    id: 'first-aid-welfare',
+    title: 'Первая помощь и бытовые условия',
+    description: 'Оценивает первую помощь, питьевую воду, бытовые зоны и базовую поддержку здоровья.',
+    questions: [
+      'Аптечка укомплектована и доступна?',
+      'Информация о назначенных ответственных за первую помощь доступна сотрудникам?',
+      'Бытовые помещения чистые и пригодны к использованию?',
+      'В необходимых местах обеспечен доступ к питьевой воде?',
+      'Риски, связанные с температурой, усталостью и базовым здоровьем, находятся под контролем?'
+    ]
+  },
+  {
+    id: 'electrical-safety',
+    title: 'Электробезопасность',
+    description: 'Оценивает кабели, розетки, щиты, временное электроснабжение и изоляцию.',
+    questions: [
+      'На вилках, розетках и кабелях отсутствуют видимые повреждения?',
+      'Электрощиты закрыты, промаркированы и доступны для обслуживания?',
+      'Удлинители и временное питание используются безопасно, без перегрузок?',
+      'Кабели проложены так, чтобы исключить спотыкание и повреждения?',
+      'Перед электротехническим обслуживанием применяется изоляция/LOTO?'
+    ]
+  },
+  {
+    id: 'ppe',
+    title: 'СИЗ',
+    description: 'Оценивает наличие СИЗ, правильность использования, состояние и защиту посетителей.',
+    questions: [
+      'Необходимые СИЗ для работ/зоны доступны?',
+      'Сотрудники используют требуемые СИЗ в нужных местах?',
+      'СИЗ чистые, подходят по размеру и в исправном состоянии?',
+      'Для рисков зрения, рук, слуха и дыхания используются соответствующие СИЗ?',
+      'Посетителям выдаются необходимые СИЗ до входа в контролируемые зоны?'
+    ]
+  },
+  {
+    id: 'plant-tools-equipment',
+    title: 'Машины, инструмент и оборудование',
+    description: 'Оценивает ограждения, ручной инструмент, защиту, периодические проверки и управление неисправным оборудованием.',
+    questions: [
+      'Защитные ограждения машин установлены и исправны там, где это необходимо?',
+      'Аварийные остановы и защитные устройства доступны и работоспособны?',
+      'Инструменты и оборудование проверяются перед использованием?',
+      'Операторы компетентны и допущены к работе с используемым оборудованием?',
+      'Неисправное оборудование маркируется, выводится из эксплуатации или контролируется?'
+    ]
+  },
+  {
+    id: 'working-at-height',
+    title: 'Работы на высоте',
+    description: 'Оценивает лестницы, леса, защиту краев, падение предметов и погодные условия.',
+    questions: [
+      'Лестницы исправны, проверены и используются безопасно?',
+      'Леса/платформы полностью укомплектованы, устойчивы и проверены?',
+      'Открытые края, проемы и хрупкие поверхности защищены?',
+      'В зонах риска падения применяются системы предотвращения падения?',
+      'Инструменты и материалы контролируются для предотвращения падения предметов?'
+    ]
+  },
+  {
+    id: 'manual-handling',
+    title: 'Ручное перемещение и эргономика',
+    description: 'Оценивает подъем, рабочую позу, организацию места, повторяющиеся операции и вспомогательные средства.',
+    questions: [
+      'Тяжелые/неудобные грузы перемещаются безопасным методом или с использованием вспомогательных средств?',
+      'Сотрудники избегают небезопасного подъема, скручивания и чрезмерного вытягивания?',
+      'Рабочие места организованы так, чтобы снижать перегрузку и неудобную позу?',
+      'Повторяющиеся операции управляются через перерывы, ротацию или смену задач?',
+      'Тележки и вспомогательные средства перемещения находятся в безопасном состоянии?'
+    ]
+  },
+  {
+    id: 'chemicals',
+    title: 'Химические и опасные вещества',
+    description: 'Оценивает маркировку, хранение, SDS, контроль разливов и меры по предотвращению воздействия.',
+    questions: [
+      'Емкости с химическими веществами четко и правильно промаркированы?',
+      'В зонах использования/хранения химии доступны SDS?',
+      'Несовместимые химические вещества хранятся раздельно и безопасно?',
+      'В необходимых зонах есть наборы для ликвидации разливов или другие меры контроля?',
+      'Пользователи защищены от воздействия на дыхание, кожу и глаза?'
+    ]
+  },
+  {
+    id: 'vehicle-pedestrian',
+    title: 'Безопасность транспорта и пешеходов',
+    description: 'Оценивает движение транспорта, пешеходные пути, обзор, маневры задним ходом и зоны погрузки.',
+    questions: [
+      'Где возможно, пешеходные пути отделены от транспортного потока?',
+      'Маневры и движение задним ходом контролируются безопасным образом?',
+      'Зоны погрузки/разгрузки контролируются и очищены от посторонних?',
+      'Ограничения скорости, знаки и дорожная разметка видимы?',
+      'Водители и пешеходы соблюдают правила движения на площадке?'
+    ]
+  },
+  {
+    id: 'contractor-maintenance',
+    title: 'Работы подрядчиков / техническое обслуживание',
+    description: 'Оценивает контроль работ, разрешения, изоляцию, надзор и процессы передачи зоны.',
+    questions: [
+      'Перед началом работ подрядчика/обслуживания проводится допуск?',
+      'Для работ повышенного риска применяется разрешительная система или контроль задания?',
+      'Рабочие зоны ограждаются/контролируются для защиты других лиц?',
+      'Где требуется, применяется изоляция, LOTO или отключение сервисов?',
+      'После обслуживания зона проверяется и приводится в безопасное состояние?'
+    ]
+  },
+  {
+    id: 'environmental-controls',
+    title: 'Экологический контроль и отходы',
+    description: 'Оценивает сортировку отходов, утечки, выбросы, дренаж и экологические воздействия.',
+    questions: [
+      'Отходы сортируются и хранятся в соответствующих контейнерах?',
+      'Риск утечки, разлива или сброса в дренаж предотвращается/контролируется?',
+      'Опасные отходы промаркированы и находятся под контролем?',
+      'Шум, пыль, дым и запахи контролируются?',
+      'Открытые площадки/склады управляются так, чтобы предотвращать экологическое воздействие?'
+    ]
+  },
+  {
+    id: 'safety-communication',
+    title: 'Коммуникация по безопасности и уведомления',
+    description: 'Оценивает знаки, информирование, уведомления, надзор и видимые требования безопасности.',
+    questions: [
+      'Знаки и инструкции по безопасности понятны и хорошо видимы?',
+      'Сотрудники знают порядок сообщения об опасностях, near miss и инцидентах?',
+      'В необходимых местах проводятся инструктажи по безопасности/toolbox talks?',
+      'Руководители оперативно реагируют на небезопасные условия и поведение?',
+      'Посетители и новые сотрудники получают необходимый инструктаж перед входом в зону?'
+    ]
+  }
+];
+
 const recordsByModule: Record<ModuleKey, ModuleRecord[]> = {
   dashboard: [],
   inspections: [
@@ -3657,7 +3840,7 @@ export function App() {
   }, [accessLevel]);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || language === 'tr') {
+    if (typeof window === 'undefined' || language !== 'en') {
       return;
     }
 
@@ -3690,6 +3873,70 @@ export function App() {
       observer.disconnect();
     };
   }, [language, activeModule, projectFilter, accessLevel]);
+
+  const inspectionSections = language === 'ru' ? inspectionChecklistSectionsRu : inspectionChecklistSections;
+
+  const inspectionCopy = {
+    dataEntryTitle: language === 'ru' ? 'Ввод данных инспекции' : 'Denetim Veri Girişi',
+    summaryTitle: language === 'ru' ? 'Сводка инспекции' : 'Denetim Özeti',
+    checklistTitle: language === 'ru' ? 'Контрольный список инспекции' : 'Denetim Kontrol Listesi',
+    correctiveActionsTitle: language === 'ru' ? 'Корректирующие действия' : 'Düzeltici Faaliyetler',
+    reportsTitle: language === 'ru' ? 'Операции с отчетом' : 'Rapor İşlemleri',
+    titleLabel: language === 'ru' ? 'Заголовок' : 'Başlık',
+    businessUnitLabel: language === 'ru' ? 'Бизнес-единица / Компания' : 'İş Birimi / Şirket',
+    siteAreaLabel: language === 'ru' ? 'Площадка / Зона' : 'Saha / Alan',
+    locationTypeLabel: language === 'ru' ? 'Тип локации' : 'Lokasyon Türü',
+    selectOption: language === 'ru' ? 'Выберите' : 'Seçiniz',
+    inspectionDateLabel: language === 'ru' ? 'Дата инспекции' : 'Denetim Tarihi',
+    inspectorLabel: language === 'ru' ? 'ФИО инспектора' : 'Denetçi Ad Soyad',
+    departmentLabel: language === 'ru' ? 'Отдел' : 'Departman',
+    positiveObservationsLabel: language === 'ru' ? 'Позитивные наблюдения' : 'Pozitif Gözlemler',
+    inspectionNotesLabel: language === 'ru' ? 'Примечания инспекции' : 'Denetim Notları',
+    progressLabel: language === 'ru' ? 'Прогресс' : 'İlerleme',
+    totalFindingsLabel: language === 'ru' ? 'Всего замечаний' : 'Toplam Bulgular',
+    openActionsLabel: language === 'ru' ? 'Открытые действия' : 'Açık Aksiyonlar',
+    answeredProgressLabel: language === 'ru' ? 'Отвеченный прогресс' : 'Yanıtlanan İlerleme',
+    complianceScoreLabel: language === 'ru' ? 'Оценка соответствия' : 'Uygunluk skoru',
+    highFindingsLabel: language === 'ru' ? 'Высокие замечания' : 'Yüksek Bulgular',
+    mediumFindingsLabel: language === 'ru' ? 'Средние замечания' : 'Orta Bulgular',
+    lowFindingsLabel: language === 'ru' ? 'Низкие замечания' : 'Düşük Bulgular',
+    skipChecklistLabel: language === 'ru' ? 'Пропустить этот контрольный список' : 'Bu kontrol listesini atla',
+    yesLabel: language === 'ru' ? 'Да' : 'Evet',
+    noLabel: language === 'ru' ? 'Нет' : 'Hayır',
+    naLabel: language === 'ru' ? 'Неприменимо' : 'Uygulanamaz',
+    correctiveHint: language === 'ru' ? 'Отслеживайте замечания, требующие действий.' : 'Takip gerektiren bulguları izleyin.',
+    statusOpen: language === 'ru' ? 'Открыто' : 'Açık',
+    statusInProgress: language === 'ru' ? 'В процессе' : 'Devam Ediyor',
+    statusClosed: language === 'ru' ? 'Закрыто' : 'Kapalı',
+    addLabel: language === 'ru' ? 'Добавить' : 'Ekle',
+    manualActionPlaceholder: language === 'ru' ? 'Добавить действие вручную' : 'Manuel aksiyon ekle',
+    noActionsYet: language === 'ru' ? 'Корректирующие действия еще не добавлены.' : 'Henüz düzeltici faaliyet eklenmedi.',
+    reportHint:
+      language === 'ru'
+        ? 'Экспортируйте краткий отчет: сводка, замечания, неприменимые пункты и корректирующие действия.'
+        : 'Özet, bulgular, uygun değil/uygulanamaz maddeler ve düzeltici faaliyetleri içeren kısa raporu dışa aktarın.',
+    exportDocx: language === 'ru' ? 'Экспорт DOCX' : 'DOCX Dışa Aktar',
+    exportActionCsv: language === 'ru' ? 'Экспорт CSV действий' : 'Aksiyon CSV Dışa Aktar',
+    exportFullCsv: language === 'ru' ? 'Экспорт полного CSV' : 'Tam CSV Dışa Aktar',
+    sendEmailSummary: language === 'ru' ? 'Отправить сводку по e-mail' : 'Özeti E-posta ile Gönder',
+    printPdf: language === 'ru' ? 'Печать / PDF' : 'Yazdır / PDF',
+    resetInspection: language === 'ru' ? 'Сбросить инспекцию' : 'Denetimi Sıfırla',
+    preparedBy: language === 'ru' ? 'Подготовлено Erdem Cetin' : 'Erdem Cetin tarafından hazırlandı'
+  };
+
+  const locationTypesLocalized =
+    language === 'ru'
+      ? [
+          'Офис',
+          'Склад',
+          'Мастерская',
+          'Шоурум',
+          'Проживание',
+          'Проектная площадка',
+          'Зона работ субподрядчика',
+          'Другое'
+        ]
+      : locationTypes;
 
   useEffect(() => {
     if (!isAuthorizedViewer) {
@@ -5042,7 +5289,7 @@ export function App() {
     let mediumFindings = 0;
     let lowFindings = 0;
 
-    inspectionChecklistSections.forEach((section) => {
+    inspectionSections.forEach((section) => {
       if (skippedChecklistSections[section.id]) {
         return;
       }
@@ -5096,7 +5343,16 @@ export function App() {
       lowFindings,
       naCount
     };
-  }, [checklistAnswers, manualActions, skippedChecklistSections]);
+  }, [checklistAnswers, inspectionSections, manualActions, skippedChecklistSections]);
+
+  const inspectionUrgencyLabel =
+    language === 'ru'
+      ? inspectionSummary.complianceScore <= 50
+        ? 'Требуется срочное улучшение (0-50%)'
+        : inspectionSummary.complianceScore <= 75
+          ? 'Требуется улучшение (51-75%)'
+          : 'Под контролем (76-100%)'
+      : inspectionSummary.urgentLabel;
 
   const chartValues = useMemo(() => {
     if (activeModule === 'dashboard') {
@@ -14436,43 +14692,43 @@ export function App() {
         {activeModule === 'inspections' ? (
           <>
             <section className="panel">
-              <h2>Denetim Veri Girişi</h2>
+              <h2>{inspectionCopy.dataEntryTitle}</h2>
               <div className="form-grid">
                 <label>
-                  Başlık
+                  {inspectionCopy.titleLabel}
                   <input
                     value={inspectionForm.title}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, title: event.target.value }))}
                   />
                 </label>
                 <label>
-                  İş Birimi / Şirket
+                  {inspectionCopy.businessUnitLabel}
                   <input
                     value={inspectionForm.businessUnit}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, businessUnit: event.target.value }))}
                   />
                 </label>
                 <label>
-                  Saha / Alan
+                  {inspectionCopy.siteAreaLabel}
                   <input
                     value={inspectionForm.siteArea}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, siteArea: event.target.value }))}
                   />
                 </label>
                 <label>
-                  Lokasyon Türü
+                  {inspectionCopy.locationTypeLabel}
                   <select
                     value={inspectionForm.locationType}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, locationType: event.target.value }))}
                   >
-                    <option value="">Seçiniz</option>
-                    {locationTypes.map((locationType) => (
+                    <option value="">{inspectionCopy.selectOption}</option>
+                    {locationTypesLocalized.map((locationType) => (
                       <option key={locationType} value={locationType}>{locationType}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Denetim Tarihi
+                  {inspectionCopy.inspectionDateLabel}
                   <input
                     type="date"
                     value={inspectionForm.inspectionDate}
@@ -14480,28 +14736,28 @@ export function App() {
                   />
                 </label>
                 <label>
-                  Denetçi Ad Soyad
+                  {inspectionCopy.inspectorLabel}
                   <input
                     value={inspectionForm.inspectorName}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, inspectorName: event.target.value }))}
                   />
                 </label>
                 <label>
-                  Departman
+                  {inspectionCopy.departmentLabel}
                   <input
                     value={inspectionForm.department}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, department: event.target.value }))}
                   />
                 </label>
                 <label>
-                  Pozitif Gözlemler
+                  {inspectionCopy.positiveObservationsLabel}
                   <input
                     value={inspectionForm.positiveObservations}
                     onChange={(event) => setInspectionForm((prev) => ({ ...prev, positiveObservations: event.target.value }))}
                   />
                 </label>
                 <label className="full-row">
-                  Denetim Notları
+                  {inspectionCopy.inspectionNotesLabel}
                   <textarea
                     rows={3}
                     value={inspectionForm.inspectionNotes}
@@ -14512,53 +14768,53 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>Denetim Özeti</h2>
+              <h2>{inspectionCopy.summaryTitle}</h2>
               <div className="inspection-summary-grid">
                 <article className="kpi-card">
-                  <span className="kpi-label">{inspectionSummary.urgentLabel}</span>
+                  <span className="kpi-label">{inspectionUrgencyLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.complianceScore}%</strong>
                 </article>
                 <article className="kpi-card">
-                  <span className="kpi-label">İlerleme</span>
+                  <span className="kpi-label">{inspectionCopy.progressLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.answeredProgress}</strong>
                 </article>
                 <article className="kpi-card">
-                  <span className="kpi-label">Toplam Bulgular</span>
+                  <span className="kpi-label">{inspectionCopy.totalFindingsLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.totalFindings}</strong>
                 </article>
                 <article className="kpi-card">
-                  <span className="kpi-label">Açık Aksiyonlar</span>
+                  <span className="kpi-label">{inspectionCopy.openActionsLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.openActions}</strong>
                 </article>
                 <article className="kpi-card">
-                  <span className="kpi-label">Yanıtlanan İlerleme</span>
+                  <span className="kpi-label">{inspectionCopy.answeredProgressLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.answeredProgress}</strong>
                 </article>
               </div>
               <p className="summary-line">
-                <span className="compliance-score-title">Uygunluk skoru</span>
+                <span className="compliance-score-title">{inspectionCopy.complianceScoreLabel}</span>
                 <br />
-                {inspectionSummary.complianceScore}% - {inspectionSummary.urgentLabel}
+                {inspectionSummary.complianceScore}% - {inspectionUrgencyLabel}
               </p>
               <div className="inspection-summary-grid">
                 <article className="kpi-card">
-                  <span className="kpi-label">Yüksek Bulgular</span>
+                  <span className="kpi-label">{inspectionCopy.highFindingsLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.highFindings}</strong>
                 </article>
                 <article className="kpi-card">
-                  <span className="kpi-label">Orta Bulgular</span>
+                  <span className="kpi-label">{inspectionCopy.mediumFindingsLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.mediumFindings}</strong>
                 </article>
                 <article className="kpi-card">
-                  <span className="kpi-label">Düşük Bulgular</span>
+                  <span className="kpi-label">{inspectionCopy.lowFindingsLabel}</span>
                   <strong className="kpi-value">{inspectionSummary.lowFindings}</strong>
                 </article>
               </div>
             </section>
 
             <section className="panel">
-              <h2>Denetim Kontrol Listesi</h2>
-              {inspectionChecklistSections.map((section, sectionIndex) => {
+              <h2>{inspectionCopy.checklistTitle}</h2>
+              {inspectionSections.map((section, sectionIndex) => {
                 const progress = getChecklistProgress(section.id, section.questions.length);
                 return (
                   <article key={section.id} className="checklist-section">
@@ -14576,7 +14832,7 @@ export function App() {
                           }))
                         }
                       />
-                      Bu kontrol listesini atla
+                      {inspectionCopy.skipChecklistLabel}
                     </label>
 
                     {!skippedChecklistSections[section.id] ? (
@@ -14595,7 +14851,7 @@ export function App() {
                                     checked={selected === 'YES'}
                                     onChange={() => setChecklistAnswer(section.id, questionIndex, 'YES')}
                                   />
-                                  Evet
+                                  {inspectionCopy.yesLabel}
                                 </label>
                                 <label>
                                   <input
@@ -14604,7 +14860,7 @@ export function App() {
                                     checked={selected === 'NO'}
                                     onChange={() => setChecklistAnswer(section.id, questionIndex, 'NO')}
                                   />
-                                  Hayır
+                                  {inspectionCopy.noLabel}
                                 </label>
                                 <label className="na-option-label">
                                   <input
@@ -14613,7 +14869,7 @@ export function App() {
                                     checked={selected === 'NA'}
                                     onChange={() => setChecklistAnswer(section.id, questionIndex, 'NA')}
                                   />
-                                  Uygulanamaz
+                                  {inspectionCopy.naLabel}
                                 </label>
                               </div>
                             </div>
@@ -14627,21 +14883,21 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>Düzeltici Faaliyetler</h2>
-              <p>Takip gerektiren bulguları izleyin.</p>
+              <h2>{inspectionCopy.correctiveActionsTitle}</h2>
+              <p>{inspectionCopy.correctiveHint}</p>
               <p>
-                Açık: {inspectionSummary.openActions} - Devam Ediyor: {inspectionSummary.inProgressActions} - Kapalı: {inspectionSummary.closedActions}
+                {inspectionCopy.statusOpen}: {inspectionSummary.openActions} - {inspectionCopy.statusInProgress}: {inspectionSummary.inProgressActions} - {inspectionCopy.statusClosed}: {inspectionSummary.closedActions}
               </p>
               <div className="actions-row">
                 <input
-                  placeholder="Manuel aksiyon ekle"
+                  placeholder={inspectionCopy.manualActionPlaceholder}
                   value={manualActionText}
                   onChange={(event) => setManualActionText(event.target.value)}
                 />
-                <button type="button" onClick={addManualAction}>Ekle</button>
+                <button type="button" onClick={addManualAction}>{inspectionCopy.addLabel}</button>
               </div>
               {manualActions.length === 0 ? (
-                <p>Henüz düzeltici faaliyet eklenmedi.</p>
+                <p>{inspectionCopy.noActionsYet}</p>
               ) : (
                 <div className="manual-actions-list">
                   {manualActions.map((action, actionIndex) => (
@@ -14651,9 +14907,9 @@ export function App() {
                         value={action.status}
                         onChange={(event) => updateManualActionStatus(actionIndex, event.target.value as ActionStatus)}
                       >
-                        <option value="OPEN">Açık</option>
-                        <option value="IN_PROGRESS">Devam Ediyor</option>
-                        <option value="CLOSED">Kapalı</option>
+                        <option value="OPEN">{inspectionCopy.statusOpen}</option>
+                        <option value="IN_PROGRESS">{inspectionCopy.statusInProgress}</option>
+                        <option value="CLOSED">{inspectionCopy.statusClosed}</option>
                       </select>
                     </div>
                   ))}
@@ -14662,17 +14918,17 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>Rapor İşlemleri</h2>
-              <p>Özet, bulgular, uygun değil/uygulanamaz maddeler ve düzeltici faaliyetleri içeren kısa raporu dışa aktarın.</p>
+              <h2>{inspectionCopy.reportsTitle}</h2>
+              <p>{inspectionCopy.reportHint}</p>
               <div className="report-action-buttons">
-                <button type="button">DOCX Dışa Aktar</button>
-                <button type="button">Aksiyon CSV Dışa Aktar</button>
-                <button type="button">Tam CSV Dışa Aktar</button>
-                <button type="button">Özeti E-posta ile Gönder</button>
-                <button type="button">Yazdır / PDF</button>
-                <button type="button" onClick={resetInspection}>Denetimi Sıfırla</button>
+                <button type="button">{inspectionCopy.exportDocx}</button>
+                <button type="button">{inspectionCopy.exportActionCsv}</button>
+                <button type="button">{inspectionCopy.exportFullCsv}</button>
+                <button type="button">{inspectionCopy.sendEmailSummary}</button>
+                <button type="button">{inspectionCopy.printPdf}</button>
+                <button type="button" onClick={resetInspection}>{inspectionCopy.resetInspection}</button>
               </div>
-              <p className="creator-note">Erdem Cetin tarafından hazırlandı</p>
+              <p className="creator-note">{inspectionCopy.preparedBy}</p>
             </section>
           </>
         ) : null}
