@@ -1681,6 +1681,7 @@ const textByLanguage: Partial<Record<Language, Record<string, string>>> = {
     'Electrical risk review': 'Elektrik risk değerlendirmesi',
     'Hot work permit': 'Sıcak çalışma izni',
     'Minor finger injury': 'Hafif parmak yaralanması',
+    'Hafif parmak yaralanması': 'Незначительная травма пальца',
     'Weekly internal audit': 'Haftalık iç tetkik',
     'Lifting equipment check': 'Kaldırma ekipmanı kontrolü',
     'Waste segregation tracking': 'Atık ayrıştırma takibi',
@@ -10999,7 +11000,11 @@ export function App() {
     reportWindow.print();
   };
 
-  const headerTitle = activeModule === 'dashboard' ? localizeText('Dashboard', language) : moduleLabels[activeModule];
+  const headerTitle = activeModule === 'dashboard'
+    ? localizeText('Dashboard', language)
+    : activeModule === 'incidents' && language === 'ru'
+      ? 'Ввод данных и аналитика инцидентов'
+      : moduleLabels[activeModule];
   let headerSubtitle = `${moduleLabels[activeModule]} ${t.moduleAnalytics}`;
   if (activeModule === 'dashboard') {
     headerSubtitle = language === 'ru'
@@ -11019,6 +11024,12 @@ export function App() {
       : language === 'en'
         ? 'Permit to Work data entry and analytics.'
         : 'Çalışma izni veri girişi ve analitiği.';
+  } else if (activeModule === 'incidents') {
+    headerSubtitle = language === 'ru'
+      ? 'Ввод данных и аналитика инцидентов'
+      : language === 'en'
+        ? 'Incident data entry and analytics.'
+        : 'Olay veri girişi ve analitiği.';
   } else if (activeModule === 'reports') {
     headerSubtitle = language === 'en' ? 'Corporate report center and automated output generation.' : 'Kurumsal raporlama merkezi ve otomatik çıktı üretimi.';
   } else if (activeModule === 'projects') {
@@ -14917,33 +14928,35 @@ export function App() {
         {activeModule === 'incidents' ? (
           <>
             <section className="panel">
-              <h2>Olaylar Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Регистрация инцидентов' : 'Olaylar Veri Girişi'}</h2>
               <p className="inline-hint">
-                Olay Sayısı sahaya ait toplam olay adedini, Kayıp İş Günü ise olaydan kaynaklı iş gücü kaybını gösterir.
+                {language === 'ru'
+                  ? 'Количество инцидентов показывает общее число зарегистрированных инцидентов на объекте. Потерянные рабочие дни показывают количество рабочих дней, утраченных вследствие инцидентов.'
+                  : 'Olay Sayısı sahaya ait toplam olay adedini, Kayıp İş Günü ise olaydan kaynaklı iş gücü kaybını gösterir.'}
               </p>
 
               <div className="incident-overview-grid">
                 <article className="incident-overview-card">
-                  <span>Toplam Olay</span>
+                  <span>{language === 'ru' ? 'Количество инцидентов' : 'Toplam Olay'}</span>
                   <strong>{incidentSummary.totalIncidents}</strong>
                 </article>
                 <article className="incident-overview-card">
-                  <span>Kayıp İş Günü</span>
+                  <span>{language === 'ru' ? 'Потерянные рабочие дни' : 'Kayıp İş Günü'}</span>
                   <strong>{incidentSummary.totalLostDays}</strong>
                 </article>
                 <article className="incident-overview-card">
-                  <span>Açık / Devam</span>
+                  <span>{language === 'ru' ? 'Открыто / В работе' : 'Açık / Devam'}</span>
                   <strong>{incidentSummary.openCases} / {incidentSummary.inProgressCases}</strong>
                 </article>
                 <article className="incident-overview-card">
-                  <span>Kapalı Kayıt</span>
+                  <span>{language === 'ru' ? 'Закрытые записи' : 'Kapalı Kayıt'}</span>
                   <strong>{incidentSummary.closedCases}</strong>
                 </article>
               </div>
 
               <div className="incident-form-grid">
                 <label>
-                  Proje
+                  {language === 'ru' ? 'Проект' : 'Proje'}
                   <select
                     value={incidentForm.projectId}
                     onChange={(event) => setIncidentForm((prev) => ({ ...prev, projectId: event.target.value }))}
@@ -14955,7 +14968,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Tarih
+                  {language === 'ru' ? 'Дата' : 'Tarih'}
                   <input
                     type="date"
                     value={incidentForm.date}
@@ -14964,16 +14977,16 @@ export function App() {
                 </label>
 
                 <label className="full-row">
-                  Başlık / Açıklama
+                  {language === 'ru' ? 'Заголовок / Описание' : 'Başlık / Açıklama'}
                   <input
                     value={incidentForm.title}
                     onChange={(event) => setIncidentForm((prev) => ({ ...prev, title: event.target.value }))}
-                    placeholder="Orn: Yükleme alanında el yaralanması"
+                    placeholder={language === 'ru' ? 'Например: травма руки в зоне погрузки' : 'Orn: Yükleme alanında el yaralanması'}
                   />
                 </label>
 
                 <label>
-                  Olay Sayısı
+                  {language === 'ru' ? 'Количество инцидентов' : 'Olay Sayısı'}
                   <input
                     type="number"
                     min={1}
@@ -14983,7 +14996,7 @@ export function App() {
                 </label>
 
                 <label>
-                  Kayıp İş Günü
+                  {language === 'ru' ? 'Потерянные рабочие дни' : 'Kayıp İş Günü'}
                   <input
                     type="number"
                     min={0}
@@ -14993,35 +15006,41 @@ export function App() {
                 </label>
 
                 <label>
-                  Durum
+                  {language === 'ru' ? 'Статус' : 'Durum'}
                   <select
                     value={incidentForm.status}
                     onChange={(event) => setIncidentForm((prev) => ({ ...prev, status: event.target.value as Status }))}
                   >
-                    <option value="OPEN">Açık</option>
-                    <option value="IN_PROGRESS">Devam Ediyor</option>
-                    <option value="CLOSED">Kapalı</option>
+                    <option value="OPEN">{language === 'ru' ? 'Открыто' : 'Açık'}</option>
+                    <option value="IN_PROGRESS">{language === 'ru' ? 'В работе' : 'Devam Ediyor'}</option>
+                    <option value="CLOSED">{language === 'ru' ? 'Закрыто' : 'Kapalı'}</option>
                   </select>
                 </label>
 
                 <div className="full-row actions">
-                  <button type="button" onClick={saveIncidentEntry}>{editingIncidentIndex !== null ? 'Güncelle' : 'Kaydet'}</button>
+                  <button type="button" onClick={saveIncidentEntry}>
+                    {language === 'ru'
+                      ? 'Сохранить запись'
+                      : editingIncidentIndex !== null
+                        ? 'Güncelle'
+                        : 'Kaydet'}
+                  </button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>Olaylar Kayıtlar</h2>
+              <h2>{language === 'ru' ? 'Реестр инцидентов' : 'Olaylar Kayıtlar'}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>Proje</th>
-                    <th>Tarih</th>
-                    <th>Başlık</th>
-                    <th>Olay Sayısı</th>
-                    <th>Kayıp İş Günü</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Дата' : 'Tarih'}</th>
+                    <th>{language === 'ru' ? 'Заголовок' : 'Başlık'}</th>
+                    <th>{language === 'ru' ? 'Количество инцидентов' : 'Olay Sayısı'}</th>
+                    <th>{language === 'ru' ? 'Потерянные рабочие дни' : 'Kayıp İş Günü'}</th>
+                    <th>{language === 'ru' ? 'Статус' : 'Durum'}</th>
+                    <th>{language === 'ru' ? 'Действия' : 'İşlemler'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -15037,9 +15056,9 @@ export function App() {
                           <span className={`status-badge ${getStatusBadgeClass(row.status)}`}>{localizeStatus(row.status)}</span>
                         </td>
                         <td className="actions-cell table-actions-cell">
-                          <div className="table-action-group" aria-label={`${localizeText(row.title, language)} işlemleri`}>
-                            <button type="button" className="table-action-button" onClick={() => editIncidentRecord(index)}>Düzenle</button>
-                            <button type="button" className="table-action-button danger" onClick={() => deleteIncidentRecord(index)}>Sil</button>
+                          <div className="table-action-group" aria-label={language === 'ru' ? `Действия по записи ${localizeText(row.title, language)}` : `${localizeText(row.title, language)} işlemleri`}>
+                            <button type="button" className="table-action-button" onClick={() => editIncidentRecord(index)}>{language === 'ru' ? 'Редактировать' : 'Düzenle'}</button>
+                            <button type="button" className="table-action-button danger" onClick={() => deleteIncidentRecord(index)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                           </div>
                         </td>
                       </tr>
