@@ -12201,11 +12201,11 @@ export function App() {
               <section className="panel">
                 <h2>{ptwCopy.tabResponsible}</h2>
                 <div className="form-grid">
-                  <label>İşi Talep Eden<input value={ptwForm.isiTalepEden} onChange={(event) => setPtwForm((prev) => ({ ...prev, isiTalepEden: event.target.value }))} /></label>
-                  <label>İşi Veren<input value={ptwForm.isiVeren} onChange={(event) => setPtwForm((prev) => ({ ...prev, isiVeren: event.target.value }))} /></label>
+                  <label>{localizeText('İşi Talep Eden', language)}<input value={ptwForm.isiTalepEden} onChange={(event) => setPtwForm((prev) => ({ ...prev, isiTalepEden: event.target.value }))} /></label>
+                  <label>{localizeText('İşi Veren', language)}<input value={ptwForm.isiVeren} onChange={(event) => setPtwForm((prev) => ({ ...prev, isiVeren: event.target.value }))} /></label>
 
-                  <label>HSE Sorumlusu<input value={ptwForm.hseSorumlusu} onChange={(event) => setPtwForm((prev) => ({ ...prev, hseSorumlusu: event.target.value }))} /></label>
-                  <label>Yetkili Onaylayan<input value={ptwForm.yetkiliOnaylayan} onChange={(event) => setPtwForm((prev) => ({ ...prev, yetkiliOnaylayan: event.target.value }))} /></label>
+                  <label>{localizeText('HSE Sorumlusu', language)}<input value={ptwForm.hseSorumlusu} onChange={(event) => setPtwForm((prev) => ({ ...prev, hseSorumlusu: event.target.value }))} /></label>
+                  <label>{localizeText('Yetkili Onaylayan', language)}<input value={ptwForm.yetkiliOnaylayan} onChange={(event) => setPtwForm((prev) => ({ ...prev, yetkiliOnaylayan: event.target.value }))} /></label>
                 </div>
               </section>
             ) : null}
@@ -12216,11 +12216,11 @@ export function App() {
                 <table>
                   <thead>
                     <tr>
-                      <th>Ad Soyad</th>
-                      <th>Görevi</th>
-                      <th>Firma</th>
-                      <th>Eğitim Durumu</th>
-                      <th>İmza</th>
+                      <th>{localizeText('Ad Soyad', language)}</th>
+                      <th>{localizeText('Görevi', language)}</th>
+                      <th>{localizeText('Firma', language)}</th>
+                      <th>{localizeText('Eğitim Durumu', language)}</th>
+                      <th>{localizeText('İmza', language)}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -12235,7 +12235,7 @@ export function App() {
                     ))}
                   </tbody>
                 </table>
-                <div className="actions"><button type="button" onClick={addPtwTeamMember}>Yeni Personel Ekle</button></div>
+                <div className="actions"><button type="button" onClick={addPtwTeamMember}>{localizeText('Yeni Personel Ekle', language)}</button></div>
               </section>
             ) : null}
 
@@ -12243,15 +12243,15 @@ export function App() {
               <section className="panel">
                 <h2>{ptwCopy.tabWork}</h2>
                 <div className="form-grid">
-                  <label>İşin Adı<input value={ptwForm.isinAdi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isinAdi: event.target.value }))} /></label>
-                  <label>Çalışma Alanı<input value={ptwForm.calismaAlani} onChange={(event) => setPtwForm((prev) => ({ ...prev, calismaAlani: event.target.value }))} /></label>
-                  <label className="full-row">İşin Açıklaması<textarea rows={3} value={ptwForm.isinAciklamasi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isinAciklamasi: event.target.value }))} /></label>
-                  <label className="full-row">Yapılacak İş<textarea rows={3} value={ptwForm.yapilacakIs} onChange={(event) => setPtwForm((prev) => ({ ...prev, yapilacakIs: event.target.value }))} /></label>
-                  <label className="full-row">Çalışma Koşulları<textarea rows={3} value={ptwForm.calismaKosullari} onChange={(event) => setPtwForm((prev) => ({ ...prev, calismaKosullari: event.target.value }))} /></label>
-                  <label>Başlangıç Tarihi<input type="date" value={ptwForm.baslangicTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, baslangicTarihi: event.target.value }))} /></label>
-                  <label>Başlangıç Saati<input type="time" value={ptwForm.baslangicSaati} onChange={(event) => setPtwForm((prev) => ({ ...prev, baslangicSaati: event.target.value }))} /></label>
-                  <label>Bitiş Tarihi<input type="date" value={ptwForm.bitisTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, bitisTarihi: event.target.value }))} /></label>
-                  <label>Bitiş Saati<input type="time" value={ptwForm.bitisSaati} onChange={(event) => setPtwForm((prev) => ({ ...prev, bitisSaati: event.target.value }))} /></label>
+                  <label>{localizeText('İşin Adı', language)}<input value={ptwForm.isinAdi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isinAdi: event.target.value }))} /></label>
+                  <label>{localizeText('Çalışma Alanı', language)}<input value={ptwForm.calismaAlani} onChange={(event) => setPtwForm((prev) => ({ ...prev, calismaAlani: event.target.value }))} /></label>
+                  <label className="full-row">{localizeText('İşin Açıklaması', language)}<textarea rows={3} value={ptwForm.isinAciklamasi} onChange={(event) => setPtwForm((prev) => ({ ...prev, isinAciklamasi: event.target.value }))} /></label>
+                  <label className="full-row">{localizeText('Yapılacak İş', language)}<textarea rows={3} value={ptwForm.yapilacakIs} onChange={(event) => setPtwForm((prev) => ({ ...prev, yapilacakIs: event.target.value }))} /></label>
+                  <label className="full-row">{localizeText('Çalışma Koşulları', language)}<textarea rows={3} value={ptwForm.calismaKosullari} onChange={(event) => setPtwForm((prev) => ({ ...prev, calismaKosullari: event.target.value }))} /></label>
+                  <label>{localizeText('Başlangıç Tarihi', language)}<input type="date" value={ptwForm.baslangicTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, baslangicTarihi: event.target.value }))} /></label>
+                  <label>{localizeText('Başlangıç Saati', language)}<input type="time" value={ptwForm.baslangicSaati} onChange={(event) => setPtwForm((prev) => ({ ...prev, baslangicSaati: event.target.value }))} /></label>
+                  <label>{localizeText('Bitiş Tarihi', language)}<input type="date" value={ptwForm.bitisTarihi} onChange={(event) => setPtwForm((prev) => ({ ...prev, bitisTarihi: event.target.value }))} /></label>
+                  <label>{localizeText('Bitiş Saati', language)}<input type="time" value={ptwForm.bitisSaati} onChange={(event) => setPtwForm((prev) => ({ ...prev, bitisSaati: event.target.value }))} /></label>
                 </div>
               </section>
             ) : null}
@@ -12267,7 +12267,7 @@ export function App() {
                         checked={ptwTehlikeler.includes(tehlike)}
                         onChange={() => togglePtwArraySelection(tehlike, ptwTehlikeler, setPtwTehlikeler)}
                       />
-                      {tehlike}
+                      {localizeText(tehlike, language)}
                     </label>
                   ))}
                 </div>
@@ -12285,7 +12285,7 @@ export function App() {
                         checked={ptwGuvenlikSecimleri.includes(sistem)}
                         onChange={() => togglePtwArraySelection(sistem, ptwGuvenlikSecimleri, setPtwGuvenlikSecimleri)}
                       />
-                      {sistem}
+                      {localizeText(sistem, language)}
                     </label>
                   ))}
                 </div>
