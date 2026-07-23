@@ -2009,6 +2009,37 @@ const buildTurkishReplacementMap = (language: Exclude<Language, 'tr'>): Map<stri
       ['Düşük', 'Низкий'],
       ['Orta', 'Средний'],
       ['Yüksek', 'Высокий'],
+      ['Çalışma İzinleri', 'Наряды-допуски'],
+      ['Toolbox Talk', 'Тулбокс-брифинги'],
+      ['İSG Prosedürleri', 'Процедуры по ОТиПБ'],
+      ['SOP', 'СОП'],
+      ['İş Talimatları', 'Рабочие инструкции'],
+      ['Risk Değerlendirme Şablonları', 'Шаблоны оценки рисков'],
+      ['JSA Şablonları', 'Шаблоны JSA'],
+      ['Denetim Kontrol Listeleri', 'Чек-листы проверок'],
+      ['Olay Bildirim Formları', 'Формы уведомления об инцидентах'],
+      ['Acil Durum Müdahale Planı', 'План реагирования на чрезвычайные ситуации'],
+      ['LOTO Prosedürü', 'Процедура LOTO'],
+      ['Yüksekte Çalışma Prosedürü', 'Процедура работ на высоте'],
+      ['Kazı Prosedürü', 'Процедура земляных работ'],
+      ['İskele Prosedürü', 'Процедура работ на лесах'],
+      ['Çevre Prosedürleri', 'Экологические процедуры'],
+      ['Şirket Politikaları', 'Политики компании'],
+      ['Kurumsal Standartlar', 'Корпоративные стандарты'],
+      ['Form', 'Форма'],
+      ['Prosedür', 'Процедура'],
+      ['Talimat', 'Инструкция'],
+      ['Şablon', 'Шаблон'],
+      ['Kontrol Listesi', 'Чек-лист'],
+      ['Plan', 'План'],
+      ['Politika', 'Политика'],
+      ['Standart', 'Стандарт'],
+      ['Taslak', 'Черновик'],
+      ['Gözden Geçirme Aşamasında', 'На рассмотрении'],
+      ['Onaylandı', 'Утверждено'],
+      ['Geçersiz (Obsolete)', 'Недействительно (устаревшее)'],
+      ['Revizyon Geçmişi', 'История ревизий'],
+      ['Detayları görmek için bir kontrollü belge seçin.', 'Выберите контролируемый документ для просмотра деталей.'],
       ['Haz', 'Июн'],
       ['Tem', 'Июл'],
       ['Agu', 'Авг'],
@@ -13132,7 +13163,7 @@ export function App() {
                     </div>
 
                     <div className="document-revision-list">
-                      <h4>Revizyon Geçmişi</h4>
+                      <h4>{language === 'ru' ? 'История ревизий' : 'Revizyon Geçmişi'}</h4>
                       <ul>
                         {selectedControlledDocument.revisions.slice().reverse().map((revision) => (
                           <li key={revision.id}>
@@ -13143,7 +13174,7 @@ export function App() {
                     </div>
                   </>
                 ) : (
-                  <div className="inline-hint">Detayları görmek için bir kontrollü belge seçin.</div>
+                  <div className="inline-hint">{language === 'ru' ? 'Выберите контролируемый документ для просмотра деталей.' : 'Detayları görmek için bir kontrollü belge seçin.'}</div>
                 )}
               </section>
             </div>
