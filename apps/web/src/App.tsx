@@ -5769,11 +5769,12 @@ export function App() {
 
   const ppeMonthlyTrend = useMemo(() => {
     const now = new Date();
+    const locale = language === 'ru' ? 'ru-RU' : language === 'en' ? 'en-US' : 'tr-TR';
     const buckets = Array.from({ length: 6 }, (_, index) => {
       const d = new Date(now.getFullYear(), now.getMonth() - (5 - index), 1);
       return {
         key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
-        label: d.toLocaleDateString('tr-TR', { month: 'short' }),
+        label: d.toLocaleDateString(locale, { month: 'short' }),
         incoming: 0,
         outgoing: 0
       };
@@ -5798,7 +5799,7 @@ export function App() {
     });
 
     return buckets;
-  }, [ppeDashboardTransactions]);
+  }, [ppeDashboardTransactions, language]);
 
   const ppeMonthlyTrendMax = useMemo(
     () => Math.max(...ppeMonthlyTrend.map((row) => Math.max(row.incoming, row.outgoing)), 1),
@@ -6092,12 +6093,12 @@ export function App() {
 
   const ppeStatusLabel = (status: PpeStockStatus) => {
     if (status === 'YETERLI') {
-      return 'Yeterli';
+      return language === 'ru' ? 'Достаточно' : 'Yeterli';
     }
     if (status === 'DUSUK_STOK') {
-      return 'Düşük Stok';
+      return language === 'ru' ? 'Низкий запас' : 'Düşük Stok';
     }
-    return 'Stokta Yok';
+    return language === 'ru' ? 'Нет в наличии' : 'Stokta Yok';
   };
 
   const ppeStatusClass = (status: PpeStockStatus) => {
@@ -6112,18 +6113,18 @@ export function App() {
 
   const ppeTransactionTypeLabel = (type: PpeTransactionType) => {
     if (type === 'STOK_GIRISI') {
-      return 'Stok Girişi';
+      return language === 'ru' ? 'Поступление на склад' : 'Stok Girişi';
     }
     if (type === 'STOK_CIKISI') {
-      return 'Stok Çıkışı';
+      return language === 'ru' ? 'Расход со склада' : 'Stok Çıkışı';
     }
     if (type === 'STOGA_IADE') {
-      return 'Stoğa İade';
+      return language === 'ru' ? 'Возврат на склад' : 'Stoğa İade';
     }
     if (type === 'HASARLI_HURDA') {
-      return 'Hasarlı / Hurda';
+      return language === 'ru' ? 'Повреждённое / Лом' : 'Hasarlı / Hurda';
     }
-    return 'Stok Düzeltme';
+    return language === 'ru' ? 'Корректировка запаса' : 'Stok Düzeltme';
   };
 
   const equipmentInspectionStatusLabel = (status: EquipmentInspectionStatus) => {
@@ -14792,7 +14793,17 @@ export function App() {
                     <label>
                       {language === 'ru' ? 'Тип транзакции' : 'İşlem Türü'}
                       <select value={ppeTransactionForm.transactionType} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, transactionType: event.target.value as PpeTransactionType }))}>
-                        {ppeTransactionTypeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                        {ppeTransactionTypeOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {language === 'ru'
+                              ? option.value === 'STOK_GIRISI' ? 'Поступление (Закупка)'
+                              : option.value === 'STOK_CIKISI' ? 'Расход (Выдача персоналу)'
+                              : option.value === 'STOGA_IADE' ? 'Возврат на склад'
+                              : option.value === 'HASARLI_HURDA' ? 'Повреждённое / Лом'
+                              : 'Корректировка запаса'
+                              : option.label}
+                          </option>
+                        ))}
                       </select>
                     </label>
                     <label>
@@ -14892,7 +14903,15 @@ export function App() {
                     <label>
                       {language === 'ru' ? 'Статус' : 'Durum'}
                       <select value={ppeTransactionForm.lifecycle} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, lifecycle: event.target.value as PpeTransactionLifecycle }))}>
-                        {ppeLifecycleOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                        {ppeLifecycleOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {language === 'ru'
+                              ? option.value === 'TAMAMLANDI' ? 'Завершено'
+                              : option.value === 'ONAY_BEKLIYOR' ? 'Ожидает согласования'
+                              : 'Отменено'
+                              : option.label}
+                          </option>
+                        ))}
                       </select>
                     </label>
                     <label>
