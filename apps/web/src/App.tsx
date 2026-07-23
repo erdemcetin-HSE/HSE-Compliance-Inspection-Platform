@@ -1053,16 +1053,18 @@ const HEALTH_RECORDS_STORAGE_KEY = 'hse-health-records-v1';
 const OBSERVATION_RECORDS_STORAGE_KEY = 'hse-observation-records-v1';
 const PTW_LOCAL_RECORDS_STORAGE_KEY = 'hse-ptw-local-records-v1';
 
-const observationCategoryOptions = [
-  'Güvensiz Davranış',
-  'Güvensiz Durum',
-  'Çevresel Uygunsuzluk',
-  'Yangın Güvenliği',
-  'KKD Uygunsuzluğu',
-  'Housekeeping',
-  'Pozitif Gözlem',
-  'Diğer'
-];
+const observationCategoryLabelsRu: Record<string, string> = {
+  'Çevresel Uygunsuzluk': 'Экологическое несоответствие',
+  'Yangın Güvenliği': 'Пожарная безопасность',
+  'KKD Uygunsuzluğu': 'Несоответствие по СИЗ',
+  Housekeeping: 'Содержание рабочих мест',
+  'Pozitif Gözlem': 'Позитивное предписание',
+  'Diğer': 'Прочее'
+};
+
+const observationCategoryOptions = Object.keys(observationCategoryLabelsRu);
+
+const observationCategoryOptionsRu: Record<string, string> = observationCategoryLabelsRu;
 
 const observationPriorityLabel: Record<ObservationPriority, string> = {
   DUSUK: 'Düşük',
@@ -1075,17 +1077,6 @@ const observationStatusLabel: Record<ObservationWorkflowStatus, string> = {
   ACIK: 'Açık',
   DEVAM_EDIYOR: 'Devam Ediyor',
   KAPALI: 'Kapalı'
-};
-
-const observationCategoryOptionsRu: Record<string, string> = {
-  'Güvensiz Davranış': 'Небезопасные действия',
-  'Güvensiz Durum': 'Небезопасные условия',
-  'Çevresel Uygunsuzluk': 'Экологическое несоответствие',
-  'Yangın Güvenliği': 'Пожарная безопасность',
-  'KKD Uygunsuzluğu': 'Несоответствие по СИЗ',
-  Housekeeping: 'Содержание рабочих мест',
-  'Pozitif Gözlem': 'Позитивное предписание',
-  'Diğer': 'Прочее'
 };
 
 const observationPriorityLabelRu: Record<ObservationPriority, string> = {
@@ -1958,6 +1949,66 @@ const buildTurkishReplacementMap = (language: Exclude<Language, 'tr'>): Map<stri
       ['Dağılım', 'Distribution']
     ],
     ru: [
+      ['Yasal Mevzuat Kaydı Yönetici Özeti', 'Сводка реестра законодательства'],
+      ['Rol', 'Роль'],
+      ['Kategori', 'Категория'],
+      ['Yetkili Merci', 'Компетентный орган'],
+      ['Uyumluluk', 'Соответствие'],
+      ['Toplam Mevzuat Sayısı', 'Общее количество нормативных документов'],
+      ['Uyumlu Mevzuatlar', 'Соответствующие нормативные документы'],
+      ['Uyumsuz Mevzuatlar', 'Несоответствующие нормативные документы'],
+      ['Gözden Geçirme Aşamasındaki', 'На рассмотрении'],
+      ['Yaklaşan Gözden Geçirmeler', 'Предстоящие пересмотры'],
+      ['Открыто Yasal Aksiyonlar', 'Открытые корректирующие действия'],
+      ['Uyumluluk Durumu', 'Статус соответствия'],
+      ['Uyumlu', 'Соответствует'],
+      ['Kısmen Uyumlu', 'Частично соответствует'],
+      ['Uyumsuz', 'Не соответствует'],
+      ['Kategoriye Göre Mevzuatlar', 'Нормативные документы по категориям'],
+      ['Охрана труда ve Güvenliği', 'Охрана труда и промышленная безопасность'],
+      ['Yangın Güvenliği', 'Пожарная безопасность'],
+      ['Электрика Güvenliği', 'Электробезопасность'],
+      ['Подъемное Ekipmanları', 'Подъёмное оборудование'],
+      ['Atık Yönetimi', 'Обращение с отходами'],
+      ['Химические вещества Güvenlik', 'Безопасность химических веществ'],
+      ['Yaklaşan Yasal Gözden Geçirmeler', 'Предстоящие пересмотры законодательства'],
+      ['Projeye Göre Открыто Yasal Aksiyonlar', 'Открытые корректирующие действия по проектам'],
+      ['Yaklaşan Gözden Geçirme Uyarısı', 'Предупреждение о предстоящем пересмотре'],
+      ['Süresi Dolan Gereklilik Uyarısı', 'Предупреждение об истечении срока действия требований'],
+      ['Belge Silme Yetkisi', 'Право удаления документов'],
+      ['Yasal Mevzuat Kaydı Ввод данных', 'Ввод данных реестра законодательства'],
+      ['Mevzuat Kimliği', 'Идентификатор нормативного документа'],
+      ['Mevzuat Kategorisi', 'Категория нормативного документа'],
+      ['Mevzuat Başlığı', 'Наименование нормативного документа'],
+      ['İlgili Otorite / Kurum', 'Компетентный орган / Организация'],
+      ['İlgili Departman', 'Ответственный отдел'],
+      ['Yasal Gereklilik', 'Законодательное требование'],
+      ['Ответственный Kişi', 'Ответственное лицо'],
+      ['Yürürlük Tarihi', 'Дата вступления в силу'],
+      ['Последнее Gözden Geçirme Tarihi', 'Дата последнего пересмотра'],
+      ['Bir Sonraki Gözden Geçirme Tarihi', 'Дата следующего пересмотра'],
+      ['Открыто Actions', 'Открытые корректирующие действия'],
+      ['Risk Seviyesi', 'Уровень риска'],
+      ['Notlar', 'Примечания'],
+      ['Yasal Kaydı Сохранить', 'Сохранить запись'],
+      ['Yasal Mevzuat Kayıtları', 'Реестр законодательства'],
+      ['Bir Sonraki Gözden Geçirme', 'Следующий пересмотр'],
+      ['Filtreye uygun yasal kayıt bulunmuyor.', 'Не найдено ни одной записи, соответствующей выбранным фильтрам.'],
+      ['Tümü', 'Все'],
+      ['İSG Yöneticisi', 'Менеджер по ОТиПБ'],
+      ['Kurumsal İSG Yöneticisi', 'Корпоративный менеджер по ОТиПБ'],
+      ['Uyumluluk Yöneticisi', 'Менеджер по соответствию'],
+      ['ISO Yönetim Temsilcisi', 'Представитель руководства по ISO'],
+      ['Görüntüleyici', 'Просмотр'],
+      ['Охрана труда ve Güvenliği', 'Охрана труда и промышленная безопасность'],
+      ['Экология, Şehircilik ve İklim Değişikliği Bakanlığı', 'Министерство окружающей среды, градостроительства и изменения климата'],
+      ['Çalışma ve Sosyal Güvenlik Bakanlığı', 'Министерство труда и социального обеспечения'],
+      ['Enerji ve Tabii Kaynaklar Bakanlığı', 'Министерство энергетики и природных ресурсов'],
+      ['İtfaiye Daire Başkanlığı', 'Департамент пожарной охраны'],
+      ['TSE', 'Турецкий институт стандартов'],
+      ['Düşük', 'Низкий'],
+      ['Orta', 'Средний'],
+      ['Yüksek', 'Высокий'],
       ['Haz', 'Июн'],
       ['Tem', 'Июл'],
       ['Agu', 'Авг'],
@@ -2463,33 +2514,37 @@ const ptwStatusFlowRuLabel: Record<PtwStatus, string> = {
   'İptal': 'Отменен'
 };
 
-const legalCategoryOptions = [
-  'İş Sağlığı ve Güvenliği',
-  'Çevre',
-  'Yangın Güvenliği',
-  'Elektrik Güvenliği',
-  'Kaldırma Ekipmanları',
-  'Makineler',
-  'Atık Yönetimi',
-  'Kimyasal Güvenlik'
+const legalCategoryOptions: Array<{ value: string; label: string }> = [
+  { value: 'İş Sağlığı ve Güvenliği', label: 'Охрана труда и промышленная безопасность' },
+  { value: 'Çevre', label: 'Экология' },
+  { value: 'Yangın Güvenliği', label: 'Пожарная безопасность' },
+  { value: 'Elektrik Güvenliği', label: 'Электробезопасность' },
+  { value: 'Kaldırma Ekipmanları', label: 'Подъёмное оборудование' },
+  { value: 'Makineler', label: 'Машины и механизмы' },
+  { value: 'Atık Yönetimi', label: 'Обращение с отходами' },
+  { value: 'Kimyasal Güvenlik', label: 'Безопасность химических веществ' }
 ];
 
-const legalAuthorityOptions = [
-  'Çalışma ve Sosyal Güvenlik Bakanlığı',
-  'Çevre, Şehircilik ve İklim Değişikliği Bakanlığı',
-  'Enerji ve Tabii Kaynaklar Bakanlığı',
-  'İtfaiye Daire Başkanlığı',
-  'TSE',
-  'Rostechnadzor'
+const legalAuthorityOptions: Array<{ value: string; label: string }> = [
+  { value: 'Çalışma ve Sosyal Güvenlik Bakanlığı', label: 'Министерство труда и социального обеспечения' },
+  { value: 'Çevre, Şehircilik ve İklim Değişikliği Bakanlığı', label: 'Министерство окружающей среды, градостроительства и изменения климата' },
+  { value: 'Enerji ve Tabii Kaynaklar Bakanlığı', label: 'Министерство энергетики и природных ресурсов' },
+  { value: 'İtfaiye Daire Başkanlığı', label: 'Департамент пожарной охраны' },
+  { value: 'TSE', label: 'Турецкий институт стандартов' },
+  { value: 'Rostechnadzor', label: 'Ростехнадзор' }
 ];
 
 const legalRoleOptions: Array<{ value: LegalUserRole; label: string }> = [
-  { value: 'HSE_MANAGER', label: 'İSG Yöneticisi' },
-  { value: 'CORPORATE_HSE_MANAGER', label: 'Kurumsal İSG Yöneticisi' },
-  { value: 'COMPLIANCE_MANAGER', label: 'Uyumluluk Yöneticisi' },
-  { value: 'ISO_REPRESENTATIVE', label: 'ISO Yönetim Temsilcisi' },
-  { value: 'VIEWER', label: 'Görüntüleyici' }
+  { value: 'HSE_MANAGER', label: 'Менеджер по ОТиПБ' },
+  { value: 'CORPORATE_HSE_MANAGER', label: 'Корпоративный менеджер по ОТиПБ' },
+  { value: 'COMPLIANCE_MANAGER', label: 'Менеджер по соответствию' },
+  { value: 'ISO_REPRESENTATIVE', label: 'Представитель руководства по ISO' },
+  { value: 'VIEWER', label: 'Просмотр' }
 ];
+
+const legalCategoryLabelsRu: Record<string, string> = Object.fromEntries(legalCategoryOptions.map((option) => [option.value, option.label]));
+
+const legalAuthorityLabelsRu: Record<string, string> = Object.fromEntries(legalAuthorityOptions.map((option) => [option.value, option.label]));
 
 const controlledDocumentCategoryOptions = [
   'Çalışma İzinleri',
@@ -2726,129 +2781,129 @@ const initialLegalRecords: LegalRecord[] = [
     id: 'legal-1',
     projectId: 'metro',
     regulationId: 'LG-2026-0001',
-    category: 'İş Sağlığı ve Güvenliği',
-    title: 'Yapı İşlerinde İş Sağlığı ve Güvenliği Yönetmeliği',
-    authority: 'Çalışma ve Sosyal Güvenlik Bakanlığı',
-    department: 'İSG',
-    legalRequirement: 'Yüksekte çalışma, iskele, düşmeye karşı koruma ve saha denetim şartlarının periyodik doğrulaması.',
-    responsiblePerson: 'Kurumsal İSG Müdürü',
+    category: 'Охрана труда и промышленная безопасность',
+    title: 'Правила охраны труда и промышленной безопасности при строительных работах',
+    authority: 'Министерство труда и социального обеспечения',
+    department: 'ОТиПБ',
+    legalRequirement: 'Периодическая проверка работ на высоте, лесов, средств защиты от падения и требований к инспекциям на площадке.',
+    responsiblePerson: 'Корпоративный менеджер по ОТиПБ',
     complianceStatus: 'KISMEN_UYUMLU',
     effectiveDate: '2024-01-01',
     lastReviewDate: '2026-06-10',
     nextReviewDate: '2026-08-05',
     openActions: 3,
     riskLevel: 'YUKSEK',
-    notes: 'Tünel şaft alanlarında düşüş önleme planı güncelleniyor.',
+    notes: 'План предотвращения падений в зонах тоннельных шахт обновляется.',
     documents: [
       {
         id: 'legal-doc-1',
         kind: 'MEVZUAT_BELGESI',
-        fileName: 'yapi-islerinde-isg-yonetmeligi.pdf',
+        fileName: 'pravila-ohrany-truda-v-stroitelnyh-rabotah.pdf',
         fileType: 'application/pdf',
         fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         uploadedAt: '2026-06-10',
-        uploadedBy: 'Kurumsal İSG Müdürü',
+        uploadedBy: 'Корпоративный менеджер по ОТиПБ',
         versions: [
           {
             version: 1,
-            fileName: 'yapi-islerinde-isg-yonetmeligi.pdf',
+            fileName: 'pravila-ohrany-truda-v-stroitelnyh-rabotah.pdf',
             fileType: 'application/pdf',
             fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
             uploadedAt: '2026-06-10',
-            uploadedBy: 'Kurumsal İSG Müdürü'
+            uploadedBy: 'Корпоративный менеджер по ОТиПБ'
           }
         ]
       },
       {
         id: 'legal-doc-2',
         kind: 'DENETIM_RAPORU',
-        fileName: 'metro-yuksekte-calisma-denetim-raporu.docx',
+        fileName: 'metro-audit-rabot-na-vysote.docx',
         fileType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         fileUrl: '#',
         uploadedAt: '2026-07-01',
-        uploadedBy: 'İSG Uzmanı',
+        uploadedBy: 'Специалист по ОТиПБ',
         versions: [
           {
             version: 1,
-            fileName: 'metro-yuksekte-calisma-denetim-raporu.docx',
+            fileName: 'metro-audit-rabot-na-vysote.docx',
             fileType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             fileUrl: '#',
             uploadedAt: '2026-07-01',
-            uploadedBy: 'İSG Uzmanı'
+            uploadedBy: 'Специалист по ОТиПБ'
           }
         ]
       }
     ],
-    createdBy: 'Kurumsal İSG Müdürü',
+    createdBy: 'Корпоративный менеджер по ОТиПБ',
     createdAt: '2026-06-10',
-    modifiedBy: 'İSG Uzmanı',
+    modifiedBy: 'Специалист по ОТиПБ',
     modifiedAt: '2026-07-01',
-    reviewedBy: 'Uyumluluk Yöneticisi',
+    reviewedBy: 'Менеджер по соответствию',
     reviewedAt: '2026-07-08',
-    exportHistory: [{ format: 'PDF_SINGLE', actor: 'Uyumluluk Yöneticisi', date: '2026-07-09' }],
-    downloadHistory: [{ fileName: 'yapi-islerinde-isg-yonetmeligi.pdf', actor: 'İSG Uzmanı', date: '2026-07-02' }],
+    exportHistory: [{ format: 'PDF_SINGLE', actor: 'Менеджер по соответствию', date: '2026-07-09' }],
+    downloadHistory: [{ fileName: 'pravila-ohrany-truda-v-stroitelnyh-rabotah.pdf', actor: 'Специалист по ОТиПБ', date: '2026-07-02' }],
     auditTrail: [
-      { id: 'legal-audit-1', eventType: 'CREATED', actor: 'Kurumsal İSG Müdürü', eventDate: '2026-06-10', detail: 'Mevzuat kaydı oluşturuldu.' },
-      { id: 'legal-audit-2', eventType: 'REVIEWED', actor: 'Uyumluluk Yöneticisi', eventDate: '2026-07-08', detail: 'Gözden geçirme tamamlandı.' }
+      { id: 'legal-audit-1', eventType: 'CREATED', actor: 'Корпоративный менеджер по ОТиПБ', eventDate: '2026-06-10', detail: 'Запись законодательства создана.' },
+      { id: 'legal-audit-2', eventType: 'REVIEWED', actor: 'Менеджер по соответствию', eventDate: '2026-07-08', detail: 'Пересмотр завершён.' }
     ]
   },
   {
     id: 'legal-2',
     projectId: 'port',
     regulationId: 'LG-2026-0002',
-    category: 'Çevre',
-    title: 'Atık Yönetimi Yönetmeliği',
-    authority: 'Çevre, Şehircilik ve İklim Değişikliği Bakanlığı',
-    department: 'Çevre',
-    legalRequirement: 'Tehlikeli atıkların sınıflandırılması, geçici depolama ve lisanslı bertaraf süreçlerinin kayıt altına alınması.',
-    responsiblePerson: 'Çevre Mühendisi',
+    category: 'Экология',
+    title: 'Правила обращения с отходами',
+    authority: 'Министерство окружающей среды, градостроительства и изменения климата',
+    department: 'Экология',
+    legalRequirement: 'Классификация опасных отходов, временное хранение и учет процессов лицензированной утилизации.',
+    responsiblePerson: 'Инженер-эколог',
     complianceStatus: 'UYUMSUZ',
     effectiveDate: '2023-04-12',
     lastReviewDate: '2026-05-20',
     nextReviewDate: '2026-07-25',
     openActions: 5,
     riskLevel: 'KRITIK',
-    notes: 'Atık transfer formlarının dijital arşive aktarımı gecikmiş durumda.',
+    notes: 'Передача форм по перевозке отходов в цифровой архив задерживается.',
     documents: [],
-    createdBy: 'Çevre Mühendisi',
+    createdBy: 'Инженер-эколог',
     createdAt: '2026-05-20',
-    modifiedBy: 'Çevre Mühendisi',
+    modifiedBy: 'Инженер-эколог',
     modifiedAt: '2026-07-10',
-    reviewedBy: 'ISO Yönetim Temsilcisi',
+    reviewedBy: 'Представитель руководства по ISO',
     reviewedAt: '2026-07-11',
     exportHistory: [],
     downloadHistory: [],
     auditTrail: [
-      { id: 'legal-audit-3', eventType: 'CREATED', actor: 'Çevre Mühendisi', eventDate: '2026-05-20', detail: 'Kayıt eklendi.' }
+      { id: 'legal-audit-3', eventType: 'CREATED', actor: 'Инженер-эколог', eventDate: '2026-05-20', detail: 'Запись добавлена.' }
     ]
   },
   {
     id: 'legal-3',
     projectId: 'solar',
     regulationId: 'LG-2026-0003',
-    category: 'Elektrik Güvenliği',
-    title: 'Elektrik Tesislerinde İşletme Güvenliği',
-    authority: 'Enerji ve Tabii Kaynaklar Bakanlığı',
-    department: 'Elektrik',
-    legalRequirement: 'Yüksek gerilim operasyonları için yetkin personel, LOTO prosedürü ve yıllık test raporlarının takibi.',
-    responsiblePerson: 'Elektrik İşletme Şefi',
+    category: 'Электробезопасность',
+    title: 'Безопасность эксплуатации электроустановок',
+    authority: 'Министерство энергетики и природных ресурсов',
+    department: 'Электрика',
+    legalRequirement: 'Квалифицированный персонал для операций на высоком напряжении, процедура LOTO и контроль ежегодных отчетов по испытаниям.',
+    responsiblePerson: 'Начальник электрохозяйства',
     complianceStatus: 'UYUMLU',
     effectiveDate: '2022-09-01',
     lastReviewDate: '2026-07-01',
     nextReviewDate: '2026-10-01',
     openActions: 1,
     riskLevel: 'ORTA',
-    notes: 'Bir adet bakım prosedürü revizyonu açık.',
+    notes: 'Одна ревизия процедуры технического обслуживания открыта.',
     documents: [],
-    createdBy: 'Elektrik İşletme Şefi',
+    createdBy: 'Начальник электрохозяйства',
     createdAt: '2026-07-01',
-    modifiedBy: 'Elektrik İşletme Şefi',
+    modifiedBy: 'Начальник электрохозяйства',
     modifiedAt: '2026-07-01',
-    reviewedBy: 'Kurumsal İSG Müdürü',
+    reviewedBy: 'Корпоративный менеджер по ОТиПБ',
     reviewedAt: '2026-07-12',
     exportHistory: [],
     downloadHistory: [],
-    auditTrail: [{ id: 'legal-audit-4', eventType: 'CREATED', actor: 'Elektrik İşletme Şefi', eventDate: '2026-07-01', detail: 'Kayıt eklendi.' }]
+    auditTrail: [{ id: 'legal-audit-4', eventType: 'CREATED', actor: 'Начальник электрохозяйства', eventDate: '2026-07-01', detail: 'Запись добавлена.' }]
   }
 ];
 
@@ -3276,7 +3331,7 @@ const recordsByModule: Record<ModuleKey, ModuleRecord[]> = {
     { projectId: 'metro', date: '2026-07-11', title: 'Sağlık taraması', valueA: 63, valueB: 7, status: 'CLOSED' }
   ],
   'legal-register': [
-    { projectId: 'all', date: '2026-07-10', title: 'Mevzuat güncellemesi', valueA: 4, valueB: 1, status: 'OPEN' }
+    { projectId: 'all', date: '2026-07-10', title: 'Обновление законодательства', valueA: 4, valueB: 1, status: 'OPEN' }
   ],
   documents: [
     { projectId: 'all', date: '2026-07-09', title: 'SOP revizyonu', valueA: 16, valueB: 3, status: 'IN_PROGRESS' }
@@ -4662,9 +4717,9 @@ export function App() {
   });
   const [legalForm, setLegalForm] = useState<LegalRecordForm>({
     projectId: projectCatalog[0]?.id ?? '',
-    category: legalCategoryOptions[0],
+    category: legalCategoryOptions[0].value,
     title: '',
-    authority: legalAuthorityOptions[0],
+    authority: legalAuthorityOptions[0].value,
     department: departmentNames[0] ?? '',
     legalRequirement: '',
     responsiblePerson: '',
@@ -5218,7 +5273,7 @@ export function App() {
 
   const legalCategoryBars = useMemo(() => {
     const map = new Map<string, number>();
-    legalCategoryOptions.forEach((category) => map.set(category, 0));
+    legalCategoryOptions.forEach((category) => map.set(category.value, 0));
     legalScopedRows.forEach((record) => {
       map.set(record.category, (map.get(record.category) ?? 0) + 1);
     });
@@ -8094,7 +8149,7 @@ export function App() {
       </head>
       <body>
         <div class="report-header">
-          <div class="logo-box">HSE LOGO</div>
+          <div class="logo-box">ЛОГОТИП HSE</div>
           <div>
             <h1>KKD Envanter KPI Raporu</h1>
             <div class="date">Tarih: ${new Date().toLocaleDateString('tr-TR')}</div>
@@ -8663,7 +8718,31 @@ export function App() {
   };
 
   const legalRoleLabel = (value: LegalUserRole) => {
+    if (language === 'ru') {
+      const map: Record<LegalUserRole, string> = {
+        HSE_MANAGER: 'Менеджер по ОТиПБ',
+        CORPORATE_HSE_MANAGER: 'Корпоративный менеджер по ОТиПБ',
+        COMPLIANCE_MANAGER: 'Менеджер по соответствию',
+        ISO_REPRESENTATIVE: 'Представитель руководства по ISO',
+        VIEWER: 'Просмотр'
+      };
+      return map[value];
+    }
     return legalRoleOptions.find((option) => option.value === value)?.label ?? value;
+  };
+
+  const legalCategoryLabel = (value: string) => {
+    if (language === 'ru') {
+      return legalCategoryLabelsRu[value] ?? value;
+    }
+    return value;
+  };
+
+  const legalAuthorityLabel = (value: string) => {
+    if (language === 'ru') {
+      return legalAuthorityLabelsRu[value] ?? value;
+    }
+    return value;
   };
 
   const detectFileType = (fileName: string, fallbackType?: string) => {
@@ -8764,7 +8843,7 @@ export function App() {
           eventType: 'CREATED',
           actor,
           eventDate: now,
-          detail: `Kayıt oluşturuldu (${nextLegalRegulationId}).`
+          detail: `Запись создана (${nextLegalRegulationId}).`
         }
       ]
     };
@@ -8801,7 +8880,7 @@ export function App() {
           eventType: 'UPDATED',
           actor,
           eventDate: now,
-          detail: `${newDocuments.length} belge yüklendi (${legalDocumentKindLabel(kind)}).`
+          detail: `Загружено файлов: ${newDocuments.length} (${legalDocumentKindLabel(kind)}).`
         }
       );
       return updated;
@@ -8861,7 +8940,7 @@ export function App() {
           eventType: 'REPLACED_DOCUMENT',
           actor,
           eventDate: nowDate,
-          detail: 'Belge yeni sürüm ile değiştirildi.'
+          detail: 'Документ заменен новой версией.'
         }
       );
     });
@@ -8888,7 +8967,7 @@ export function App() {
           eventType: 'DELETED_DOCUMENT',
           actor,
           eventDate: now,
-          detail: `${target?.fileName ?? 'Belge'} silindi.`
+          detail: `${target?.fileName ?? 'Документ'} удален.`
         }
       );
       return next;
@@ -9421,7 +9500,7 @@ export function App() {
           eventType: 'REVIEWED',
           actor,
           eventDate: now,
-          detail: 'Kayıt gözden geçirildi.'
+          detail: 'Запись пересмотрена.'
         }
       )
     );
@@ -9453,7 +9532,7 @@ export function App() {
           eventType: 'DOWNLOADED_DOCUMENT',
           actor,
           eventDate: now,
-          detail: `${documentRow.fileName} indirildi.`
+          detail: `${documentRow.fileName} скачан.`
         }
       )
     );
@@ -9492,22 +9571,22 @@ export function App() {
           <section class="legal-report-section">
             <h2>${record.regulationId} - ${record.title}</h2>
             <div class="legal-grid">
-              <article><span>Proje</span><strong>${projectName}</strong></article>
-              <article><span>Kategori</span><strong>${record.category}</strong></article>
-              <article><span>Yetkili Merci</span><strong>${record.authority}</strong></article>
-              <article><span>Sorumlu Kişi</span><strong>${record.responsiblePerson}</strong></article>
-              <article><span>Uyumluluk Durumu</span><strong>${complianceLabel(record.complianceStatus)}</strong></article>
-              <article><span>Risk Seviyesi</span><strong>${legalRiskLabel(record.riskLevel)}</strong></article>
-              <article><span>Yürürlük Tarihi</span><strong>${record.effectiveDate}</strong></article>
-              <article><span>Sonraki Gözden Geçirme</span><strong>${record.nextReviewDate}</strong></article>
-              <article><span>Açık Eylemler</span><strong>${record.openActions}</strong></article>
-              <article><span>Oluşturan</span><strong>${record.createdBy}</strong></article>
-              <article><span>Oluşturulma Tarihi</span><strong>${record.createdAt}</strong></article>
-              <article><span>Gözden Geçiren</span><strong>${record.reviewedBy}</strong></article>
+              <article><span>Проект</span><strong>${projectName}</strong></article>
+              <article><span>Категория</span><strong>${legalCategoryLabel(record.category)}</strong></article>
+              <article><span>Компетентный орган</span><strong>${legalAuthorityLabel(record.authority)}</strong></article>
+              <article><span>Ответственное лицо</span><strong>${record.responsiblePerson}</strong></article>
+              <article><span>Статус соответствия</span><strong>${complianceLabel(record.complianceStatus)}</strong></article>
+              <article><span>Уровень риска</span><strong>${legalRiskLabel(record.riskLevel)}</strong></article>
+              <article><span>Дата вступления в силу</span><strong>${record.effectiveDate}</strong></article>
+              <article><span>Дата следующего пересмотра</span><strong>${record.nextReviewDate}</strong></article>
+              <article><span>Открытые корректирующие действия</span><strong>${record.openActions}</strong></article>
+              <article><span>Создал</span><strong>${record.createdBy}</strong></article>
+              <article><span>Дата создания</span><strong>${record.createdAt}</strong></article>
+              <article><span>Проверил</span><strong>${record.reviewedBy}</strong></article>
             </div>
-            <div class="legal-row"><strong>Yasal Gereklilik:</strong> ${record.legalRequirement}</div>
-            <div class="legal-row"><strong>Notlar:</strong> ${record.notes || '-'}</div>
-            <div class="legal-row"><strong>Ekli Belge Referansları:</strong> ${record.documents.map((doc) => doc.fileName).join(', ') || '-'}</div>
+            <div class="legal-row"><strong>Законодательное требование:</strong> ${record.legalRequirement}</div>
+            <div class="legal-row"><strong>Примечания:</strong> ${record.notes || '-'}</div>
+            <div class="legal-row"><strong>Ссылки на прикрепленные документы:</strong> ${record.documents.map((doc) => doc.fileName).join(', ') || '-'}</div>
           </section>
         `;
       })
@@ -9515,14 +9594,14 @@ export function App() {
 
     const summaryRows = `
       <section class="legal-report-section">
-        <h2>Uyumluluk Özet Raporu</h2>
+        <h2>Сводный отчет по соответствию</h2>
         <div class="legal-grid">
-          <article><span>Toplam Mevzuat</span><strong>${legalSummary.total}</strong></article>
-          <article><span>Uyumlu</span><strong>${legalSummary.compliant}</strong></article>
-          <article><span>Uyumsuz</span><strong>${legalSummary.nonCompliant}</strong></article>
-          <article><span>Kısmen Uyumlu / İnceleme</span><strong>${legalSummary.inReview}</strong></article>
-          <article><span>Yaklaşan Gözden Geçirme</span><strong>${legalSummary.upcomingReviews}</strong></article>
-          <article><span>Açık Yasal Aksiyon</span><strong>${legalSummary.openActions}</strong></article>
+          <article><span>Общее количество нормативных документов</span><strong>${legalSummary.total}</strong></article>
+          <article><span>Соответствующие нормативные документы</span><strong>${legalSummary.compliant}</strong></article>
+          <article><span>Несоответствующие нормативные документы</span><strong>${legalSummary.nonCompliant}</strong></article>
+          <article><span>На рассмотрении</span><strong>${legalSummary.inReview}</strong></article>
+          <article><span>Предстоящие пересмотры законодательства</span><strong>${legalSummary.upcomingReviews}</strong></article>
+          <article><span>Открытые корректирующие действия</span><strong>${legalSummary.openActions}</strong></article>
         </div>
       </section>
     `;
@@ -9532,7 +9611,7 @@ export function App() {
       <html lang="tr">
       <head>
         <meta charset="utf-8" />
-        <title>${options?.title ?? 'Yasal Envanter Raporu'}</title>
+        <title>${options?.title ?? 'Отчет реестра законодательства'}</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 24px; color: #0f172a; }
           .report-header { border: 1px solid #dbe3ee; border-radius: 10px; padding: 12px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(170deg, #f8fbff 0%, #edf5ff 100%); }
@@ -9557,20 +9636,20 @@ export function App() {
         <header class="report-header">
           <div class="logo-box">HSE LOGO</div>
           <div>
-            <h1>${options?.title ?? 'Yasal Envanter Yönetici Raporu'}</h1>
+            <h1>${options?.title ?? 'Управленческий отчет реестра законодательства'}</h1>
           </div>
           <div class="meta">
-            <div>Rapor Tarihi: ${nowText}</div>
-            <div>Hazırlayan: ${actor}</div>
-            <div>Standart: ISO 45001 / ISO 14001</div>
+            <div>Дата отчета: ${nowText}</div>
+            <div>Подготовил: ${actor}</div>
+            <div>Стандарт: ISO 45001 / ISO 14001</div>
           </div>
         </header>
         ${mode === 'summary' ? summaryRows : ''}
         ${mode === 'single' || mode === 'full' ? recordSections : ''}
         ${mode === 'full' ? summaryRows : ''}
         <footer class="footer">
-          <span>Kurumsal Yasal Uyum Raporu</span>
-          <span>Dokuman: LEG-REG-RPT | Rev: 01</span>
+          <span>Корпоративный отчет по правовому соответствию</span>
+          <span>Документ: РЕЕСТР-ЗАК | Ред.: 01</span>
         </footer>
       </body>
       </html>
@@ -9590,7 +9669,7 @@ export function App() {
     const now = new Date().toISOString().slice(0, 10);
     openLegalReportWindow('single', {
       recordId: selectedLegalRecord.id,
-      title: `Tekil Yasal Kayıt - ${selectedLegalRecord.regulationId}`,
+      title: `Запись реестра законодательства - ${selectedLegalRecord.regulationId}`,
       autoPrint: true
     });
     updateLegalRecord(selectedLegalRecord.id, (record) =>
@@ -9603,7 +9682,7 @@ export function App() {
           eventType: 'EXPORTED_PDF_SINGLE',
           actor,
           eventDate: now,
-          detail: 'Tekil yasal kayıt PDF dışa aktarıldı.'
+          detail: 'Единичная запись реестра законодательства экспортирована в виде PDF-документа.'
         }
       )
     );
@@ -9613,7 +9692,7 @@ export function App() {
     const actor = legalRoleLabel(legalUserRole);
     const now = new Date().toISOString().slice(0, 10);
     openLegalReportWindow('full', {
-      title: 'Tam Yasal Kayıt Raporu',
+      title: 'Полный отчет реестра законодательства',
       autoPrint: true
     });
     setLegalRecords((prev) =>
@@ -9627,7 +9706,7 @@ export function App() {
             eventType: 'EXPORTED_PDF_FULL',
             actor,
             eventDate: now,
-            detail: 'Tam yasal kayıt raporu PDF dışa aktarıldı.'
+            detail: 'Полный отчет реестра законодательства экспортирован в виде PDF-документа.'
           }
         )
       )
@@ -9636,22 +9715,22 @@ export function App() {
 
   const exportLegalExcel = () => {
     const headers = [
-      'Proje',
-      'Mevzuat ID',
-      'Mevzuat Başlığı',
-      'Kategori',
-      'Yetkili Merci',
-      'Departman',
-      'Uyumluluk Durumu',
-      'Sorumlu Kişi',
-      'Yürürlük Tarihi',
-      'Son Gözden Geçirme',
-      'Sonraki Gözden Geçirme',
-      'Açık Aksiyonlar',
-      'Risk Seviyesi',
-      'Ekli Belge Sayısı',
-      'Oluşturan',
-      'Oluşturulma Tarihi'
+      'Проект',
+      'Идентификатор нормативного документа',
+      'Наименование',
+      'Категория',
+      'Компетентный орган',
+      'Ответственный отдел',
+      'Статус соответствия',
+      'Ответственное лицо',
+      'Дата вступления в силу',
+      'Дата последнего пересмотра',
+      'Дата следующего пересмотра',
+      'Открытые корректирующие действия',
+      'Уровень риска',
+      'Количество прикрепленных документов',
+      'Создал',
+      'Дата создания'
     ];
     const rows = legalScopedRows.map((record) => [
       projectCatalog.find((project) => project.id === record.projectId)?.name ?? record.projectId,
@@ -9698,7 +9777,7 @@ export function App() {
             eventType: 'EXPORTED_EXCEL',
             actor,
             eventDate: now,
-            detail: 'Yasal kayıt raporu Excel dışa aktarıldı.'
+            detail: 'Отчет реестра законодательства экспортирован в формате XLSX.'
           }
         )
       )
@@ -9711,21 +9790,21 @@ export function App() {
     }
     openLegalReportWindow('single', {
       recordId: selectedLegalRecord.id,
-      title: `Yazdırma - ${selectedLegalRecord.regulationId}`,
+      title: `Печать - ${selectedLegalRecord.regulationId}`,
       autoPrint: true
     });
   };
 
   const printFullLegalRegister = () => {
     openLegalReportWindow('full', {
-      title: 'Yazdırma - Tam Yasal Kayıt',
+      title: 'Печать - Полный реестр законодательства',
       autoPrint: true
     });
   };
 
   const printLegalComplianceSummary = () => {
     openLegalReportWindow('summary', {
-      title: 'Yazdırma - Uyumluluk Özet Raporu',
+      title: 'Печать - Сводный отчет по соответствию',
       autoPrint: true
     });
   };
@@ -11857,6 +11936,9 @@ export function App() {
             <button type="button" className="table-action-button" onClick={continueAsGuest}>
               {language === 'en' ? 'Continue as Guest' : language === 'ru' ? 'Продолжить как гость' : 'Misafir Olarak Devam Et'}
             </button>
+            <button type="button" className="secondary" onClick={() => window.console.log('Simple React button clicked')}>
+              Simple Button
+            </button>
           </div>
 
           <p style={{ marginTop: 10, color: '#526074', fontSize: '0.84rem' }}>{guestHint}</p>
@@ -12329,68 +12411,62 @@ export function App() {
         {activeModule === 'legal-register' ? (
           <div className="legal-register-layout">
             <section className="panel legal-panel">
-              <h2>{language === 'ru' ? 'Сводка реестра законодательства' : 'Yasal Mevzuat Kaydı Yönetici Özeti'}</h2>
+              <h2>Сводка реестра законодательства</h2>
               <div className="dashboard-toolbar legal-toolbar">
                 <label>
-                  {language === 'ru' ? 'Роль' : 'Rol'}
+                  Роль
                   <select value={legalUserRole} onChange={(event) => setLegalUserRole(event.target.value as LegalUserRole)}>
                     {legalRoleOptions.map((option) => (
                       <option key={option.value} value={option.value}>
-                        {language === 'ru'
-                          ? option.value === 'HSE_MANAGER' ? 'Менеджер по ОТиПБ'
-                          : option.value === 'CORPORATE_HSE_MANAGER' ? 'Корпоративный менеджер по ОТиПБ'
-                          : option.value === 'COMPLIANCE_MANAGER' ? 'Менеджер по соответствию'
-                          : option.value === 'ISO_REPRESENTATIVE' ? 'Представитель по ISO'
-                          : 'Просмотр'
-                          : option.label}
+                        {legalRoleLabel(option.value)}
                       </option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Проект' : 'Proje'}
+                  Проект
                   <select value={legalFilters.projectId} onChange={(event) => setLegalFilters((prev) => ({ ...prev, projectId: event.target.value }))}>
-                    <option value="all">{language === 'ru' ? 'Все проекты' : 'Tüm Projeler'}</option>
+                    <option value="all">Все проекты</option>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Категория' : 'Kategori'}
+                  Категория
                   <select value={legalFilters.category} onChange={(event) => setLegalFilters((prev) => ({ ...prev, category: event.target.value }))}>
-                    <option value="all">{language === 'ru' ? 'Все' : 'Tümü'}</option>
+                    <option value="all">Все</option>
                     {legalCategoryOptions.map((category) => (
-                      <option key={category} value={category}>{category}</option>
+                      <option key={category.value} value={category.value}>{category.label}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Регулирующий орган' : 'Yetkili Merci'}
+                  Компетентный орган
                   <select value={legalFilters.authority} onChange={(event) => setLegalFilters((prev) => ({ ...prev, authority: event.target.value }))}>
-                    <option value="all">{language === 'ru' ? 'Все' : 'Tümü'}</option>
+                    <option value="all">Все</option>
                     {legalAuthorityOptions.map((authority) => (
-                      <option key={authority} value={authority}>{authority}</option>
+                      <option key={authority.value} value={authority.value}>{authority.label}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Соответствие' : 'Uyumluluk'}
+                  Соответствие
                   <select
                     value={legalFilters.complianceStatus}
                     onChange={(event) => setLegalFilters((prev) => ({ ...prev, complianceStatus: event.target.value as 'ALL' | LegalComplianceStatus }))}
                   >
-                    <option value="ALL">{language === 'ru' ? 'Все' : 'Tümü'}</option>
-                    <option value="UYUMLU">{language === 'ru' ? 'Соответствует' : 'Uyumlu'}</option>
-                    <option value="KISMEN_UYUMLU">{language === 'ru' ? 'Частично соответствует' : 'Kısmen Uyumlu'}</option>
-                    <option value="UYUMSUZ">{language === 'ru' ? 'Не соответствует' : 'Uyumsuz'}</option>
-                    <option value="UYGULANAMAZ">{language === 'ru' ? 'Не применимо' : 'Uygulanamaz'}</option>
+                    <option value="ALL">Все</option>
+                    <option value="UYUMLU">Соответствует</option>
+                    <option value="KISMEN_UYUMLU">Частично соответствует</option>
+                    <option value="UYUMSUZ">Не соответствует</option>
+                    <option value="UYGULANAMAZ">Не применимо</option>
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Поиск' : 'Ara'}
+                  Поиск
                   <input
-                    placeholder={language === 'ru' ? 'Название, номер, ответственный' : 'Başlık, mevzuat no, sorumlu'}
+                    placeholder="Название, номер, ответственный"
                     value={legalFilters.keyword}
                     onChange={(event) => setLegalFilters((prev) => ({ ...prev, keyword: event.target.value }))}
                   />
@@ -12398,32 +12474,32 @@ export function App() {
               </div>
 
               <div className="legal-kpi-grid">
-                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего нормативных актов' : 'Toplam Mevzuat Sayısı'}</span><strong>{legalSummary.total}</strong></article>
-                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Соответствующие акты' : 'Uyumlu Mevzuatlar'}</span><strong>{legalSummary.compliant}</strong></article>
-                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Несоответствующие акты' : 'Uyumsuz Mevzuatlar'}</span><strong>{legalSummary.nonCompliant}</strong></article>
-                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'На рассмотрении' : 'Gözden Geçirme Aşamasındaki'}</span><strong>{legalSummary.inReview}</strong></article>
-                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Предстоящие пересмотры' : 'Yaklaşan Gözden Geçirmeler'}</span><strong>{legalSummary.upcomingReviews}</strong></article>
-                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Открытые правовые меры' : 'Açık Yasal Aksiyonlar'}</span><strong>{legalSummary.openActions}</strong></article>
+                <article className="equipment-kpi-card"><span>Всего нормативных актов</span><strong>{legalSummary.total}</strong></article>
+                <article className="equipment-kpi-card"><span>Соответствующие акты</span><strong>{legalSummary.compliant}</strong></article>
+                <article className="equipment-kpi-card"><span>Несоответствующие акты</span><strong>{legalSummary.nonCompliant}</strong></article>
+                <article className="equipment-kpi-card"><span>На рассмотрении</span><strong>{legalSummary.inReview}</strong></article>
+                <article className="equipment-kpi-card"><span>Предстоящие пересмотры</span><strong>{legalSummary.upcomingReviews}</strong></article>
+                <article className="equipment-kpi-card"><span>Открытые корректирующие действия</span><strong>{legalSummary.openActions}</strong></article>
               </div>
 
               <div className="executive-charts-grid legal-chart-grid">
                 <article className="chart-card">
-                  <strong>{language === 'ru' ? 'Статус соответствия' : 'Uyumluluk Durumu'}</strong>
+                  <strong>Статус соответствия</strong>
                   <DashboardChart type="donut" values={legalComplianceChart} themeName="compliance" />
                   <div className="health-legend-grid legal-compliance-legend">
-                    <span>{language === 'ru' ? 'Соответствует' : 'Uyumlu'}: {legalComplianceChart[0]}</span>
-                    <span>{language === 'ru' ? 'Частично соответствует' : 'Kısmen Uyumlu'}: {legalComplianceChart[1]}</span>
-                    <span>{language === 'ru' ? 'Не соответствует' : 'Uyumsuz'}: {legalComplianceChart[2]}</span>
+                    <span>Соответствует: {legalComplianceChart[0]}</span>
+                    <span>Частично соответствует: {legalComplianceChart[1]}</span>
+                    <span>Не соответствует: {legalComplianceChart[2]}</span>
                   </div>
                 </article>
                 <article className="chart-card">
-                  <strong>{language === 'ru' ? 'Нормативные акты по категориям' : 'Kategoriye Göre Mevzuatlar'}</strong>
+                  <strong>Нормативные акты по категориям</strong>
                   <div className="workforce-horizontal-chart">
                     {legalCategoryBars.map(([label, value]) => {
                       const max = Math.max(...legalCategoryBars.map((row) => row[1]), 1);
                       return (
                         <div className="workforce-horizontal-row" key={label}>
-                          <span>{label}</span>
+                          <span>{legalCategoryLabel(label)}</span>
                           <div className="workforce-horizontal-track">
                             <div className="workforce-horizontal-fill" style={{ width: `${Math.max((value / max) * 100, 4)}%` }} />
                           </div>
@@ -12434,33 +12510,33 @@ export function App() {
                   </div>
                 </article>
                 <article className="chart-card">
-                  <strong>{language === 'ru' ? 'Предстоящие правовые пересмотры' : 'Yaklaşan Yasal Gözden Geçirmeler'}</strong>
+                  <strong>Предстоящие пересмотры законодательства</strong>
                   <DashboardChart type="line" values={legalReviewTrend.values} xLabels={legalReviewTrend.labels} themeName="compliance" />
                 </article>
                 <article className="chart-card">
-                  <strong>{language === 'ru' ? 'Открытые правовые меры по проектам' : 'Projeye Göre Açık Yasal Aksiyonlar'}</strong>
+                  <strong>Открытые корректирующие действия по проектам</strong>
                   <DashboardChart type="bar" values={legalOpenActionsByProject.values} xLabels={legalOpenActionsByProject.labels} themeName="risk" showTrend={false} />
                 </article>
               </div>
 
               <div className="risk-meta-row">
                 <article className="risk-meta-card">
-                  <span>{language === 'ru' ? 'Предупреждение о предстоящем пересмотре' : 'Yaklaşan Gözden Geçirme Uyarısı'}</span>
+                  <span>Предупреждение о предстоящем пересмотре</span>
                   <strong>{legalAlerts.upcoming.length}</strong>
                 </article>
                 <article className="risk-meta-card">
-                  <span>{language === 'ru' ? 'Предупреждение об истёкших требованиях' : 'Süresi Dolan Gereklilik Uyarısı'}</span>
+                  <span>Предупреждение об истёкших требованиях</span>
                   <strong>{legalAlerts.expired.length}</strong>
                 </article>
                 <article className="risk-meta-card">
-                  <span>{language === 'ru' ? 'Право на удаление документов' : 'Belge Silme Yetkisi'}</span>
-                  <strong>{legalCanDeleteDocument ? (language === 'ru' ? 'Активно' : 'Aktif') : (language === 'ru' ? 'Только менеджер по соответствию' : 'Sadece Uyumluluk Yöneticisi')}</strong>
+                  <span>Право на удаление документов</span>
+                  <strong>{legalCanDeleteDocument ? 'Активно' : 'Только менеджер по нормативному соответствию'}</strong>
                 </article>
               </div>
             </section>
 
             <section className="panel legal-panel">
-              <h2>{language === 'ru' ? 'Ввод данных реестра законодательства' : 'Yasal Mevzuat Kaydı Veri Girişi'}</h2>
+              <h2>Ввод данных реестра законодательства</h2>
               <div className="form-grid legal-form-grid">
                 <label>
                   {language === 'ru' ? 'Проект' : 'Proje'}
@@ -12471,31 +12547,31 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Идентификатор нормативного акта' : 'Mevzuat Kimliği'}
+                  Идентификатор нормативного документа
                   <input value={nextLegalRegulationId} disabled />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Категория нормативного акта' : 'Mevzuat Kategorisi'}
+                  Категория нормативного документа
                   <select value={legalForm.category} onChange={(event) => setLegalForm((prev) => ({ ...prev, category: event.target.value }))}>
                     {legalCategoryOptions.map((category) => (
-                      <option key={category} value={category}>{category}</option>
+                      <option key={category.value} value={category.value}>{category.label}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Название нормативного акта' : 'Mevzuat Başlığı'}
+                  Наименование нормативного документа
                   <input value={legalForm.title} onChange={(event) => setLegalForm((prev) => ({ ...prev, title: event.target.value }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Регулирующий орган / Учреждение' : 'İlgili Otorite / Kurum'}
+                  Компетентный орган / Организация
                   <select value={legalForm.authority} onChange={(event) => setLegalForm((prev) => ({ ...prev, authority: event.target.value }))}>
                     {legalAuthorityOptions.map((authority) => (
-                      <option key={authority} value={authority}>{authority}</option>
+                      <option key={authority.value} value={authority.value}>{authority.label}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Соответствующий отдел' : 'İlgili Departman'}
+                  Ответственный отдел
                   <select value={legalForm.department} onChange={(event) => setLegalForm((prev) => ({ ...prev, department: event.target.value }))}>
                     {departmentNames.map((department) => (
                       <option key={department} value={department}>{department}</option>
@@ -12503,15 +12579,15 @@ export function App() {
                   </select>
                 </label>
                 <label className="full-row">
-                  {language === 'ru' ? 'Правовое требование' : 'Yasal Gereklilik'}
+                  Законодательное требование
                   <textarea rows={3} value={legalForm.legalRequirement} onChange={(event) => setLegalForm((prev) => ({ ...prev, legalRequirement: event.target.value }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}
+                  Ответственное лицо
                   <input value={legalForm.responsiblePerson} onChange={(event) => setLegalForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Статус соответствия' : 'Uyumluluk Durumu'}
+                  Статус соответствия
                   <select value={legalForm.complianceStatus} onChange={(event) => setLegalForm((prev) => ({ ...prev, complianceStatus: event.target.value as LegalComplianceStatus }))}>
                     <option value="UYUMLU">{language === 'ru' ? 'Соответствует' : 'Uyumlu'}</option>
                     <option value="KISMEN_UYUMLU">{language === 'ru' ? 'Частично соответствует' : 'Kısmen Uyumlu'}</option>
@@ -12520,23 +12596,23 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  {language === 'ru' ? 'Дата вступления в силу' : 'Yürürlük Tarihi'}
+                  Дата вступления в силу
                   <input type="date" value={legalForm.effectiveDate} onChange={(event) => setLegalForm((prev) => ({ ...prev, effectiveDate: event.target.value }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Дата последнего пересмотра' : 'Son Gözden Geçirme Tarihi'}
+                  Дата последнего пересмотра
                   <input type="date" value={legalForm.lastReviewDate} onChange={(event) => setLegalForm((prev) => ({ ...prev, lastReviewDate: event.target.value }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Дата следующего пересмотра' : 'Bir Sonraki Gözden Geçirme Tarihi'}
+                  Дата следующего пересмотра
                   <input type="date" value={legalForm.nextReviewDate} onChange={(event) => setLegalForm((prev) => ({ ...prev, nextReviewDate: event.target.value }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Открытые правовые меры' : 'Açık Aksiyonlar'}
+                  Открытые корректирующие действия
                   <input type="number" min={0} value={legalForm.openActions} onChange={(event) => setLegalForm((prev) => ({ ...prev, openActions: Number(event.target.value) }))} />
                 </label>
                 <label>
-                  {language === 'ru' ? 'Уровень риска' : 'Risk Seviyesi'}
+                  Уровень риска
                   <select value={legalForm.riskLevel} onChange={(event) => setLegalForm((prev) => ({ ...prev, riskLevel: event.target.value as LegalRiskLevel }))}>
                     <option value="DUSUK">{language === 'ru' ? 'Низкий' : 'Düşük'}</option>
                     <option value="ORTA">{language === 'ru' ? 'Средний' : 'Orta'}</option>
@@ -12545,27 +12621,27 @@ export function App() {
                   </select>
                 </label>
                 <label className="full-row">
-                  {language === 'ru' ? 'Примечания' : 'Notlar'}
+                  Примечания
                   <textarea rows={3} value={legalForm.notes} onChange={(event) => setLegalForm((prev) => ({ ...prev, notes: event.target.value }))} />
                 </label>
                 <div className="full-row actions">
-                  <button type="button" onClick={saveLegalRecord}>{language === 'ru' ? 'Сохранить запись реестра' : 'Yasal Kaydı Kaydet'}</button>
+                  <button type="button" onClick={saveLegalRecord}>Сохранить запись</button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap legal-panel">
-              <h2>{language === 'ru' ? 'Записи реестра законодательства' : 'Yasal Mevzuat Kayıtları'}</h2>
+              <h2>Записи реестра законодательства</h2>
               <table className="legal-record-table">
                 <thead>
                   <tr>
-                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
-                    <th>{language === 'ru' ? 'Название нормативного акта' : 'Mevzuat Başlığı'}</th>
-                    <th>{language === 'ru' ? 'Категория' : 'Kategori'}</th>
-                    <th>{language === 'ru' ? 'Статус соответствия' : 'Uyumluluk Durumu'}</th>
-                    <th>{language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}</th>
-                    <th>{language === 'ru' ? 'Следующий пересмотр' : 'Bir Sonraki Gözden Geçirme'}</th>
-                    <th>{language === 'ru' ? 'Открытые правовые меры' : 'Açık Aksiyonlar'}</th>
+                    <th>Проект</th>
+                    <th>Наименование</th>
+                    <th>Категория</th>
+                    <th>Статус соответствия</th>
+                    <th>Ответственное лицо</th>
+                    <th>Следующий пересмотр</th>
+                    <th>Открытые корректирующие действия</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -12581,7 +12657,7 @@ export function App() {
                       >
                         <td>{projectCatalog.find((project) => project.id === record.projectId)?.name ?? record.projectId}</td>
                         <td>{record.title}</td>
-                        <td>{record.category}</td>
+                        <td>{legalCategoryLabel(record.category)}</td>
                         <td><span className={`status-badge ${legalComplianceClass(record.complianceStatus)}`}>{legalComplianceLabel(record.complianceStatus)}</span></td>
                         <td>{record.responsiblePerson}</td>
                         <td>{record.nextReviewDate}</td>
@@ -12590,7 +12666,7 @@ export function App() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7}>{language === 'ru' ? 'Записи, соответствующие фильтру, не найдены.' : 'Filtreye uygun yasal kayıt bulunmuyor.'}</td>
+                      <td colSpan={7}>Записи, соответствующие фильтру, не найдены.</td>
                     </tr>
                   )}
                 </tbody>
@@ -12601,26 +12677,26 @@ export function App() {
               <section className="panel legal-panel">
                 <div className="risk-detail-head legal-detail-head">
                   <div>
-                    <h2>Belge Yönetimi ve Denetim - {selectedLegalRecord.regulationId}</h2>
-                    <p className="risk-detail-subtitle">{selectedLegalRecord.title} | {selectedLegalRecord.authority}</p>
+                    <h2>Управление документами и аудит - {selectedLegalRecord.regulationId}</h2>
+                    <p className="risk-detail-subtitle">{selectedLegalRecord.title} | {legalAuthorityLabel(selectedLegalRecord.authority)}</p>
                   </div>
                   <div className="legal-action-toolbar">
-                    <span className="legal-action-toolbar-title">{language === 'ru' ? 'Быстрые операции с отчетом' : 'Hızlı Rapor İşlemleri'}</span>
+                    <span className="legal-action-toolbar-title">Быстрые операции с отчетом</span>
                     <div className="risk-detail-badges legal-action-bar">
-                      <button type="button" onClick={() => markLegalReviewed(selectedLegalRecord.id)}>{language === 'ru' ? 'Отмечено как проверено' : 'Gözden Geçirildi'}</button>
-                      <button type="button" onClick={exportSingleLegalPdf}>{language === 'ru' ? 'PDF по записи' : 'Tekil PDF'}</button>
-                      <button type="button" onClick={exportFullLegalPdf}>{language === 'ru' ? 'Полный PDF' : 'Tam PDF'}</button>
-                      <button type="button" onClick={exportLegalExcel}>{language === 'ru' ? 'Excel' : 'Excel'}</button>
-                      <button type="button" onClick={printSingleLegalRecord}>{language === 'ru' ? 'Печать записи' : 'Tekil Yazdır'}</button>
-                      <button type="button" onClick={printFullLegalRegister}>{language === 'ru' ? 'Печать полного реестра' : 'Tam Yazdır'}</button>
-                      <button type="button" onClick={printLegalComplianceSummary}>{language === 'ru' ? 'Печать сводки' : 'Özet Yazdır'}</button>
+                      <button type="button" onClick={() => markLegalReviewed(selectedLegalRecord.id)}>Отмечено как проверено</button>
+                      <button type="button" onClick={exportSingleLegalPdf}>Экспорт записи в PDF</button>
+                      <button type="button" onClick={exportFullLegalPdf}>Полный экспорт в PDF</button>
+                      <button type="button" onClick={exportLegalExcel}>Выгрузка XLSX</button>
+                      <button type="button" onClick={printSingleLegalRecord}>Печать записи</button>
+                      <button type="button" onClick={printFullLegalRegister}>Печать полного реестра</button>
+                      <button type="button" onClick={printLegalComplianceSummary}>Печать сводки</button>
                     </div>
                   </div>
                 </div>
 
                 <div className="legal-document-upload-grid">
                   <label>
-                    {language === 'ru' ? 'Загрузить нормативный документ (PDF, DOCX, XLSX)' : 'Mevzuat Belgesi Yükle (PDF, DOCX, XLSX)'}
+                    Загрузить нормативный документ (файлы .pdf, .docx, .xlsx)
                     {language === 'ru' ? (
                       <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'MEVZUAT_BELGESI', filesToFileList(files))} />
                     ) : (
@@ -12628,7 +12704,7 @@ export function App() {
                     )}
                   </label>
                   <label>
-                    {language === 'ru' ? 'Загрузить подтверждение соответствия' : 'Uyumluluk Kanıtı Yükle'}
+                    Загрузить подтверждение соответствия
                     {language === 'ru' ? (
                       <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'UYUMLULUK_KANITI', filesToFileList(files))} />
                     ) : (
@@ -12636,7 +12712,7 @@ export function App() {
                     )}
                   </label>
                   <label>
-                    {language === 'ru' ? 'Загрузить отчет о проверке' : 'Denetim Raporu Yükle'}
+                    Загрузить отчет о проверке
                     {language === 'ru' ? (
                       <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'DENETIM_RAPORU', filesToFileList(files))} />
                     ) : (
@@ -12644,7 +12720,7 @@ export function App() {
                     )}
                   </label>
                   <label>
-                    {language === 'ru' ? 'Загрузить разрешение / сертификат' : 'İzin / Sertifika Yükle'}
+                    Загрузить разрешение / сертификат
                     {language === 'ru' ? (
                       <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" multiple onFilesChange={(files) => uploadLegalDocuments(selectedLegalRecord.id, 'IZIN_SERTIFIKA', filesToFileList(files))} />
                     ) : (
@@ -12659,11 +12735,11 @@ export function App() {
                       <table className="legal-doc-table">
                         <thead>
                           <tr>
-                            <th>{language === 'ru' ? 'Документ' : 'Belge'}</th>
-                            <th>{language === 'ru' ? 'Тип' : 'Tür'}</th>
-                            <th>{language === 'ru' ? 'Загрузил' : 'Yükleyen'}</th>
-                            <th>{language === 'ru' ? 'Версия' : 'Sürüm'}</th>
-                            <th>{language === 'ru' ? 'Действия' : 'İşlemler'}</th>
+                            <th>Документ</th>
+                            <th>Тип</th>
+                            <th>Загрузил</th>
+                            <th>Версия</th>
+                            <th>Действия</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -12676,23 +12752,15 @@ export function App() {
                                 <td>v{documentRow.versions.length}</td>
                                 <td>
                                   <div className="legal-doc-actions">
-                                    <button type="button" className="legal-inline-btn" onClick={() => setSelectedLegalDocumentId(documentRow.id)}>{language === 'ru' ? 'Просмотреть' : 'Önizle'}</button>
-                                    <button type="button" className="legal-inline-btn" onClick={() => downloadLegalDocument(selectedLegalRecord.id, documentRow)}>{language === 'ru' ? 'Скачать' : 'İndir'}</button>
-                                    <button type="button" className="legal-inline-btn" onClick={() => openLegalDocumentFullscreen(documentRow)}>{language === 'ru' ? 'На весь экран' : 'Tam Ekran'}</button>
+                                    <button type="button" className="legal-inline-btn" onClick={() => setSelectedLegalDocumentId(documentRow.id)}>Просмотреть</button>
+                                    <button type="button" className="legal-inline-btn" onClick={() => downloadLegalDocument(selectedLegalRecord.id, documentRow)}>Скачать</button>
+                                    <button type="button" className="legal-inline-btn" onClick={() => openLegalDocumentFullscreen(documentRow)}>На весь экран</button>
                                     <label className="legal-replace-file legal-inline-btn">
-                                      {language === 'ru' ? 'Заменить' : 'Değiştir'}
-                                      {language === 'ru' ? (
-                                        <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" onFilesChange={(files) => replaceLegalDocument(selectedLegalRecord.id, documentRow.id, filesToFileList(files))} />
-                                      ) : (
-                                        <input
-                                          type="file"
-                                          accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png"
-                                          onChange={(event) => replaceLegalDocument(selectedLegalRecord.id, documentRow.id, event.target.files)}
-                                        />
-                                      )}
+                                      Заменить
+                                      <CustomFileUpload buttonLabel="Выбрать файлы" emptyLabel="Файлы не выбраны" singleLabel="Выбран файл: " multipleLabel="Выбрано файлов: " accept=".pdf,.docx,.xlsx,.jpg,.jpeg,.png" onFilesChange={(files) => replaceLegalDocument(selectedLegalRecord.id, documentRow.id, filesToFileList(files))} />
                                     </label>
                                     <button type="button" className="legal-inline-btn" disabled={!legalCanDeleteDocument} onClick={() => deleteLegalDocument(selectedLegalRecord.id, documentRow.id)}>
-                                      {language === 'ru' ? 'Удалить' : 'Sil'}
+                                      Удалить
                                     </button>
                                   </div>
                                 </td>
@@ -12700,7 +12768,7 @@ export function App() {
                             ))
                           ) : (
                             <tr>
-                              <td colSpan={5}>{language === 'ru' ? 'Документы пока не загружены.' : 'Henüz belge yüklenmedi.'}</td>
+                              <td colSpan={5}>Документы пока не загружены.</td>
                             </tr>
                           )}
                         </tbody>
@@ -12709,18 +12777,18 @@ export function App() {
 
                     <div className="legal-audit-grid">
                       <article>
-                        <h3>{language === 'ru' ? 'История проверки' : 'Denetim Geçmişi'}</h3>
+                        <h3>История проверки</h3>
                         <ul>
-                          <li>{language === 'ru' ? 'Создал' : 'Oluşturan Kişi'}: {selectedLegalRecord.createdBy}</li>
-                          <li>{language === 'ru' ? 'Дата создания' : 'Oluşturulma Tarihi'}: {selectedLegalRecord.createdAt}</li>
-                          <li>{language === 'ru' ? 'Изменил' : 'Değiştiren Kişi'}: {selectedLegalRecord.modifiedBy}</li>
-                          <li>{language === 'ru' ? 'Дата изменения' : 'Değiştirilme Tarihi'}: {selectedLegalRecord.modifiedAt}</li>
-                          <li>{language === 'ru' ? 'Проверил' : 'Gözden Geçiren Kişi'}: {selectedLegalRecord.reviewedBy}</li>
-                          <li>{language === 'ru' ? 'Дата проверки' : 'Gözden Geçirme Tarihi'}: {selectedLegalRecord.reviewedAt}</li>
+                          <li>Создал: {selectedLegalRecord.createdBy}</li>
+                          <li>Дата создания: {selectedLegalRecord.createdAt}</li>
+                          <li>Изменил: {selectedLegalRecord.modifiedBy}</li>
+                          <li>Дата изменения: {selectedLegalRecord.modifiedAt}</li>
+                          <li>Проверил: {selectedLegalRecord.reviewedBy}</li>
+                          <li>Дата проверки: {selectedLegalRecord.reviewedAt}</li>
                         </ul>
                       </article>
                       <article>
-                        <h3>{language === 'ru' ? 'События аудита' : 'Audit Trail Olayları'}</h3>
+                        <h3>События аудита</h3>
                         <ul>
                           {selectedLegalRecord.auditTrail.map((eventRow) => (
                             <li key={eventRow.id}>{eventRow.eventDate} - {eventRow.actor} - {eventRow.detail}</li>
@@ -12731,21 +12799,21 @@ export function App() {
                   </div>
 
                   <article className="legal-viewer-shell">
-                    <h3>{language === 'ru' ? 'Просмотр документа' : 'Belge Görüntüleyici'}</h3>
+                    <h3>Просмотр документа</h3>
                     {selectedLegalDocument ? (
                       <>
                         {selectedLegalDocument.fileType === 'application/pdf' ? (
                           <>
                             <div className="legal-viewer-toolbar">
                               <button type="button" onClick={() => setLegalViewerZoom((prev) => Math.max(60, prev - 10))}>-</button>
-                              <span>{language === 'ru' ? 'Масштаб' : 'Yakınlaştırma'}: {legalViewerZoom}%</span>
+                              <span>Масштаб: {legalViewerZoom}%</span>
                               <button type="button" onClick={() => setLegalViewerZoom((prev) => Math.min(220, prev + 10))}>+</button>
                               <label>
-                                {language === 'ru' ? 'Страница' : 'Sayfa'}
+                                Страница
                                 <input type="number" min={1} value={legalViewerPage} onChange={(event) => setLegalViewerPage(Math.max(1, Number(event.target.value) || 1))} />
                               </label>
                               <label>
-                                {language === 'ru' ? 'Поиск' : 'Ara'}
+                                Поиск
                                 <input value={legalViewerSearch} onChange={(event) => setLegalViewerSearch(event.target.value)} />
                               </label>
                             </div>
@@ -12759,12 +12827,12 @@ export function App() {
                           <img src={selectedLegalDocument.fileUrl} alt={selectedLegalDocument.fileName} className="legal-preview-image" />
                         ) : (
                           <div className="inline-hint">
-                            {language === 'ru' ? 'Предпросмотр Office-файлов в этой среде может быть ограничен. Используйте скачивание или полноэкранный просмотр.' : 'Office önizleme bu ortamda sınırlı olabilir. Güvenli indirme veya tam ekranda açma ile görüntüleyebilirsiniz.'}
+                            Предпросмотр офисных файлов в этой среде может быть ограничен. Используйте скачивание или полноэкранный просмотр.
                           </div>
                         )}
 
                         <div className="legal-version-panel">
-                          <h4>{language === 'ru' ? 'История версий' : 'Sürüm Geçmişi'}</h4>
+                          <h4>История версий</h4>
                           <ul>
                             {selectedLegalDocument.versions.map((version) => (
                               <li key={`${selectedLegalDocument.id}-v${version.version}`}>
@@ -12775,7 +12843,7 @@ export function App() {
                         </div>
                       </>
                     ) : (
-                      <p>{language === 'ru' ? 'Выберите документ для просмотра.' : 'Önizlemek için bir belge seçin.'}</p>
+                      <p>Выберите документ для просмотра.</p>
                     )}
                   </article>
                 </div>
