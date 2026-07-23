@@ -15004,22 +15004,22 @@ export function App() {
         {activeModule === 'trainings' ? (
           <>
             <section className="panel">
-              <h2>Eğitim Yönetimi KPI</h2>
+              <h2>{language === 'ru' ? 'КПЭ управления обучением' : 'Eğitim Yönetimi KPI'}</h2>
               <div className="equipment-kpi-grid">
-                <article className="equipment-kpi-card"><span>Toplam Eğitim Sayısı</span><strong>{trainingSummary.totalTrainings}</strong></article>
-                <article className="equipment-kpi-card"><span>Toplam Katılımcı Sayısı</span><strong>{trainingSummary.totalParticipants}</strong></article>
-                <article className="equipment-kpi-card"><span>Sertifikalı Çalışan Sayısı</span><strong>{trainingSummary.certifiedEmployees}</strong></article>
-                <article className="equipment-kpi-card"><span>Eğitim Bekleyen Çalışan Sayısı</span><strong>{trainingSummary.pendingEmployees}</strong></article>
-                <article className="equipment-kpi-card"><span>Toplam Eğitim Maliyeti</span><strong>{trainingSummary.totalCost.toLocaleString('tr-TR')} Rub</strong></article>
-                <article className="equipment-kpi-card"><span>Çalışan Başına Ortalama Eğitim Maliyeti</span><strong>{trainingSummary.avgCostPerEmployee.toLocaleString('tr-TR')} Rub</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего тренингов' : 'Toplam Eğitim Sayısı'}</span><strong>{trainingSummary.totalTrainings}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего участников' : 'Toplam Katılımcı Sayısı'}</span><strong>{trainingSummary.totalParticipants}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Сертифицированные сотрудники' : 'Sertifikalı Çalışan Sayısı'}</span><strong>{trainingSummary.certifiedEmployees}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Сотрудники в ожидании обучения' : 'Eğitim Bekleyen Çalışan Sayısı'}</span><strong>{trainingSummary.pendingEmployees}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Общая стоимость обучения' : 'Toplam Eğitim Maliyeti'}</span><strong>{trainingSummary.totalCost.toLocaleString('tr-TR')} Rub</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Средняя стоимость обучения на сотрудника' : 'Çalışan Başına Ortalama Eğitim Maliyeti'}</span><strong>{trainingSummary.avgCostPerEmployee.toLocaleString('tr-TR')} Rub</strong></article>
               </div>
             </section>
 
             <section className="panel">
-              <h2>Eğitim Performans Görselleştirmesi</h2>
+              <h2>{language === 'ru' ? 'Визуализация производительности обучения' : 'Eğitim Performans Görselleştirmesi'}</h2>
               <div className="training-chart-grid">
                 <article className="chart-card">
-                  <strong>Eğitim Türleri</strong>
+                  <strong>{language === 'ru' ? 'Типы обучения' : 'Eğitim Türleri'}</strong>
                   <DashboardChart
                     type="donut"
                     values={trainingTypeDistribution.length > 0 ? trainingTypeDistribution.map((item) => item[1]) : [0]}
@@ -15029,7 +15029,7 @@ export function App() {
                 </article>
 
                 <article className="chart-card">
-                  <strong>Projeye Göre Eğitim Maliyeti</strong>
+                  <strong>{language === 'ru' ? 'Стоимость обучения по проектам' : 'Projeye Göre Eğitim Maliyeti'}</strong>
                   <DashboardChart
                     type="bar"
                     values={trainingCostByProject.map((item) => item.value)}
@@ -15040,7 +15040,7 @@ export function App() {
                 </article>
 
                 <article className="chart-card training-horizontal-card">
-                  <strong>Projeye Göre Sertifikalı İşgücü</strong>
+                  <strong>{language === 'ru' ? 'Сертифицированная рабочая сила по проектам' : 'Projeye Göre Sertifikalı İşgücü'}</strong>
                   <div className="training-project-bars">
                     {trainingProjectWorkforce.map((item) => (
                       <div key={item.label} className="training-project-row">
@@ -15060,7 +15060,7 @@ export function App() {
                 </article>
 
                 <article className="chart-card">
-                  <strong>Eğitim Durumu</strong>
+                  <strong>{language === 'ru' ? 'Статус обучения' : 'Eğitim Durumu'}</strong>
                   <DashboardChart
                     type="donut"
                     values={[
@@ -15077,110 +15077,112 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>Eğitim Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Ввод данных обучения' : 'Eğitim Veri Girişi'}</h2>
               <p className="inline-hint">
-                Bu modül İK personel yönetimi değil; İSG eğitim yönetimi, sertifikasyon uyumluluğu ve proje eğitim performansının kurumsal takibi için tasarlanmıştır.
+                {language === 'ru'
+                  ? 'Этот модуль не управляет кадровым обеспечением; он разработан для управления обучением по HSE, соответствию сертификации и копоративному мониторингу проектных тренингов.'
+                  : 'Bu modül İK personel yönetimi değil; İSG eğitim yönetimi, sertifikasyon uyumluluğu ve proje eğitim performansının kurumsal takibi için tasarlanmıştır.'}
               </p>
 
               <div className="risk-meta-row">
-                <div className="risk-meta-card"><span>Eğitim Kimliği</span><strong>{nextTrainingId}</strong></div>
-                <div className="risk-meta-card"><span>Bekleyen Çalışan</span><strong>{trainingSummary.pendingEmployees}</strong></div>
-                <div className="risk-meta-card"><span>Toplam Maliyet</span><strong>{trainingSummary.totalCost.toLocaleString('tr-TR')} Rub</strong></div>
+                <div className="risk-meta-card"><span>{language === 'ru' ? 'Идентификатор обучения' : 'Eğitim Kimliği'}</span><strong>{nextTrainingId}</strong></div>
+                <div className="risk-meta-card"><span>{language === 'ru' ? 'Сотрудники в ожидании' : 'Bekleyen Çalışan'}</span><strong>{trainingSummary.pendingEmployees}</strong></div>
+                <div className="risk-meta-card"><span>{language === 'ru' ? 'Общая стоимость' : 'Toplam Maliyet'}</span><strong>{trainingSummary.totalCost.toLocaleString('tr-TR')} Rub</strong></div>
               </div>
 
               <div className="training-form-layout">
                 <article className="workforce-form-section">
-                  <h3>Eğitim Bilgileri</h3>
+                  <h3>{language === 'ru' ? 'Информация об обучении' : 'Eğitim Bilgileri'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Proje
+                      {language === 'ru' ? 'Проект' : 'Proje'}
                       <select value={trainingForm.projectId} onChange={(event) => setTrainingForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                         {projectCatalog.map((project) => <option key={project.id} value={project.id}>{project.name}</option>)}
                       </select>
                     </label>
                     <label>
-                      Eğitim Kimliği (Otomatik Oluşturulur)
+                      {language === 'ru' ? 'Идентификатор обучения (Автоматически генерируется)' : 'Eğitim Kimliği (Otomatik Oluşturulur)'}
                       <input value={nextTrainingId} disabled />
                     </label>
                     <label>
-                      Eğitim Türü
+                      {language === 'ru' ? 'Тип обучения' : 'Eğitim Türü'}
                       <select value={trainingForm.trainingType} onChange={(event) => setTrainingForm((prev) => ({ ...prev, trainingType: event.target.value }))}>
                         {trainingTypeOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      Eğitim Başlığı
+                      {language === 'ru' ? 'Название обучения' : 'Eğitim Başlığı'}
                       <input value={trainingForm.trainingTitle} onChange={(event) => setTrainingForm((prev) => ({ ...prev, trainingTitle: event.target.value }))} />
                     </label>
                     <label>
-                      Eğitim Kategorisi
+                      {language === 'ru' ? 'Категория обучения' : 'Eğitim Kategorisi'}
                       <select value={trainingForm.trainingCategory} onChange={(event) => setTrainingForm((prev) => ({ ...prev, trainingCategory: event.target.value }))}>
                         {trainingCategoryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      Eğitim Tarihi
+                      {language === 'ru' ? 'Дата обучения' : 'Eğitim Tarihi'}
                       <input type="date" value={trainingForm.trainingDate} onChange={(event) => setTrainingForm((prev) => ({ ...prev, trainingDate: event.target.value }))} />
                     </label>
                     <label className="full-row">
-                      Eğitimi Veren Kurum/Kişi
+                      {language === 'ru' ? 'Организация / Лицо, предоставляющее обучение' : 'Eğitimi Veren Kurum/Kişi'}
                       <input value={trainingForm.provider} onChange={(event) => setTrainingForm((prev) => ({ ...prev, provider: event.target.value }))} />
                     </label>
                   </div>
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Çalışan Bilgileri</h3>
+                  <h3>{language === 'ru' ? 'Информация о пособиях' : 'Çalışan Bilgileri'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Departman
+                      {language === 'ru' ? 'Отдел' : 'Departman'}
                       <select value={trainingForm.department} onChange={(event) => setTrainingForm((prev) => ({ ...prev, department: event.target.value }))}>
                         {trainingDepartmentOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      Pozisyon
+                      {language === 'ru' ? 'Позиция' : 'Pozisyon'}
                       <select value={trainingForm.position} onChange={(event) => setTrainingForm((prev) => ({ ...prev, position: event.target.value }))}>
                         {trainingPositionOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      Proje Çalışan Sayısı
+                      {language === 'ru' ? 'Количество сотрудников на проекте' : 'Proje Çalışan Sayısı'}
                       <input type="number" min={0} value={trainingForm.projectEmployeeCount} onChange={(event) => setTrainingForm((prev) => ({ ...prev, projectEmployeeCount: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
                     <label>
-                      Sertifikalı Çalışan Sayısı
+                      {language === 'ru' ? 'Количество сертифицированных сотрудников' : 'Sertifikalı Çalışan Sayısı'}
                       <input type="number" min={0} value={trainingForm.certifiedEmployeeCount} onChange={(event) => setTrainingForm((prev) => ({ ...prev, certifiedEmployeeCount: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
                   </div>
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Sertifikasyon</h3>
+                  <h3>{language === 'ru' ? 'Сертификация' : 'Sertifikasyon'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Sertifika Gerekliliği
+                      {language === 'ru' ? 'Требование сертификата' : 'Sertifika Gerekliliği'}
                       <select value={trainingForm.certificateRequired ? 'EVET' : 'HAYIR'} onChange={(event) => setTrainingForm((prev) => ({ ...prev, certificateRequired: event.target.value === 'EVET' }))}>
-                        <option value="EVET">Evet</option>
-                        <option value="HAYIR">Hayır</option>
+                        <option value="EVET">{language === 'ru' ? 'Да' : 'Evet'}</option>
+                        <option value="HAYIR">{language === 'ru' ? 'Нет' : 'Hayır'}</option>
                       </select>
                     </label>
                     <label>
-                      Sertifika Geçerlilik Tarihi
+                      {language === 'ru' ? 'Дата истечения срока сертификата' : 'Sertifika Geçerlilik Tarihi'}
                       <input type="date" value={trainingForm.certificateValidityDate} onChange={(event) => setTrainingForm((prev) => ({ ...prev, certificateValidityDate: event.target.value }))} />
                     </label>
                   </div>
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Finansal</h3>
+                  <h3>{language === 'ru' ? 'Финансовые' : 'Finansal'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Toplam Eğitim Maliyeti
+                      {language === 'ru' ? 'Общая стоимость обучения' : 'Toplam Eğitim Maliyeti'}
                       <input type="number" min={0} value={trainingForm.totalTrainingCost} onChange={(event) => setTrainingForm((prev) => ({ ...prev, totalTrainingCost: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
                     <label>
-                      Çalışan Başına Maliyet
+                      {language === 'ru' ? 'Стоимость на сотрудника' : 'Çalışan Başına Maliyet'}
                       <input
                         value={`${trainingForm.projectEmployeeCount > 0 ? Math.round(trainingForm.totalTrainingCost / trainingForm.projectEmployeeCount).toLocaleString('tr-TR') : 0} Rub`}
                         disabled
@@ -15255,15 +15257,15 @@ export function App() {
               <table>
                 <thead>
                   <tr>
-                    <th>Proje</th>
-                    <th>Eğitim Tarihi</th>
-                    <th>Eğitim Başlığı</th>
-                    <th>Eğitim Türü</th>
-                    <th>Katılımcılar</th>
-                    <th>Sertifikalı Çalışanlar</th>
-                    <th>Toplam Maliyet</th>
-                    <th>Durum</th>
-                    <th>İşlem</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Дата обучения' : 'Eğitim Tarihi'}</th>
+                    <th>{language === 'ru' ? 'Название обучения' : 'Eğitim Başlığı'}</th>
+                    <th>{language === 'ru' ? 'Тип обучения' : 'Eğitim Türü'}</th>
+                    <th>{language === 'ru' ? 'Участники' : 'Katılımcılar'}</th>
+                    <th>{language === 'ru' ? 'Сертифицированные сотрудники' : 'Sertifikalı Çalışanlar'}</th>
+                    <th>{language === 'ru' ? 'Общая стоимость' : 'Toplam Maliyet'}</th>
+                    <th>{language === 'ru' ? 'Статус' : 'Durum'}</th>
+                    <th>{language === 'ru' ? 'Операция' : 'İşlem'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -15283,9 +15285,9 @@ export function App() {
                           </div>
                         </td>
                         <td className="actions-cell training-actions-cell">
-                          <div className="table-action-group" aria-label={`${row.trainingTitle} işlemleri`}>
-                            <button type="button" className="table-action-button" onClick={() => editTrainingEntry(row.id)}>Düzenle</button>
-                            <button type="button" className="table-action-button danger" onClick={() => deleteTrainingEntry(row.id)}>Sil</button>
+                          <div className="table-action-group" aria-label={`${row.trainingTitle} ${language === 'ru' ? 'операции' : 'işlemleri'}`}>
+                            <button type="button" className="table-action-button" onClick={() => editTrainingEntry(row.id)}>{language === 'ru' ? 'Редактировать' : 'Düzenle'}</button>
+                            <button type="button" className="table-action-button danger" onClick={() => deleteTrainingEntry(row.id)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                           </div>
                         </td>
                       </tr>
