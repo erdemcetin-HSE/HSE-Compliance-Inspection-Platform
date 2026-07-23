@@ -5964,14 +5964,9 @@ export function App() {
     const vaccinationUpToDate = healthRecords.filter((record) => record.vaccinationStatus.toLowerCase().includes('up')).length;
     const vaccinationRate = totalEmployees > 0 ? Math.round((vaccinationUpToDate / totalEmployees) * 100) : 0;
 
-    const metricLabels = [
-      'İşe Uygun',
-      'Kısıtlı Görev',
-      'Kronik Hastalık',
-      'Bulaşıcı Hastalık',
-      '30 Gün İçinde Muayene',
-      'Toplam Kayıt'
-    ];
+    const metricLabels = language === 'ru'
+      ? ['Годен к работе', 'Ограниченный режим', 'Хронические заболевания', 'Инфекционные заболевания', 'Осмотр в 30 дней', 'Всего записей']
+      : ['İşe Uygun', 'Kısıtlı Görev', 'Kronik Hastalık', 'Bulaşıcı Hastalık', '30 Gün İçinde Muayene', 'Toplam Kayıt'];
     const metricValues = [fitForWork, restrictedDuty, chronicCount, communicableCount, medicalDue, totalEmployees];
 
     const departmentMap = new Map<string, number>();
@@ -5997,7 +5992,7 @@ export function App() {
       departmentRows,
       departmentMax
     };
-  }, [healthRecords]);
+  }, [healthRecords, language]);
 
   const emergencyTypeLabel = (value: EmergencyType) => {
     const map: Record<EmergencyType, string> = {
@@ -13260,11 +13255,11 @@ export function App() {
 
         {activeModule === 'occupational-health' ? (
           <section className="panel">
-            <h2 className="health-chart-title">İş Sağlığı Analiz Grafiği</h2>
-            <p className="message health-chart-note">Her sütun bir KPI metrik adını temsil eder. Bu grafik PDF raporunda da aynı başlıklarla yer alır.</p>
+            <h2 className="health-chart-title">{language === 'ru' ? 'Аналитический график охраны труда' : 'İş Sağlığı Analiz Grafiği'}</h2>
+            <p className="message health-chart-note">{language === 'ru' ? 'Каждый столбец представляет название ключевого показателя. Этот график также отображается в отчёте PDF с теми же заголовками.' : 'Her sütun bir KPI metrik adını temsil eder. Bu grafik PDF raporunda da aynı başlıklarla yer alır.'}</p>
             <div className="executive-charts-grid">
               <div className="chart-card">
-                <strong>İş Sağlığı KPI Metrikleri</strong>
+                <strong>{language === 'ru' ? 'КПЭ охраны труда' : 'İş Sağlığı KPI Metrikleri'}</strong>
                 <DashboardChart
                   type="bar"
                   values={healthAnalytics.metricValues}
@@ -13275,16 +13270,16 @@ export function App() {
                 />
               </div>
               <div className="chart-card">
-                <strong>Sağlık Durum Dağılımı</strong>
+                <strong>{language === 'ru' ? 'Распределение по состоянию здоровья' : 'Sağlık Durum Dağılımı'}</strong>
                 <DashboardChart
                   type="donut"
                   values={[healthAnalytics.fitForWork, healthAnalytics.notFitForWork, healthAnalytics.restrictedDuty]}
                   themeName="safety"
                 />
                 <div className="health-legend-grid">
-                  <span>İşe Uygun: {healthAnalytics.fitForWork}</span>
-                  <span>İşe Uygun Değil: {healthAnalytics.notFitForWork}</span>
-                  <span>Kısıtlı Görev: {healthAnalytics.restrictedDuty}</span>
+                  <span>{language === 'ru' ? 'Годен к работе' : 'İşe Uygun'}: {healthAnalytics.fitForWork}</span>
+                  <span>{language === 'ru' ? 'Не годен к работе' : 'İşe Uygun Değil'}: {healthAnalytics.notFitForWork}</span>
+                  <span>{language === 'ru' ? 'Ограниченный режим' : 'Kısıtlı Görev'}: {healthAnalytics.restrictedDuty}</span>
                 </div>
               </div>
             </div>
@@ -16980,97 +16975,97 @@ export function App() {
 
         {activeModule === 'occupational-health' ? (
           <section className="panel">
-            <h2>İş Sağlığı Veri Girişi</h2>
+            <h2>{language === 'ru' ? 'Ввод данных охраны труда' : 'İş Sağlığı Veri Girişi'}</h2>
             <div className="form-grid">
               <label>
-                Çalışan Adı
+                {language === 'ru' ? 'Имя сотрудника' : 'Çalışan Adı'}
                 <input
                   value={healthForm.employeeName}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, employeeName: event.target.value }))}
                 />
               </label>
               <label>
-                Çalışan ID
+                {language === 'ru' ? 'Идентификатор сотрудника' : 'Çalışan ID'}
                 <input
                   value={healthForm.employeeId}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, employeeId: event.target.value }))}
                 />
               </label>
               <label>
-                Departman
+                {language === 'ru' ? 'Отдел' : 'Departman'}
                 <input
                   value={healthForm.department}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, department: event.target.value }))}
                 />
               </label>
               <label>
-                Pozisyon
+                {language === 'ru' ? 'Должность' : 'Pozisyon'}
                 <input
                   value={healthForm.position}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, position: event.target.value }))}
                 />
               </label>
               <label>
-                Kan Grubu
+                {language === 'ru' ? 'Группа крови' : 'Kan Grubu'}
                 <input
                   value={healthForm.bloodGroup}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, bloodGroup: event.target.value }))}
                 />
               </label>
               <label>
-                Alerjiler
+                {language === 'ru' ? 'Аллергии' : 'Alerjiler'}
                 <input
                   value={healthForm.allergies}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, allergies: event.target.value }))}
                 />
               </label>
               <label>
-                Kronik Hastalık
+                {language === 'ru' ? 'Хроническое заболевание' : 'Kronik Hastalık'}
                 <input
                   value={healthForm.chronicDisease}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, chronicDisease: event.target.value }))}
                 />
               </label>
               <label>
-                Bulaşıcı Hastalık
+                {language === 'ru' ? 'Инфекционное заболевание' : 'Bulaşıcı Hastalık'}
                 <input
                   value={healthForm.communicableDisease}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, communicableDisease: event.target.value }))}
                 />
               </label>
               <label>
-                İlaç Kullanımı
+                {language === 'ru' ? 'Приём лекарств' : 'İlaç Kullanımı'}
                 <input
                   value={healthForm.medication}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, medication: event.target.value }))}
                 />
               </label>
               <label>
-                Engellilik Durumu
+                {language === 'ru' ? 'Статус инвалидности' : 'Engellilik Durumu'}
                 <input
                   value={healthForm.disabilityStatus}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, disabilityStatus: event.target.value }))}
                 />
               </label>
               <label>
-                İşe Uygunluk (Evet / Hayır)
+                {language === 'ru' ? 'Годен к работе (Да / Нет)' : 'İşe Uygunluk (Evet / Hayır)'}
                 <select
                   value={healthForm.fitForWork}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, fitForWork: event.target.value as 'Yes' | 'No' }))}
                 >
-                  <option value="Yes">Evet</option>
-                  <option value="No">Hayır</option>
+                  <option value="Yes">{language === 'ru' ? 'Да' : 'Evet'}</option>
+                  <option value="No">{language === 'ru' ? 'Нет' : 'Hayır'}</option>
                 </select>
               </label>
               <label>
-                Kısıtlı Çalışma
+                {language === 'ru' ? 'Ограниченный режим работы' : 'Kısıtlı Çalışma'}
                 <input
                   value={healthForm.restrictedWork}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, restrictedWork: event.target.value }))}
                 />
               </label>
               <label>
-                Muayene Tarihi
+                {language === 'ru' ? 'Дата медосмотра' : 'Muayene Tarihi'}
                 <input
                   type="date"
                   value={healthForm.medicalExaminationDate}
@@ -17078,7 +17073,7 @@ export function App() {
                 />
               </label>
               <label>
-                Sonraki Muayene
+                {language === 'ru' ? 'Следующий медосмотр' : 'Sonraki Muayene'}
                 <input
                   type="date"
                   value={healthForm.nextMedicalExamination}
@@ -17086,14 +17081,14 @@ export function App() {
                 />
               </label>
               <label>
-                Aşı Durumu
+                {language === 'ru' ? 'Статус вакцинации' : 'Aşı Durumu'}
                 <input
                   value={healthForm.vaccinationStatus}
                   onChange={(event) => setHealthForm((prev) => ({ ...prev, vaccinationStatus: event.target.value }))}
                 />
               </label>
               <label className="full-row">
-                Notlar
+                {language === 'ru' ? 'Примечания' : 'Notlar'}
                 <textarea
                   rows={3}
                   value={healthForm.remarks}
@@ -17101,13 +17096,13 @@ export function App() {
                 />
               </label>
               <div className="full-row actions health-entry-actions-row">
-                <button type="button" onClick={saveHealthEntry}>{editingHealthEmployeeId ? 'Güncelle' : t.save}</button>
+                <button type="button" onClick={saveHealthEntry}>{editingHealthEmployeeId ? (language === 'ru' ? 'Обновить' : 'Güncelle') : t.save}</button>
                 {editingHealthEmployeeId ? (
-                  <button type="button" className="secondary" onClick={resetHealthForm}>Vazgeç</button>
+                  <button type="button" className="secondary" onClick={resetHealthForm}>{language === 'ru' ? 'Отмена' : 'Vazgeç'}</button>
                 ) : null}
                 <div className="report-action-buttons health-entry-export-buttons">
-                  <button type="button" onClick={exportHealthExecutivePdf}>PDF Dışa Aktar</button>
-                  <button type="button" onClick={exportHealthRecordsCsv}>Excel Dışa Aktar</button>
+                  <button type="button" onClick={exportHealthExecutivePdf}>{language === 'ru' ? 'Экспортировать в PDF' : 'PDF Dışa Aktar'}</button>
+                  <button type="button" onClick={exportHealthRecordsCsv}>{language === 'ru' ? 'Экспортировать в Excel' : 'Excel Dışa Aktar'}</button>
                 </div>
               </div>
             </div>
@@ -17443,27 +17438,27 @@ export function App() {
 
         {activeModule === 'occupational-health' ? (
           <section className="panel table-wrap">
-            <h2>İş Sağlığı Kayıtları</h2>
+            <h2>{language === 'ru' ? 'Записи охраны труда' : 'İş Sağlığı Kayıtları'}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Çalışan Adı</th>
-                  <th>Çalışan ID</th>
-                  <th>Departman</th>
-                  <th>Pozisyon</th>
-                  <th>Kan Grubu</th>
-                  <th>Alerjiler</th>
-                  <th>Kronik Hastalık</th>
-                  <th>Bulaşıcı Hastalık</th>
-                  <th>İlaç Kullanımı</th>
-                  <th>Engellilik Durumu</th>
-                  <th>İşe Uygunluk</th>
-                  <th>Kısıtlı Çalışma</th>
-                  <th>Muayene Tarihi</th>
-                  <th>Sonraki Muayene</th>
-                  <th>Aşı Durumu</th>
-                  <th>Notlar</th>
-                  <th>İşlem</th>
+                  <th>{language === 'ru' ? 'Имя сотрудника' : 'Çalışan Adı'}</th>
+                  <th>{language === 'ru' ? 'Идентификатор сотрудника' : 'Çalışan ID'}</th>
+                  <th>{language === 'ru' ? 'Отдел' : 'Departman'}</th>
+                  <th>{language === 'ru' ? 'Должность' : 'Pozisyon'}</th>
+                  <th>{language === 'ru' ? 'Группа крови' : 'Kan Grubu'}</th>
+                  <th>{language === 'ru' ? 'Аллергии' : 'Alerjiler'}</th>
+                  <th>{language === 'ru' ? 'Хроническое заболевание' : 'Kronik Hastalık'}</th>
+                  <th>{language === 'ru' ? 'Инфекционное заболевание' : 'Bulaşıcı Hastalık'}</th>
+                  <th>{language === 'ru' ? 'Приём лекарств' : 'İlaç Kullanımı'}</th>
+                  <th>{language === 'ru' ? 'Статус инвалидности' : 'Engellilik Durumu'}</th>
+                  <th>{language === 'ru' ? 'Годен к работе' : 'İşe Uygunluk'}</th>
+                  <th>{language === 'ru' ? 'Ограниченный режим' : 'Kısıtlı Çalışma'}</th>
+                  <th>{language === 'ru' ? 'Дата медосмотра' : 'Muayene Tarihi'}</th>
+                  <th>{language === 'ru' ? 'Следующий медосмотр' : 'Sonraki Muayene'}</th>
+                  <th>{language === 'ru' ? 'Статус вакцинации' : 'Aşı Durumu'}</th>
+                  <th>{language === 'ru' ? 'Примечания' : 'Notlar'}</th>
+                  <th>{language === 'ru' ? 'Операция' : 'İşlem'}</th>
                 </tr>
               </thead>
               <tbody>
@@ -17480,16 +17475,16 @@ export function App() {
                       <td>{record.communicableDisease}</td>
                       <td>{record.medication}</td>
                       <td>{record.disabilityStatus}</td>
-                      <td>{record.fitForWork === 'Yes' ? 'Evet' : 'Hayır'}</td>
+                      <td>{record.fitForWork === 'Yes' ? (language === 'ru' ? 'Да' : 'Evet') : (language === 'ru' ? 'Нет' : 'Hayır')}</td>
                       <td>{record.restrictedWork}</td>
                       <td>{record.medicalExaminationDate}</td>
                       <td>{record.nextMedicalExamination}</td>
                       <td>{record.vaccinationStatus}</td>
                       <td>{record.remarks}</td>
                       <td className="actions-cell table-actions-cell">
-                        <div className="table-action-group" aria-label={`${record.employeeName} işlemleri`}>
-                          <button type="button" className="table-action-button" onClick={() => editHealthEntry(record.employeeId)}>Düzenle</button>
-                          <button type="button" className="table-action-button danger" onClick={() => deleteHealthEntry(record.employeeId)}>Sil</button>
+                        <div className="table-action-group" aria-label={`${record.employeeName} ${language === 'ru' ? 'операции' : 'işlemleri'}`}>
+                          <button type="button" className="table-action-button" onClick={() => editHealthEntry(record.employeeId)}>{language === 'ru' ? 'Редактировать' : 'Düzenle'}</button>
+                          <button type="button" className="table-action-button danger" onClick={() => deleteHealthEntry(record.employeeId)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                         </div>
                       </td>
                     </tr>
@@ -17498,9 +17493,9 @@ export function App() {
                   <tr>
                     <td colSpan={16}>{t.noHealth}</td>
                     <td className="actions-cell table-actions-cell">
-                      <div className="table-action-group" aria-label="İş sağlığı kayıt işlemleri">
-                        <button type="button" className="table-action-button" disabled>Düzenle</button>
-                        <button type="button" className="table-action-button danger" disabled>Sil</button>
+                      <div className="table-action-group" aria-label={language === 'ru' ? 'операции записи охраны труда' : 'İş sağlığı kayıt işlemleri'}>
+                        <button type="button" className="table-action-button" disabled>{language === 'ru' ? 'Редактировать' : 'Düzenle'}</button>
+                        <button type="button" className="table-action-button danger" disabled>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                       </div>
                     </td>
                   </tr>
