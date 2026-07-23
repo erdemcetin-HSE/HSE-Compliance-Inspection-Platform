@@ -14675,14 +14675,14 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>KKD Stok Görselleştirmesi</h2>
+              <h2>{language === 'ru' ? 'Визуализация запасов СИЗ' : 'KKD Stok Görselleştirmesi'}</h2>
               <div className="ppe-project-filter-row">
                 <button
                   type="button"
                   className={ppeDashboardProjectFilter === 'all' ? 'ppe-project-filter-btn active' : 'ppe-project-filter-btn'}
                   onClick={() => setPpeDashboardProjectFilter('all')}
                 >
-                  Tüm Projeler
+                  {language === 'ru' ? 'Все проекты' : 'Tüm Projeler'}
                 </button>
                 {projectCatalog.map((project) => (
                   <button
