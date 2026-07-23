@@ -2304,6 +2304,29 @@ const workforceDepartmentOptions = [
   'Dizayn'
 ];
 
+const workforceDepartmentTranslations: Record<string, string> = {
+  'Elektrik': 'Электротехнические',
+  'Mekanik': 'Механика',
+  'İnşaat': 'Строительство',
+  'İK': 'Управление кадрами',
+  'İSG': 'Охрана труда',
+  'Proje Yönetimi': 'Управление проектами',
+  'Depo': 'Склад',
+  'Bakım': 'Техническое обслуживание',
+  'Atölye': 'Мастерская',
+  'Teknik Ofis': 'Техническое управление',
+  'Finans': 'Финансы',
+  'PTO': 'ПТО',
+  'Dizayn': 'Дизайн'
+};
+
+const translateDepartment = (dept: string, lang: string): string => {
+  if (lang === 'ru' && workforceDepartmentTranslations[dept]) {
+    return workforceDepartmentTranslations[dept];
+  }
+  return dept;
+};
+
 const trainingTypeOptions = [
   'İSG Oryantasyonu',
   'Yüksekte Çalışma',
@@ -14332,26 +14355,26 @@ export function App() {
         {activeModule === 'employees' ? (
           <>
             <section className="panel">
-              <h2>İşgücü KPI</h2>
+              <h2>{language === 'ru' ? 'Ключевые показатели рабочей силы' : 'İşgücü KPI'}</h2>
               <div className="workforce-kpi-grid">
-                <article className="equipment-kpi-card"><span>Toplam İşgücü</span><strong>{workforceSummary.totalWorkforce}</strong></article>
-                <article className="equipment-kpi-card"><span>Yeni Çalışanlar</span><strong>{workforceSummary.newEmployees}</strong></article>
-                <article className="equipment-kpi-card"><span>Erkek Çalışanlar</span><strong>{workforceSummary.maleEmployees}</strong></article>
-                <article className="equipment-kpi-card"><span>Kadın Çalışanlar</span><strong>{workforceSummary.femaleEmployees}</strong></article>
-                <article className="equipment-kpi-card"><span>Gündüz Vardiyası İş Gücü</span><strong>{workforceSummary.dayShiftWorkers}</strong></article>
-                <article className="equipment-kpi-card"><span>Gece Vardiyası İş Gücü</span><strong>{workforceSummary.nightShiftWorkers}</strong></article>
-                <article className="equipment-kpi-card"><span>Fazla Mesai Çalışanları</span><strong>{workforceSummary.overtimeWorkers}</strong></article>
-                <article className="equipment-kpi-card"><span>Kadın Çalışan Oranı</span><strong>%{workforceRates.womenRatio}</strong></article>
-                <article className="equipment-kpi-card"><span>Yeni Çalışan Oranı</span><strong>%{workforceRates.newEmployeeRatio}</strong></article>
-                <article className="equipment-kpi-card"><span>Fazla Mesai Oranı</span><strong>%{workforceRates.overtimeRatio}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего рабочей силы' : 'Toplam İşgücü'}</span><strong>{workforceSummary.totalWorkforce}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Новые сотрудники' : 'Yeni Çalışanlar'}</span><strong>{workforceSummary.newEmployees}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Мужчины сотрудники' : 'Erkek Çalışanlar'}</span><strong>{workforceSummary.maleEmployees}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Женщины сотрудники' : 'Kadın Çalışanlar'}</span><strong>{workforceSummary.femaleEmployees}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Рабочая сила дневной смены' : 'Gündüz Vardiyası İş Gücü'}</span><strong>{workforceSummary.dayShiftWorkers}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Рабочая сила ночной смены' : 'Gece Vardiyası İş Gücü'}</span><strong>{workforceSummary.nightShiftWorkers}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Сотрудники сверхурочной работы' : 'Fazla Mesai Çalışanları'}</span><strong>{workforceSummary.overtimeWorkers}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Процент женских сотрудников' : 'Kadın Çalışan Oranı'}</span><strong>%{workforceRates.womenRatio}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Процент новых сотрудников' : 'Yeni Çalışan Oranı'}</span><strong>%{workforceRates.newEmployeeRatio}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Процент сверхурочной работы' : 'Fazla Mesai Oranı'}</span><strong>%{workforceRates.overtimeRatio}</strong></article>
               </div>
             </section>
 
             <section className="panel">
-              <h2>İşgücü Performans Görselleştirmesi</h2>
+              <h2>{language === 'ru' ? 'Визуализация производительности рабочей силы' : 'İşgücü Performans Görselleştirmesi'}</h2>
               <div className="workforce-chart-grid">
                 <article className="chart-card workforce-chart-card workforce-age-card">
-                  <strong>İşgücü Yaş Dağılımı</strong>
+                  <strong>{language === 'ru' ? 'Распределение рабочей силы по возрасту' : 'İşgücü Yaş Dağılımı'}</strong>
                   <DashboardChart
                     type="bar"
                     values={[
@@ -14368,11 +14391,11 @@ export function App() {
                 </article>
 
                 <article className="chart-card workforce-chart-card workforce-department-card">
-                  <strong>Departmana Göre İşgücü</strong>
+                  <strong>{language === 'ru' ? 'Рабочая сила по отделам' : 'Departmana Göre İşgücü'}</strong>
                   <div className="workforce-horizontal-chart">
                     {workforceDepartmentDistribution.map((item) => (
                       <div className="workforce-horizontal-row" key={item.label}>
-                        <span>{item.label}</span>
+                        <span>{translateDepartment(item.label, language)}</span>
                         <div className="workforce-horizontal-track">
                           <div
                             className="workforce-horizontal-fill"
@@ -14388,7 +14411,7 @@ export function App() {
                 </article>
 
                 <article className="chart-card workforce-chart-card workforce-shift-card">
-                  <strong>Vardiya Dağılımı</strong>
+                  <strong>{language === 'ru' ? 'Распределение смены' : 'Vardiya Dağılımı'}</strong>
                   <div className="workforce-shift-content">
                     <div className="workforce-shift-chart">
                       <DashboardChart
@@ -14401,9 +14424,9 @@ export function App() {
 
                     <div className="workforce-shift-legend" aria-label="Vardiya dağılımı detayları">
                       <div className="workforce-shift-legend-item">
-                        <span>Gündüz Vardiyası</span>
+                        <span>{language === 'ru' ? 'Дневная смена' : 'Gündüz Vardiyası'}</span>
                         <strong>
-                          {workforceSummary.dayShiftWorkers} kişi (
+                          {workforceSummary.dayShiftWorkers} {language === 'ru' ? 'человека' : 'kişi'} (
                           {Math.round(
                             (workforceSummary.dayShiftWorkers /
                               Math.max(workforceSummary.dayShiftWorkers + workforceSummary.nightShiftWorkers, 1)) *
@@ -14413,9 +14436,9 @@ export function App() {
                         </strong>
                       </div>
                       <div className="workforce-shift-legend-item">
-                        <span>Gece Vardiyası</span>
+                        <span>{language === 'ru' ? 'Ночная смена' : 'Gece Vardiyası'}</span>
                         <strong>
-                          {workforceSummary.nightShiftWorkers} kişi (
+                          {workforceSummary.nightShiftWorkers} {language === 'ru' ? 'человека' : 'kişi'} (
                           {Math.round(
                             (workforceSummary.nightShiftWorkers /
                               Math.max(workforceSummary.dayShiftWorkers + workforceSummary.nightShiftWorkers, 1)) *
@@ -14431,16 +14454,18 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>İşgücü Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Ввод данных о рабочей силе' : 'İşgücü Veri Girişi'}</h2>
               <p className="inline-hint">
-                Bu modül İK personel kartlarını değil; SEÇ raporlaması için işgücü istatistikleri, vardiya dağılımı ve sahaya ilişkin işgücü yapısını yönetir.
+                {language === 'ru'
+                  ? 'Этот модуль управляет статистикой рабочей силы, распределением смен и структурой рабочей силы на объекте для отчетности HSE, а не персональными картотеками отделов кадров.'
+                  : 'Bu modül İK personel kartlarını değil; SEÇ raporlaması için işgücü istatistikleri, vardiya dağılımı ve sahaya ilişkin işgücü yapısını yönetir.'}
               </p>
               <div className="workforce-form-layout">
                 <article className="workforce-form-section">
-                  <h3>Genel Bilgiler</h3>
+                  <h3>{language === 'ru' ? 'Основная информация' : 'Genel Bilgiler'}</h3>
                   <div className="workforce-form-grid">
                     <label>
-                      Proje
+                      {language === 'ru' ? 'Проект' : 'Proje'}
                       <select value={workforceForm.projectId} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                         {projectCatalog.map((project) => (
                           <option key={project.id} value={project.id}>{project.name}</option>
@@ -14449,68 +14474,68 @@ export function App() {
                     </label>
 
                     <label>
-                      Tarih
+                      {language === 'ru' ? 'Дата' : 'Tarih'}
                       <input type="date" value={workforceForm.date} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, date: event.target.value }))} />
                     </label>
 
                     <label>
-                      Departman / Çalışma Alanı
+                      {language === 'ru' ? 'Отдел / Рабочая область' : 'Departman / Çalışma Alanı'}
                       <select value={workforceForm.departmentArea} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, departmentArea: event.target.value }))}>
                         {workforceDepartmentOptions.map((department) => (
-                          <option key={department} value={department}>{department}</option>
+                          <option key={department} value={department}>{translateDepartment(department, language)}</option>
                         ))}
                       </select>
                     </label>
 
                     <label>
-                      Yüklenici / Alt Yüklenici (Opsiyonel)
+                      {language === 'ru' ? 'Подрядчик / Субподрядчик (Необязательно)' : 'Yüklenici / Alt Yüklenici (Opsiyonel)'}
                       <input value={workforceForm.contractor} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, contractor: event.target.value }))} />
                     </label>
                   </div>
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>İşgücü Bilgileri</h3>
+                  <h3>{language === 'ru' ? 'Информация о рабочей силе' : 'İşgücü Bilgileri'}</h3>
                   <div className="workforce-form-grid">
                     <label>
-                      Toplam İşgücü
+                      {language === 'ru' ? 'Всего рабочей силы' : 'Toplam İşgücü'}
                       <input type="number" min={0} value={workforceForm.totalWorkforce} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, totalWorkforce: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
 
                     <label>
-                      Yeni Çalışanlar
+                      {language === 'ru' ? 'Новые сотрудники' : 'Yeni Çalışanlar'}
                       <input type="number" min={0} value={workforceForm.newEmployees} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, newEmployees: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
 
                     <label>
-                      Erkek Çalışanlar
+                      {language === 'ru' ? 'Мужчины сотрудники' : 'Erkek Çalışanlar'}
                       <input type="number" min={0} value={workforceForm.maleEmployees} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, maleEmployees: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
 
                     <label>
-                      Kadın Çalışanlar
+                      {language === 'ru' ? 'Женщины сотрудники' : 'Kadın Çalışanlar'}
                       <input type="number" min={0} value={workforceForm.femaleEmployees} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, femaleEmployees: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
 
                     <label>
-                      Gündüz Vardiyası Çalışanları
+                      {language === 'ru' ? 'Сотрудники дневной смены' : 'Gündüz Vardiyası Çalışanları'}
                       <input type="number" min={0} value={workforceForm.dayShiftWorkers} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, dayShiftWorkers: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
 
                     <label>
-                      Gece Vardiyası Çalışanları
+                      {language === 'ru' ? 'Сотрудники ночной смены' : 'Gece Vardiyası Çalışanları'}
                       <input type="number" min={0} value={workforceForm.nightShiftWorkers} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, nightShiftWorkers: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
 
                     <label>
-                      Fazla Mesai Çalışanları
+                      {language === 'ru' ? 'Сотрудники сверхурочной работы' : 'Fazla Mesai Çalışanları'}
                       <input type="number" min={0} value={workforceForm.overtimeWorkers} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, overtimeWorkers: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
                   </div>
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Yaş Dağılımı</h3>
+                  <h3>{language === 'ru' ? 'Распределение по возрасту' : 'Yaş Dağılımı'}</h3>
                   <div className="workforce-form-grid">
                     <label>
                       18-25
@@ -14540,44 +14565,44 @@ export function App() {
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Genel</h3>
+                  <h3>{language === 'ru' ? 'Основной' : 'Genel'}</h3>
                   <div className="workforce-form-grid">
                     <label>
-                      Durum
+                      {language === 'ru' ? 'Статус' : 'Durum'}
                       <select value={workforceForm.status} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, status: event.target.value as Status }))}>
-                        <option value="OPEN">Açık</option>
-                        <option value="IN_PROGRESS">Devam Ediyor</option>
-                        <option value="CLOSED">Kapalı</option>
+                        <option value="OPEN">{language === 'ru' ? 'Открыто' : 'Açık'}</option>
+                        <option value="IN_PROGRESS">{language === 'ru' ? 'В процессе' : 'Devam Ediyor'}</option>
+                        <option value="CLOSED">{language === 'ru' ? 'Закрыто' : 'Kapalı'}</option>
                       </select>
                     </label>
 
                     <label className="full-row">
-                      Notlar
+                      {language === 'ru' ? 'Примечания' : 'Notlar'}
                       <textarea rows={3} value={workforceForm.notes} onChange={(event) => setWorkforceForm((prev) => ({ ...prev, notes: event.target.value }))} />
                     </label>
                   </div>
                 </article>
 
                 <div className="actions">
-                  <button type="button" onClick={saveWorkforceEntry}>{editingWorkforceId ? 'Güncelle' : 'Kaydet'}</button>
+                  <button type="button" onClick={saveWorkforceEntry}>{editingWorkforceId ? (language === 'ru' ? 'Обновить' : 'Güncelle') : (language === 'ru' ? 'Сохранить' : 'Kaydet')}</button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>İşgücü Kayıtları</h2>
+              <h2>{language === 'ru' ? 'Записи о рабочей силе' : 'İşgücü Kayıtları'}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>Proje</th>
-                    <th>Tarih</th>
-                    <th>Departman</th>
-                    <th>Toplam İşgücü</th>
-                    <th>Yeni Çalışanlar</th>
-                    <th>Gündüz Vardiyası</th>
-                    <th>Gece Vardiyası</th>
-                    <th>Durum</th>
-                    <th>İşlemler</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Дата' : 'Tarih'}</th>
+                    <th>{language === 'ru' ? 'Отдел' : 'Departman'}</th>
+                    <th>{language === 'ru' ? 'Всего рабочей силы' : 'Toplam İşgücü'}</th>
+                    <th>{language === 'ru' ? 'Новые сотрудники' : 'Yeni Çalışanlar'}</th>
+                    <th>{language === 'ru' ? 'Дневная смена' : 'Gündüz Vardiyası'}</th>
+                    <th>{language === 'ru' ? 'Ночная смена' : 'Gece Vardiyası'}</th>
+                    <th>{language === 'ru' ? 'Статус' : 'Durum'}</th>
+                    <th>{language === 'ru' ? 'Операции' : 'İşlemler'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14586,16 +14611,16 @@ export function App() {
                       <tr key={row.id}>
                         <td>{projectCatalog.find((project) => project.id === row.projectId)?.name ?? row.projectId}</td>
                         <td>{row.date}</td>
-                        <td>{row.departmentArea}</td>
+                        <td>{translateDepartment(row.departmentArea, language)}</td>
                         <td>{row.totalWorkforce}</td>
                         <td>{row.newEmployees}</td>
                         <td>{row.dayShiftWorkers}</td>
                         <td>{row.nightShiftWorkers}</td>
                         <td className="workforce-status-cell"><span className={`status-badge ${getStatusBadgeClass(row.status)}`}>{localizeStatus(row.status)}</span></td>
                         <td className="actions-cell table-actions-cell">
-                          <div className="table-action-group" aria-label={`${row.departmentArea} işgücü işlemleri`}>
-                            <button type="button" className="table-action-button" onClick={() => editWorkforceEntry(row.id)}>Düzenle</button>
-                            <button type="button" className="table-action-button danger" onClick={() => deleteWorkforceEntry(row.id)}>Sil</button>
+                          <div className="table-action-group" aria-label={`${row.departmentArea} ${language === 'ru' ? 'операции рабочей силы' : 'işgücü işlemleri'}`}>
+                            <button type="button" className="table-action-button" onClick={() => editWorkforceEntry(row.id)}>{language === 'ru' ? 'Редактировать' : 'Düzenle'}</button>
+                            <button type="button" className="table-action-button danger" onClick={() => deleteWorkforceEntry(row.id)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                           </div>
                         </td>
                       </tr>
