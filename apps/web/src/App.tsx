@@ -14639,14 +14639,14 @@ export function App() {
         {activeModule === 'ppe-stocks' ? (
           <>
             <section className="panel">
-              <h2>KKD Envanter KPI</h2>
+              <h2>{language === 'ru' ? 'Сводка по СИЗ' : 'KKD Envanter KPI'}</h2>
               <div className="ppe-project-filter-row">
                 <button
                   type="button"
                   className={ppeDashboardProjectFilter === 'all' ? 'ppe-project-filter-btn active' : 'ppe-project-filter-btn'}
                   onClick={() => setPpeDashboardProjectFilter('all')}
                 >
-                  Tüm Projeler
+                  {language === 'ru' ? 'Все проекты' : 'Tüm Projeler'}
                 </button>
                 {projectCatalog.map((project) => (
                   <button
@@ -14660,17 +14660,17 @@ export function App() {
                 ))}
               </div>
               <div className="equipment-kpi-grid">
-                <article className="equipment-kpi-card"><span>Toplam KKD Stoğu</span><strong>{ppeSummary.totalStock}</strong></article>
-                <article className="equipment-kpi-card"><span>Bu Ay Gelen Stok</span><strong>{ppeSummary.monthlyIncoming}</strong></article>
-                <article className="equipment-kpi-card"><span>Bu Ay Çıkışı Yapılan Stok</span><strong>{ppeSummary.monthlyOutgoing}</strong></article>
-                <article className="equipment-kpi-card"><span>Düşük Stoklu Kalemler</span><strong>{ppeSummary.lowStockItems}</strong></article>
-                <article className="equipment-kpi-card"><span>Toplam Envanter Değeri</span><strong>{ppeSummary.totalInventoryValue.toLocaleString('tr-TR')} Rub</strong></article>
-                <article className="equipment-kpi-card"><span>Gereken Satın Alma Siparişleri</span><strong>{ppeSummary.purchaseOrdersNeeded}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Общий запас СИЗ' : 'Toplam KKD Stoğu'}</span><strong>{ppeSummary.totalStock}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Поступления в этом месяце' : 'Bu Ay Gelen Stok'}</span><strong>{ppeSummary.monthlyIncoming}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Расход в этом месяце' : 'Bu Ay Çıkışı Yapılan Stok'}</span><strong>{ppeSummary.monthlyOutgoing}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Позиции с низким уровнем запаса' : 'Düşük Stoklu Kalemler'}</span><strong>{ppeSummary.lowStockItems}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Общая стоимость запасов' : 'Toplam Envanter Değeri'}</span><strong>{ppeSummary.totalInventoryValue.toLocaleString('tr-TR')} Rub</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Требуемые заказы на закупку' : 'Gereken Satın Alma Siparişleri'}</span><strong>{ppeSummary.purchaseOrdersNeeded}</strong></article>
               </div>
               <div className="report-action-buttons">
-                <button type="button" onClick={exportPpeSummaryPdf}>PDF Dışa Aktar</button>
-                <button type="button" onClick={sendPpeSummaryEmail}>Özeti E-posta ile Gönder</button>
-                <button type="button" onClick={exportPpeInventoryCsv}>Excel Dışa Aktar</button>
+                <button type="button" onClick={exportPpeSummaryPdf}>{language === 'ru' ? 'Экспортировать в PDF' : 'PDF Dışa Aktar'}</button>
+                <button type="button" onClick={sendPpeSummaryEmail}>{language === 'ru' ? 'Отправить сводку по почте' : 'Özeti E-posta ile Gönder'}</button>
+                <button type="button" onClick={exportPpeInventoryCsv}>{language === 'ru' ? 'Экспортировать в Excel' : 'Excel Dışa Aktar'}</button>
               </div>
             </section>
 
@@ -14697,7 +14697,7 @@ export function App() {
               </div>
               <div className="training-chart-grid">
                 <article className="chart-card training-horizontal-card">
-                  <strong>Kategori Bazında Mevcut KKD Stoğu</strong>
+                  <strong>{language === 'ru' ? 'Текущий запас СИЗ по категориям' : 'Kategori Bazında Mevcut KKD Stoğu'}</strong>
                   <div className="workforce-horizontal-chart">
                     {ppeCategoryStockData.length > 0 ? (
                       ppeCategoryStockData.map((row) => {
@@ -14718,7 +14718,7 @@ export function App() {
                 </article>
 
                 <article className="chart-card">
-                  <strong>Aylık Stok Giriş ve Çıkış Karşılaştırması</strong>
+                  <strong>{language === 'ru' ? 'Сравнение поступлений и расходов за месяц' : 'Aylık Stok Giriş ve Çıkış Karşılaştırması'}</strong>
                   <div className="ppe-line-shell">
                     <svg viewBox="0 0 100 100" className="viz-svg" preserveAspectRatio="none">
                       {[20, 40, 60, 80].map((y) => (
@@ -14750,8 +14750,8 @@ export function App() {
                       />
                     </svg>
                     <div className="ppe-line-legend">
-                      <span><i className="ppe-line-dot ppe-line-dot-in" />Giriş</span>
-                      <span><i className="ppe-line-dot ppe-line-dot-out" />Çıkış</span>
+                      <span><i className="ppe-line-dot ppe-line-dot-in" />{language === 'ru' ? 'Поступления' : 'Giriş'}</span>
+                      <span><i className="ppe-line-dot ppe-line-dot-out" />{language === 'ru' ? 'Расход' : 'Çıkış'}</span>
                     </div>
                     <div className="viz-axis-row">
                       {ppeMonthlyTrend.map((row) => <span key={row.key}>{row.label}</span>)}
@@ -14760,7 +14760,7 @@ export function App() {
                 </article>
 
                 <article className="chart-card">
-                  <strong>Stok Durumu</strong>
+                  <strong>{language === 'ru' ? 'Статус запасов' : 'Stok Durumu'}</strong>
                   <DashboardChart
                     type="donut"
                     values={[ppeStatusDistribution.YETERLI, ppeStatusDistribution.DUSUK_STOK, ppeStatusDistribution.STOKTA_YOK]}
@@ -14772,65 +14772,67 @@ export function App() {
             </section>
 
             <section className="panel">
-              <h2>KKD Envanter İşlemi Girişi</h2>
+              <h2>{language === 'ru' ? 'Ввод транзакции запасов СИЗ' : 'KKD Envanter İşlemi Girişi'}</h2>
               <p className="inline-hint">
-                Mevcut stok manuel düzenlenmez; her hareket bir envanter işlemi olarak kaydedilir ve stok otomatik hesaplanır.
+                {language === 'ru'
+                  ? 'Текущий запас не редактируется вручную; каждое движение записывается как транзакция запасов и автоматически пересчитывается.'
+                  : 'Mevcut stok manuel düzenlenmez; her hareket bir envanter işlemi olarak kaydedilir ve stok otomatik hesaplanır.'}
               </p>
 
               <div className="risk-meta-row">
-                <div className="risk-meta-card"><span>İşlem Kimliği</span><strong>{nextPpeTransactionId}</strong></div>
-                <div className="risk-meta-card"><span>Kullanılabilir Stok</span><strong>{ppeSummary.totalStock}</strong></div>
-                <div className="risk-meta-card"><span>Stok Tükenme Uyarısı</span><strong>{ppeSummary.outOfStockItems}</strong></div>
+                <div className="risk-meta-card"><span>{language === 'ru' ? 'Идентификатор транзакции' : 'İşlem Kimliği'}</span><strong>{nextPpeTransactionId}</strong></div>
+                <div className="risk-meta-card"><span>{language === 'ru' ? 'Доступный запас' : 'Kullanılabilir Stok'}</span><strong>{ppeSummary.totalStock}</strong></div>
+                <div className="risk-meta-card"><span>{language === 'ru' ? 'Предупреждение об истощении запасов' : 'Stok Tükenme Uyarısı'}</span><strong>{ppeSummary.outOfStockItems}</strong></div>
               </div>
 
               <div className="training-form-layout">
                 <article className="workforce-form-section">
-                  <h3>Genel Bilgiler</h3>
+                  <h3>{language === 'ru' ? 'Общие сведения' : 'Genel Bilgiler'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      İşlem Türü
+                      {language === 'ru' ? 'Тип транзакции' : 'İşlem Türü'}
                       <select value={ppeTransactionForm.transactionType} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, transactionType: event.target.value as PpeTransactionType }))}>
                         {ppeTransactionTypeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                       </select>
                     </label>
                     <label>
-                      İşlem Kimliği (Otomatik Oluşturulan)
+                      {language === 'ru' ? 'Идентификатор транзакции (Автоматическое создание)' : 'İşlem Kimliği (Otomatik Oluşturulan)'}
                       <input value={nextPpeTransactionId} disabled />
                     </label>
                     <label>
-                      Proje
+                      {language === 'ru' ? 'Проект' : 'Proje'}
                       <select value={ppeTransactionForm.projectId} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                         {projectCatalog.map((project) => <option key={project.id} value={project.id}>{project.name}</option>)}
                       </select>
                     </label>
                     <label>
-                      Depo
+                      {language === 'ru' ? 'Хранилище' : 'Depo'}
                       <select value={ppeTransactionForm.warehouse} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, warehouse: event.target.value }))}>
                         {ppeWarehouseOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      Tarih
+                      {language === 'ru' ? 'Дата' : 'Tarih'}
                       <input type="date" value={ppeTransactionForm.date} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, date: event.target.value }))} />
                     </label>
                     <label>
-                      KKD Kategorisi
+                      {language === 'ru' ? 'Категория СИЗ' : 'KKD Kategorisi'}
                       <select value={ppeTransactionForm.category} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, category: event.target.value }))}>
                         {ppeCategoryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      KKD Kalemi
+                      {language === 'ru' ? 'Элемент СИЗ' : 'KKD Kalemi'}
                       <select value={ppeTransactionForm.itemName} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, itemName: event.target.value }))}>
                         {ppeItemOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
                     </label>
                     <label>
-                      Marka / Model
+                      {language === 'ru' ? 'Марка / Модель' : 'Marka / Model'}
                       <input value={ppeTransactionForm.brandModel} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, brandModel: event.target.value }))} />
                     </label>
                     <label>
-                      Birim
+                      {language === 'ru' ? 'Единица измерения' : 'Birim'}
                       <select value={ppeTransactionForm.unit} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, unit: event.target.value }))}>
                         {ppeUnitOptions.map((option) => <option key={option} value={option}>{option}</option>)}
                       </select>
@@ -14839,10 +14841,10 @@ export function App() {
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Envanter Bilgileri</h3>
+                  <h3>{language === 'ru' ? 'Информация об инвентаре' : 'Envanter Bilgileri'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Mevcut Stok (Otomatik)
+                      {language === 'ru' ? 'Текущий запас (Автоматический)' : 'Mevcut Stok (Otomatik)'}
                       <input
                         disabled
                         value={(() => {
@@ -14852,15 +14854,15 @@ export function App() {
                       />
                     </label>
                     <label>
-                      Gelen Stok
+                      {language === 'ru' ? 'Поступления' : 'Gelen Stok'}
                       <input disabled value={ppeTransactionForm.transactionType === 'STOK_GIRISI' || ppeTransactionForm.transactionType === 'STOGA_IADE' ? ppeTransactionForm.quantity : 0} />
                     </label>
                     <label>
-                      Çıkışı Yapılan Stok
+                      {language === 'ru' ? 'Расход' : 'Çıkışı Yapılan Stok'}
                       <input disabled value={ppeTransactionForm.transactionType === 'STOK_CIKISI' || ppeTransactionForm.transactionType === 'HASARLI_HURDA' ? ppeTransactionForm.quantity : 0} />
                     </label>
                     <label>
-                      Kalan Stok (İşlem Sonrası)
+                      {language === 'ru' ? 'Оставшийся запас (После транзакции)' : 'Kalan Stok (İşlem Sonrası)'}
                       <input
                         disabled
                         value={(() => {
@@ -14874,58 +14876,58 @@ export function App() {
                       />
                     </label>
                     <label>
-                      Minimum Stok Seviyesi
+                      {language === 'ru' ? 'Минимальный уровень запаса' : 'Minimum Stok Seviyesi'}
                       <input type="number" min={0} value={ppeTransactionForm.minimumStockLevel} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, minimumStockLevel: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
                     <label>
-                      Miktar
+                      {language === 'ru' ? 'Количество' : 'Miktar'}
                       <input type="number" min={0} value={ppeTransactionForm.quantity} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, quantity: Math.max(0, Number(event.target.value) || 0) }))} />
                     </label>
                   </div>
                 </article>
 
                 <article className="workforce-form-section">
-                  <h3>Genel</h3>
+                  <h3>{language === 'ru' ? 'Общие' : 'Genel'}</h3>
                   <div className="equipment-form-grid">
                     <label>
-                      Durum
+                      {language === 'ru' ? 'Статус' : 'Durum'}
                       <select value={ppeTransactionForm.lifecycle} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, lifecycle: event.target.value as PpeTransactionLifecycle }))}>
                         {ppeLifecycleOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                       </select>
                     </label>
                     <label>
-                      Sorumlu Kişi
+                      {language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}
                       <input value={ppeTransactionForm.responsiblePerson} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))} />
                     </label>
                     <label className="full-row">
-                      Notlar
+                      {language === 'ru' ? 'Примечания' : 'Notlar'}
                       <textarea rows={3} value={ppeTransactionForm.notes} onChange={(event) => setPpeTransactionForm((prev) => ({ ...prev, notes: event.target.value }))} />
                     </label>
                   </div>
                 </article>
 
                 <div className="actions">
-                  <button type="button" onClick={savePpeTransaction}>{editingPpeTransactionId ? 'İşlemi Güncelle' : 'İşlemi Kaydet'}</button>
+                  <button type="button" onClick={savePpeTransaction}>{editingPpeTransactionId ? (language === 'ru' ? 'Обновить транзакцию' : 'İşlemi Güncelle') : (language === 'ru' ? 'Сохранить транзакцию' : 'İşlemi Kaydet')}</button>
                   {editingPpeTransactionId ? (
-                    <button type="button" className="secondary" onClick={resetPpeTransactionForm}>Vazgeç</button>
+                    <button type="button" className="secondary" onClick={resetPpeTransactionForm}>{language === 'ru' ? 'Отмена' : 'Vazgeç'}</button>
                   ) : null}
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap">
-              <h2>KKD Stok Özeti</h2>
+              <h2>{language === 'ru' ? 'Сводка запасов СИЗ' : 'KKD Stok Özeti'}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>Proje</th>
-                    <th>Tarih</th>
-                    <th>KKD Kalemi</th>
-                    <th>Gelen Stok</th>
-                    <th>Çıkışı Yapılan Stok</th>
-                    <th>Kalan Stok</th>
-                    <th>Minimum Stok</th>
-                    <th>Durum</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Дата' : 'Tarih'}</th>
+                    <th>{language === 'ru' ? 'Элемент СИЗ' : 'KKD Kalemi'}</th>
+                    <th>{language === 'ru' ? 'Поступления' : 'Gelen Stok'}</th>
+                    <th>{language === 'ru' ? 'Расход' : 'Çıkışı Yapılan Stok'}</th>
+                    <th>{language === 'ru' ? 'Оставшийся запас' : 'Kalan Stok'}</th>
+                    <th>{language === 'ru' ? 'Минимальный запас' : 'Minimum Stok'}</th>
+                    <th>{language === 'ru' ? 'Статус' : 'Durum'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14955,19 +14957,19 @@ export function App() {
             </section>
 
             <section className="panel table-wrap">
-              <h2>KKD Kayıtları</h2>
+              <h2>{language === 'ru' ? 'Записи СИЗ' : 'KKD Kayıtları'}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>İşlem Kimliği</th>
-                    <th>İşlem Türü</th>
-                    <th>Proje</th>
-                    <th>Depo</th>
-                    <th>KKD Öğesi</th>
-                    <th>Miktar</th>
-                    <th>Tarih</th>
-                    <th>Sorumlu Kişi</th>
-                    <th>İşlem</th>
+                    <th>{language === 'ru' ? 'Идентификатор транзакции' : 'İşlem Kimliği'}</th>
+                    <th>{language === 'ru' ? 'Тип транзакции' : 'İşlem Türü'}</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Хранилище' : 'Depo'}</th>
+                    <th>{language === 'ru' ? 'Элемент СИЗ' : 'KKD Öğesi'}</th>
+                    <th>{language === 'ru' ? 'Количество' : 'Miktar'}</th>
+                    <th>{language === 'ru' ? 'Дата' : 'Tarih'}</th>
+                    <th>{language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}</th>
+                    <th>{language === 'ru' ? 'Операция' : 'İşlem'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -14983,9 +14985,9 @@ export function App() {
                         <td>{row.date}</td>
                         <td>{row.responsiblePerson}</td>
                         <td className="actions-cell table-actions-cell">
-                          <div className="table-action-group" aria-label={`${row.transactionId} işlemleri`}>
-                            <button type="button" className="table-action-button" onClick={() => editPpeTransaction(row.id)}>Düzenle</button>
-                            <button type="button" className="table-action-button danger" onClick={() => deletePpeTransaction(row.id)}>Sil</button>
+                          <div className="table-action-group" aria-label={`${row.transactionId} ${language === 'ru' ? 'операции' : 'işlemleri'}`}>
+                            <button type="button" className="table-action-button" onClick={() => editPpeTransaction(row.id)}>{language === 'ru' ? 'Редактировать' : 'Düzenle'}</button>
+                            <button type="button" className="table-action-button danger" onClick={() => deletePpeTransaction(row.id)}>{language === 'ru' ? 'Удалить' : 'Sil'}</button>
                           </div>
                         </td>
                       </tr>
