@@ -8591,6 +8591,15 @@ export function App() {
   };
 
   const legalComplianceLabel = (value: LegalComplianceStatus) => {
+    if (language === 'ru') {
+      const map: Record<LegalComplianceStatus, string> = {
+        UYUMLU: 'Соответствует',
+        KISMEN_UYUMLU: 'Частично соответствует',
+        UYUMSUZ: 'Не соответствует',
+        UYGULANAMAZ: 'Не применимо'
+      };
+      return map[value];
+    }
     const map: Record<LegalComplianceStatus, string> = {
       UYUMLU: 'Uyumlu',
       KISMEN_UYUMLU: 'Kısmen Uyumlu',
@@ -8614,6 +8623,15 @@ export function App() {
   };
 
   const legalRiskLabel = (value: LegalRiskLevel) => {
+    if (language === 'ru') {
+      const map: Record<LegalRiskLevel, string> = {
+        DUSUK: 'Низкий',
+        ORTA: 'Средний',
+        YUKSEK: 'Высокий',
+        KRITIK: 'Критический'
+      };
+      return map[value];
+    }
     const map: Record<LegalRiskLevel, string> = {
       DUSUK: 'Düşük',
       ORTA: 'Orta',
@@ -8624,6 +8642,16 @@ export function App() {
   };
 
   const legalDocumentKindLabel = (value: LegalDocumentKind) => {
+    if (language === 'ru') {
+      const map: Record<LegalDocumentKind, string> = {
+        MEVZUAT_BELGESI: 'Нормативный документ',
+        UYUMLULUK_KANITI: 'Подтверждение соответствия',
+        DENETIM_RAPORU: 'Аудиторский отчёт',
+        IZIN_SERTIFIKA: 'Разрешение / Сертификат',
+        DIGER: 'Прочее'
+      };
+      return map[value];
+    }
     const map: Record<LegalDocumentKind, string> = {
       MEVZUAT_BELGESI: 'Mevzuat Belgesi',
       UYUMLULUK_KANITI: 'Uyumluluk Kanıtı',
@@ -12301,60 +12329,68 @@ export function App() {
         {activeModule === 'legal-register' ? (
           <div className="legal-register-layout">
             <section className="panel legal-panel">
-              <h2>Yasal Mevzuat Kaydı Yönetici Özeti</h2>
+              <h2>{language === 'ru' ? 'Сводка реестра законодательства' : 'Yasal Mevzuat Kaydı Yönetici Özeti'}</h2>
               <div className="dashboard-toolbar legal-toolbar">
                 <label>
-                  Rol
+                  {language === 'ru' ? 'Роль' : 'Rol'}
                   <select value={legalUserRole} onChange={(event) => setLegalUserRole(event.target.value as LegalUserRole)}>
                     {legalRoleOptions.map((option) => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
+                      <option key={option.value} value={option.value}>
+                        {language === 'ru'
+                          ? option.value === 'HSE_MANAGER' ? 'Менеджер по ОТиПБ'
+                          : option.value === 'CORPORATE_HSE_MANAGER' ? 'Корпоративный менеджер по ОТиПБ'
+                          : option.value === 'COMPLIANCE_MANAGER' ? 'Менеджер по соответствию'
+                          : option.value === 'ISO_REPRESENTATIVE' ? 'Представитель по ISO'
+                          : 'Просмотр'
+                          : option.label}
+                      </option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Proje
+                  {language === 'ru' ? 'Проект' : 'Proje'}
                   <select value={legalFilters.projectId} onChange={(event) => setLegalFilters((prev) => ({ ...prev, projectId: event.target.value }))}>
-                    <option value="all">Tüm Projeler</option>
+                    <option value="all">{language === 'ru' ? 'Все проекты' : 'Tüm Projeler'}</option>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Kategori
+                  {language === 'ru' ? 'Категория' : 'Kategori'}
                   <select value={legalFilters.category} onChange={(event) => setLegalFilters((prev) => ({ ...prev, category: event.target.value }))}>
-                    <option value="all">Tümü</option>
+                    <option value="all">{language === 'ru' ? 'Все' : 'Tümü'}</option>
                     {legalCategoryOptions.map((category) => (
                       <option key={category} value={category}>{category}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Yetkili Merci
+                  {language === 'ru' ? 'Регулирующий орган' : 'Yetkili Merci'}
                   <select value={legalFilters.authority} onChange={(event) => setLegalFilters((prev) => ({ ...prev, authority: event.target.value }))}>
-                    <option value="all">Tümü</option>
+                    <option value="all">{language === 'ru' ? 'Все' : 'Tümü'}</option>
                     {legalAuthorityOptions.map((authority) => (
                       <option key={authority} value={authority}>{authority}</option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Uyumluluk
+                  {language === 'ru' ? 'Соответствие' : 'Uyumluluk'}
                   <select
                     value={legalFilters.complianceStatus}
                     onChange={(event) => setLegalFilters((prev) => ({ ...prev, complianceStatus: event.target.value as 'ALL' | LegalComplianceStatus }))}
                   >
-                    <option value="ALL">Tümü</option>
-                    <option value="UYUMLU">Uyumlu</option>
-                    <option value="KISMEN_UYUMLU">Kısmen Uyumlu</option>
-                    <option value="UYUMSUZ">Uyumsuz</option>
-                    <option value="UYGULANAMAZ">Uygulanamaz</option>
+                    <option value="ALL">{language === 'ru' ? 'Все' : 'Tümü'}</option>
+                    <option value="UYUMLU">{language === 'ru' ? 'Соответствует' : 'Uyumlu'}</option>
+                    <option value="KISMEN_UYUMLU">{language === 'ru' ? 'Частично соответствует' : 'Kısmen Uyumlu'}</option>
+                    <option value="UYUMSUZ">{language === 'ru' ? 'Не соответствует' : 'Uyumsuz'}</option>
+                    <option value="UYGULANAMAZ">{language === 'ru' ? 'Не применимо' : 'Uygulanamaz'}</option>
                   </select>
                 </label>
                 <label>
-                  Ara
+                  {language === 'ru' ? 'Поиск' : 'Ara'}
                   <input
-                    placeholder="Başlık, mevzuat no, sorumlu"
+                    placeholder={language === 'ru' ? 'Название, номер, ответственный' : 'Başlık, mevzuat no, sorumlu'}
                     value={legalFilters.keyword}
                     onChange={(event) => setLegalFilters((prev) => ({ ...prev, keyword: event.target.value }))}
                   />
@@ -12362,26 +12398,26 @@ export function App() {
               </div>
 
               <div className="legal-kpi-grid">
-                <article className="equipment-kpi-card"><span>Toplam Mevzuat Sayısı</span><strong>{legalSummary.total}</strong></article>
-                <article className="equipment-kpi-card"><span>Uyumlu Mevzuatlar</span><strong>{legalSummary.compliant}</strong></article>
-                <article className="equipment-kpi-card"><span>Uyumsuz Mevzuatlar</span><strong>{legalSummary.nonCompliant}</strong></article>
-                <article className="equipment-kpi-card"><span>Gözden Geçirme Aşamasındaki</span><strong>{legalSummary.inReview}</strong></article>
-                <article className="equipment-kpi-card"><span>Yaklaşan Gözden Geçirmeler</span><strong>{legalSummary.upcomingReviews}</strong></article>
-                <article className="equipment-kpi-card"><span>Açık Yasal Aksiyonlar</span><strong>{legalSummary.openActions}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Всего нормативных актов' : 'Toplam Mevzuat Sayısı'}</span><strong>{legalSummary.total}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Соответствующие акты' : 'Uyumlu Mevzuatlar'}</span><strong>{legalSummary.compliant}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Несоответствующие акты' : 'Uyumsuz Mevzuatlar'}</span><strong>{legalSummary.nonCompliant}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'На рассмотрении' : 'Gözden Geçirme Aşamasındaki'}</span><strong>{legalSummary.inReview}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Предстоящие пересмотры' : 'Yaklaşan Gözden Geçirmeler'}</span><strong>{legalSummary.upcomingReviews}</strong></article>
+                <article className="equipment-kpi-card"><span>{language === 'ru' ? 'Открытые правовые меры' : 'Açık Yasal Aksiyonlar'}</span><strong>{legalSummary.openActions}</strong></article>
               </div>
 
               <div className="executive-charts-grid legal-chart-grid">
                 <article className="chart-card">
-                  <strong>Uyumluluk Durumu</strong>
+                  <strong>{language === 'ru' ? 'Статус соответствия' : 'Uyumluluk Durumu'}</strong>
                   <DashboardChart type="donut" values={legalComplianceChart} themeName="compliance" />
                   <div className="health-legend-grid legal-compliance-legend">
-                    <span>Uyumlu: {legalComplianceChart[0]}</span>
-                    <span>Kısmen Uyumlu: {legalComplianceChart[1]}</span>
-                    <span>Uyumsuz: {legalComplianceChart[2]}</span>
+                    <span>{language === 'ru' ? 'Соответствует' : 'Uyumlu'}: {legalComplianceChart[0]}</span>
+                    <span>{language === 'ru' ? 'Частично соответствует' : 'Kısmen Uyumlu'}: {legalComplianceChart[1]}</span>
+                    <span>{language === 'ru' ? 'Не соответствует' : 'Uyumsuz'}: {legalComplianceChart[2]}</span>
                   </div>
                 </article>
                 <article className="chart-card">
-                  <strong>Kategoriye Göre Mevzuatlar</strong>
+                  <strong>{language === 'ru' ? 'Нормативные акты по категориям' : 'Kategoriye Göre Mevzuatlar'}</strong>
                   <div className="workforce-horizontal-chart">
                     {legalCategoryBars.map(([label, value]) => {
                       const max = Math.max(...legalCategoryBars.map((row) => row[1]), 1);
@@ -12398,36 +12434,36 @@ export function App() {
                   </div>
                 </article>
                 <article className="chart-card">
-                  <strong>Yaklaşan Yasal Gözden Geçirmeler</strong>
+                  <strong>{language === 'ru' ? 'Предстоящие правовые пересмотры' : 'Yaklaşan Yasal Gözden Geçirmeler'}</strong>
                   <DashboardChart type="line" values={legalReviewTrend.values} xLabels={legalReviewTrend.labels} themeName="compliance" />
                 </article>
                 <article className="chart-card">
-                  <strong>Projeye Göre Açık Yasal Aksiyonlar</strong>
+                  <strong>{language === 'ru' ? 'Открытые правовые меры по проектам' : 'Projeye Göre Açık Yasal Aksiyonlar'}</strong>
                   <DashboardChart type="bar" values={legalOpenActionsByProject.values} xLabels={legalOpenActionsByProject.labels} themeName="risk" showTrend={false} />
                 </article>
               </div>
 
               <div className="risk-meta-row">
                 <article className="risk-meta-card">
-                  <span>Yaklaşan Gözden Geçirme Uyarısı</span>
+                  <span>{language === 'ru' ? 'Предупреждение о предстоящем пересмотре' : 'Yaklaşan Gözden Geçirme Uyarısı'}</span>
                   <strong>{legalAlerts.upcoming.length}</strong>
                 </article>
                 <article className="risk-meta-card">
-                  <span>Süresi Dolan Gereklilik Uyarısı</span>
+                  <span>{language === 'ru' ? 'Предупреждение об истёкших требованиях' : 'Süresi Dolan Gereklilik Uyarısı'}</span>
                   <strong>{legalAlerts.expired.length}</strong>
                 </article>
                 <article className="risk-meta-card">
-                  <span>Belge Silme Yetkisi</span>
-                  <strong>{legalCanDeleteDocument ? 'Aktif' : 'Sadece Uyumluluk Yöneticisi'}</strong>
+                  <span>{language === 'ru' ? 'Право на удаление документов' : 'Belge Silme Yetkisi'}</span>
+                  <strong>{legalCanDeleteDocument ? (language === 'ru' ? 'Активно' : 'Aktif') : (language === 'ru' ? 'Только менеджер по соответствию' : 'Sadece Uyumluluk Yöneticisi')}</strong>
                 </article>
               </div>
             </section>
 
             <section className="panel legal-panel">
-              <h2>Yasal Mevzuat Kaydı Veri Girişi</h2>
+              <h2>{language === 'ru' ? 'Ввод данных реестра законодательства' : 'Yasal Mevzuat Kaydı Veri Girişi'}</h2>
               <div className="form-grid legal-form-grid">
                 <label>
-                  Proje
+                  {language === 'ru' ? 'Проект' : 'Proje'}
                   <select value={legalForm.projectId} onChange={(event) => setLegalForm((prev) => ({ ...prev, projectId: event.target.value }))}>
                     {projectCatalog.map((project) => (
                       <option key={project.id} value={project.id}>{project.name}</option>
@@ -12435,11 +12471,11 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  Mevzuat Kimliği
+                  {language === 'ru' ? 'Идентификатор нормативного акта' : 'Mevzuat Kimliği'}
                   <input value={nextLegalRegulationId} disabled />
                 </label>
                 <label>
-                  Mevzuat Kategorisi
+                  {language === 'ru' ? 'Категория нормативного акта' : 'Mevzuat Kategorisi'}
                   <select value={legalForm.category} onChange={(event) => setLegalForm((prev) => ({ ...prev, category: event.target.value }))}>
                     {legalCategoryOptions.map((category) => (
                       <option key={category} value={category}>{category}</option>
@@ -12447,11 +12483,11 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  Mevzuat Başlığı
+                  {language === 'ru' ? 'Название нормативного акта' : 'Mevzuat Başlığı'}
                   <input value={legalForm.title} onChange={(event) => setLegalForm((prev) => ({ ...prev, title: event.target.value }))} />
                 </label>
                 <label>
-                  İlgili Otorite / Kurum
+                  {language === 'ru' ? 'Регулирующий орган / Учреждение' : 'İlgili Otorite / Kurum'}
                   <select value={legalForm.authority} onChange={(event) => setLegalForm((prev) => ({ ...prev, authority: event.target.value }))}>
                     {legalAuthorityOptions.map((authority) => (
                       <option key={authority} value={authority}>{authority}</option>
@@ -12459,7 +12495,7 @@ export function App() {
                   </select>
                 </label>
                 <label>
-                  İlgili Departman
+                  {language === 'ru' ? 'Соответствующий отдел' : 'İlgili Departman'}
                   <select value={legalForm.department} onChange={(event) => setLegalForm((prev) => ({ ...prev, department: event.target.value }))}>
                     {departmentNames.map((department) => (
                       <option key={department} value={department}>{department}</option>
@@ -12467,69 +12503,69 @@ export function App() {
                   </select>
                 </label>
                 <label className="full-row">
-                  Yasal Gereklilik
+                  {language === 'ru' ? 'Правовое требование' : 'Yasal Gereklilik'}
                   <textarea rows={3} value={legalForm.legalRequirement} onChange={(event) => setLegalForm((prev) => ({ ...prev, legalRequirement: event.target.value }))} />
                 </label>
                 <label>
-                  Sorumlu Kişi
+                  {language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}
                   <input value={legalForm.responsiblePerson} onChange={(event) => setLegalForm((prev) => ({ ...prev, responsiblePerson: event.target.value }))} />
                 </label>
                 <label>
-                  Uyumluluk Durumu
+                  {language === 'ru' ? 'Статус соответствия' : 'Uyumluluk Durumu'}
                   <select value={legalForm.complianceStatus} onChange={(event) => setLegalForm((prev) => ({ ...prev, complianceStatus: event.target.value as LegalComplianceStatus }))}>
-                    <option value="UYUMLU">Uyumlu</option>
-                    <option value="KISMEN_UYUMLU">Kısmen Uyumlu</option>
-                    <option value="UYUMSUZ">Uyumsuz</option>
-                    <option value="UYGULANAMAZ">Uygulanamaz</option>
+                    <option value="UYUMLU">{language === 'ru' ? 'Соответствует' : 'Uyumlu'}</option>
+                    <option value="KISMEN_UYUMLU">{language === 'ru' ? 'Частично соответствует' : 'Kısmen Uyumlu'}</option>
+                    <option value="UYUMSUZ">{language === 'ru' ? 'Не соответствует' : 'Uyumsuz'}</option>
+                    <option value="UYGULANAMAZ">{language === 'ru' ? 'Не применимо' : 'Uygulanamaz'}</option>
                   </select>
                 </label>
                 <label>
-                  Yürürlük Tarihi
+                  {language === 'ru' ? 'Дата вступления в силу' : 'Yürürlük Tarihi'}
                   <input type="date" value={legalForm.effectiveDate} onChange={(event) => setLegalForm((prev) => ({ ...prev, effectiveDate: event.target.value }))} />
                 </label>
                 <label>
-                  Son Gözden Geçirme Tarihi
+                  {language === 'ru' ? 'Дата последнего пересмотра' : 'Son Gözden Geçirme Tarihi'}
                   <input type="date" value={legalForm.lastReviewDate} onChange={(event) => setLegalForm((prev) => ({ ...prev, lastReviewDate: event.target.value }))} />
                 </label>
                 <label>
-                  Bir Sonraki Gözden Geçirme Tarihi
+                  {language === 'ru' ? 'Дата следующего пересмотра' : 'Bir Sonraki Gözden Geçirme Tarihi'}
                   <input type="date" value={legalForm.nextReviewDate} onChange={(event) => setLegalForm((prev) => ({ ...prev, nextReviewDate: event.target.value }))} />
                 </label>
                 <label>
-                  Açık Aksiyonlar
+                  {language === 'ru' ? 'Открытые правовые меры' : 'Açık Aksiyonlar'}
                   <input type="number" min={0} value={legalForm.openActions} onChange={(event) => setLegalForm((prev) => ({ ...prev, openActions: Number(event.target.value) }))} />
                 </label>
                 <label>
-                  Risk Seviyesi
+                  {language === 'ru' ? 'Уровень риска' : 'Risk Seviyesi'}
                   <select value={legalForm.riskLevel} onChange={(event) => setLegalForm((prev) => ({ ...prev, riskLevel: event.target.value as LegalRiskLevel }))}>
-                    <option value="DUSUK">Düşük</option>
-                    <option value="ORTA">Orta</option>
-                    <option value="YUKSEK">Yüksek</option>
-                    <option value="KRITIK">Kritik</option>
+                    <option value="DUSUK">{language === 'ru' ? 'Низкий' : 'Düşük'}</option>
+                    <option value="ORTA">{language === 'ru' ? 'Средний' : 'Orta'}</option>
+                    <option value="YUKSEK">{language === 'ru' ? 'Высокий' : 'Yüksek'}</option>
+                    <option value="KRITIK">{language === 'ru' ? 'Критический' : 'Kritik'}</option>
                   </select>
                 </label>
                 <label className="full-row">
-                  Notlar
+                  {language === 'ru' ? 'Примечания' : 'Notlar'}
                   <textarea rows={3} value={legalForm.notes} onChange={(event) => setLegalForm((prev) => ({ ...prev, notes: event.target.value }))} />
                 </label>
                 <div className="full-row actions">
-                  <button type="button" onClick={saveLegalRecord}>Yasal Kaydı Kaydet</button>
+                  <button type="button" onClick={saveLegalRecord}>{language === 'ru' ? 'Сохранить запись реестра' : 'Yasal Kaydı Kaydet'}</button>
                 </div>
               </div>
             </section>
 
             <section className="panel table-wrap legal-panel">
-              <h2>Yasal Mevzuat Kayıtları</h2>
+              <h2>{language === 'ru' ? 'Записи реестра законодательства' : 'Yasal Mevzuat Kayıtları'}</h2>
               <table className="legal-record-table">
                 <thead>
                   <tr>
-                    <th>Proje</th>
-                    <th>Mevzuat Başlığı</th>
-                    <th>Kategori</th>
-                    <th>Uyumluluk Durumu</th>
-                    <th>Sorumlu Kişi</th>
-                    <th>Bir Sonraki Gözden Geçirme</th>
-                    <th>Açık Aksiyonlar</th>
+                    <th>{language === 'ru' ? 'Проект' : 'Proje'}</th>
+                    <th>{language === 'ru' ? 'Название нормативного акта' : 'Mevzuat Başlığı'}</th>
+                    <th>{language === 'ru' ? 'Категория' : 'Kategori'}</th>
+                    <th>{language === 'ru' ? 'Статус соответствия' : 'Uyumluluk Durumu'}</th>
+                    <th>{language === 'ru' ? 'Ответственное лицо' : 'Sorumlu Kişi'}</th>
+                    <th>{language === 'ru' ? 'Следующий пересмотр' : 'Bir Sonraki Gözden Geçirme'}</th>
+                    <th>{language === 'ru' ? 'Открытые правовые меры' : 'Açık Aksiyonlar'}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -12554,7 +12590,7 @@ export function App() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7}>Filtreye uygun yasal kayıt bulunmuyor.</td>
+                      <td colSpan={7}>{language === 'ru' ? 'Записи, соответствующие фильтру, не найдены.' : 'Filtreye uygun yasal kayıt bulunmuyor.'}</td>
                     </tr>
                   )}
                 </tbody>
